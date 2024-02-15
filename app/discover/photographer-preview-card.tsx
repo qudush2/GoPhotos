@@ -32,7 +32,7 @@ export default async function PhotographerPreviewCard({
 					{assets.slice(0, 7).map((asset, idx) => (
 						<div
 							key={idx}
-							className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden rounded-md border border-black shadow-sm sm:w-60 md:w-80 lg:w-[28rem]"
+							className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden rounded-md border shadow-md sm:w-60 md:w-80 lg:w-[28rem]"
 							style={{
 								position: 'relative',
 							}}
@@ -56,7 +56,7 @@ export default async function PhotographerPreviewCard({
 						</div>
 					))}
 					{assets.length > 7 && (
-						<div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden rounded-md border border-black shadow-sm sm:w-60 md:w-80 lg:w-[28rem]">
+						<div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden rounded-md border shadow-md sm:w-60 md:w-80 lg:w-[28rem]">
 							<button className="text-md absolute left-1/2 top-1/2 z-20 m-2 -translate-x-1/2 -translate-y-1/2 transform rounded bg-white px-3 py-1 font-medium text-black shadow-md">
 								View All
 							</button>
@@ -64,7 +64,7 @@ export default async function PhotographerPreviewCard({
 								className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
 								style={{
 									backgroundImage: `url(${assets[7].cdnPath})`,
-									filter: 'blur(5px)', // Adjust the blur intensity as needed
+									filter: 'blur(5px)', 
 								}}
 							/>
 						</div>
