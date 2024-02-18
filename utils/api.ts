@@ -49,6 +49,9 @@ export async function sendEmail(
 		email: string
 		name: string
 		date: string
+		location: string
+		startTime?: string
+		endTime?: string
 		phoneNumber: string
 		eventDescription: string
 		organization?: string
@@ -59,7 +62,8 @@ export async function sendEmail(
 		from: 'gigs@gophotos.us',
 		to: photographer.email,
 		cc: client.email,
-		subject: 'GoPhotos - Photography Gig Request',
+		bcc: 'gigs@gophotos.us',
+		subject: `GoPhotos - Photography Gig Request [${client.date}]`,
 		react: GigEmailTemplate({ client, photographer }),
 	})
 

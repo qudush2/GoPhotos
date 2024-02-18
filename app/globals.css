@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+  @layer utilities {
+    .gradient {
+      background: linear-gradient(to right, #FF9993, #FC7674, #FC4D74);
+    }
+    .hover-gradient-bg:hover {
+      background: linear-gradient(to right, #FF9993, #FC7674, #FC4D74);
+    }
+
+    .hover-gradient:hover {
+      background: linear-gradient(to right, #FF9993, #FC7674, #FC4D74);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }

@@ -128,7 +128,7 @@ export default async function PhotographerProfile({
 						>
 							<div className="sm:w-full">
 								<div className="flex w-full items-center">
-									<div className="mr-2 h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" />
+									{/* <div className="mr-2 h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" /> */}
 									<div>
 										<p className="text-md font-medium">
 											{account.fullName}

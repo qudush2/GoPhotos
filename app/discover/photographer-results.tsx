@@ -13,7 +13,7 @@ export default async function PhotographerResults({
 	className,
 }: PhotographerResultsProps) {
 	const photographers = await getPhotographers()
-	// shuffleArray(photographers)
+	shuffleArray(photographers)
 
 	if (!photographers || !Array.isArray(photographers)) {
 		return <div className={cn('space-y-5', className)}>No photographers found.</div>
@@ -27,6 +27,7 @@ export default async function PhotographerResults({
 					{idx !== photographers.length - 1}
 				</Fragment>
 			))}
+
 		</div>
 	)
 }

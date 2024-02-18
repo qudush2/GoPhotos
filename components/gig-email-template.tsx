@@ -3,6 +3,9 @@ type GigEmailTemplateProps = {
 		name: string
 		date: string
 		phoneNumber: string
+		location: string
+		startTime?: string
+		endTime?: string
 		organization?: string
 		eventDescription: string
 	}
@@ -33,6 +36,9 @@ export default function GigEmailTemplate({
 				Client name: <span className="font-medium">{client.name}</span>
 			</p>
 			<p>Date: {client.date}</p>
+			<p>Location: {client.location}</p>
+			{client.startTime && <p>Start time: {client.startTime}</p>}
+			{client.endTime && <p>End time: {client.endTime}</p>}
 			<p>Phone number: {client.phoneNumber}</p>
 			{client.organization && <p>Organization: {client.organization}</p>}
 			<p className="mt-3">{client.eventDescription}</p>
