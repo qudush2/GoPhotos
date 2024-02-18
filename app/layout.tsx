@@ -2,7 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import Footer from '@/app/footer'
 import { Space_Grotesk as SpaceGrotesk } from 'next/font/google'
-import Head from 'next/head'
 
 import { cn } from '@/utils/cn'
 
