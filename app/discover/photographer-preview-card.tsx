@@ -156,7 +156,7 @@ export default async function PhotographerPreviewCard({
 function PhotographerOverlay({photographer, account, assets}: { photographer: Photographer, account: Account, assets: any[] }) {
 	return <DialogOverlay>
 	<div className="fixed left-0 top-0 z-10 h-screen w-screen bg-black opacity-20" />
-	<DialogContent className="fixed left-0 top-0 z-30 h-full w-full overflow-y-auto bg-white p-4 sm:left-1/2 sm:top-1/2 sm:h-[90%] sm:w-[90%] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-md lg:w-2/3">
+	<DialogContent className="fixed left-0 top-0 z-30 h-full w-full overflow-y-auto bg-white p-4 sm:left-1/2 sm:top-1/2 sm:h-[90%] sm:w-[90%] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-md lg:w-[80%]">
 		<div className="mt-7">
 			<PhotographerProfile
 				photographer={photographer}
