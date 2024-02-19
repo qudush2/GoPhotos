@@ -62,7 +62,7 @@ export default function LandingPage() {
 						</p>
 					</div>
 				</div>
-				<div className="flex w-1/2 items-center justify-end pr-16">
+				{/* <div className="flex w-1/2 items-center justify-end pr-16">
 					<Image
 						src="/images/photographer.JPG"
 						alt="Photographer taking a picture"
@@ -70,7 +70,7 @@ export default function LandingPage() {
 						height={100}
 						className="rounded-2xl"
 					/>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)
