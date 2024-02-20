@@ -21,7 +21,7 @@ export default function LandingPage() {
 	}
 
 	return (
-		<div className="relative h-auto bg-[#f4f4f4] pb-7 pt-5">
+		<div className="relative h-auto bg-[#f4f4f4] py-20 sm:pb-7 sm:pt-5">
 			{/* <div className="mb-7 mt-10 flex items-center justify-center space-x-2">
 				<label htmlFor="hiring" className="text-lg text-black">
 					For Hiring
