@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Footer from '@/app/footer'
 import { Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { cn } from '@/utils/cn'
 
@@ -42,6 +43,7 @@ export default function RootLayout({
 				<NavigationBar />
 				{children}
 				<Analytics />
+				<SpeedInsights />
 				<Toaster />
 				<Footer />
 			</body>
