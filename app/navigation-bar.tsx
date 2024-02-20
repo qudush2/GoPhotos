@@ -17,14 +17,14 @@ import { cn } from '@/utils/cn'
 
 export default function NavigationBar() {
 	return (
-		<Navbar isBlurred className="sticky z-10 bg-white px-20 pt-8 pb-8">
+		<Navbar isBlurred className="sticky z-10 bg-white px-8 sm:px-20 py-7">
 			<Link href="/" className="cursor-pointer">
 				<Image src={gpLogo} alt="" width={150} height={800} />
 			</Link>
 
-			<NavbarContent className="hidden gap-4 sm:flex" justify="center">
+			<NavbarContent className="gap-4 sm:flex" justify="center">
 				<NavbarItem>
-					<NavigationLink href="/discover" linkPath="/discover" className='hover-gradient'>
+					<NavigationLink href="/discover" linkPath="/discover" className='hover-gradient text-lg sm:text-base'>
 						Discover
 					</NavigationLink>
 				</NavbarItem>
@@ -38,7 +38,7 @@ export default function NavigationBar() {
 						target="_blank"
 						href="http://tinyurl.com/GP-Photographer"
 						variant="flat"
-						className="font-medium hover-gradient"
+						className="font-medium hover-gradient hidden sm:inline-block"
 					>
 						Become a Photographer
 					</Button>

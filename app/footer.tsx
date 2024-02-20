@@ -2,8 +2,8 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-gray-300 px-20 py-3 pb-10">
-      <div className="p-5">
+    <footer className="border-t border-gray-300 px-8 sm:px-20 py-3 pb-10">
+      {/* <div className="p-5">
         <h3 className="text-lg font-semibold flex justify-center">
           Didn't find the photographer you're looking for?
         </h3>
@@ -28,7 +28,7 @@ const Footer = () => {
             Sign Up
           </button>
         </form>
-      </div>
+      </div> */}
 
       <div className="flex justify-center w-full mt-5">
         <p className="pr-4">© 2024 GoPhotos, Inc.</p>

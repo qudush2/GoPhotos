@@ -36,12 +36,12 @@ export default function LandingPage() {
 				</label>
 			</div> */}
 			<div className="justify-right flex items-center space-x-7">
-				<div className="w-1/2 pl-20">
+				<div className="sm:w-1/2 px-8 sm:pl-20">
 					<div className="text-black">
 						<p
 							className={cn(
 								playfairDisplay.className,
-								'text-6xl font-medium'
+								'text-5xl sm:text-6xl font-medium'
 							)}
 						>
 							Hiring Photographers <br />
@@ -49,7 +49,7 @@ export default function LandingPage() {
 								simplified.
 							</span>
 						</p>
-						<p className="mb-10 mt-6 font-serif text-2xl italic text-black">
+						<p className="mb-5 sm:mb-10 mt-6 font-serif text-2xl italic text-black">
 							The All-In-One Photographer Booking Platform
 						</p>
 					</div>
@@ -62,7 +62,7 @@ export default function LandingPage() {
 						</p>
 					</div>
 				</div>
-				<div className="flex w-1/2 items-center justify-end pr-16">
+				<div className="hidden sm:flex w-1/2 items-center justify-end pr-16">
 					<Image
 						src="/images/photographer.JPG"
 						alt="Photographer taking a picture"

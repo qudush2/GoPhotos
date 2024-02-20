@@ -148,7 +148,6 @@ export default function RequestQuotePanel({
 						type="time"
 						id="endTime"
 						name="endTime"
-						required
 						className="w-full rounded-md border border-gray-200 text-sm outline-none"
 					/>
 				</div>

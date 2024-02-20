@@ -6,7 +6,7 @@ type TagProps = {
 
 export default function Tag({ children }: TagProps) {
 	return (
-		<div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 text-xs font-medium">
+		<div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 text-xs sm:text-sm font-medium">
 			{children ?? 'Tag'}
 		</div>
 	)

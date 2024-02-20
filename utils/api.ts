@@ -44,32 +44,34 @@ export async function getAssets(accountId: string): Promise<Asset[]> {
 	return data
 }
 
-export async function sendEmail(
-	client: {
-		email: string
-		name: string
-		date: string
-		location: string
-		startTime?: string
-		endTime?: string
-		phoneNumber: string
-		eventDescription: string
-		organization?: string
-	},
-	photographer: { email: string; name: string }
-) {
-	const { error } = await resend.emails.send({
-		from: 'gigs@gophotos.us',
-		to: photographer.email,
-		cc: client.email,
-		bcc: 'gigs@gophotos.us',
-		subject: `GoPhotos - Photography Gig Request [${client.date}]`,
-		react: GigEmailTemplate({ client, photographer }),
-	})
+export async function sendEmail(client: {
+    email: string;
+    name: string;
+    date: string;
+    location: string;
+    startTime?: string;
+    endTime?: string;
+    phoneNumber: string;
+    eventDescription: string;
+    organization?: string;
+}, photographer: { email: string; name: string }) {
+    const formattedDate = new Date(client.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+    const { error } = await resend.emails.send({
+        from: 'gigs@gophotos.us',
+        to: photographer.email,
+        cc: client.email,
+        bcc: 'gigs@gophotos.us',
+        subject: `GoPhotos - Photography Gig Request [${formattedDate}]`,
+        react: GigEmailTemplate({ client, photographer }),
+    })
 
-	console.log(error)
-	return {
-		isSent: error === null,
-		hasError: error !== null,
-	}
+    console.log(error)
+    return {
+        isSent: error === null,
+        hasError: error !== null,
+    }
 }

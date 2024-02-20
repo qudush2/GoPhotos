@@ -13,6 +13,11 @@ export const metadata: Metadata = {
 	title: 'GoPhotos',
 	description:
 		'Finding a photographer has never been this easy. Start searching for a photographer near you now!',
+	icons: {
+		icon: {
+			url: '/favicon.ico',
+		}
+	},
 }
 
 const spaceGrotesk = SpaceGrotesk({
