@@ -3,7 +3,7 @@ import { cn } from '@/utils/cn'
 
 import PhotographerPreviewCard from './photographer-preview-card'
 import { Fragment } from 'react'
-import { getPhotographers } from '@/utils/api'
+import { getPhotographers } from '@/utils/api2'
 
 type PhotographerResultsProps = {
 	className?: string
@@ -27,7 +27,6 @@ export default async function PhotographerResults({
 					{idx !== photographers.length - 1}
 				</Fragment>
 			))}
-
 		</div>
 	)
 }

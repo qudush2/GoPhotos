@@ -24,7 +24,7 @@ export default function NavigationBar() {
 
 			<NavbarContent className="gap-4 sm:flex" justify="center">
 				<NavbarItem>
-					<NavigationLink href="/discover" linkPath="/discover" className='hover-gradient text-lg sm:text-base'>
+					<NavigationLink href="/discover" linkPath="/discover" className='hover-gradient text-black text-lg sm:text-base'>
 						Discover
 					</NavigationLink>
 				</NavbarItem>
@@ -38,7 +38,7 @@ export default function NavigationBar() {
 						target="_blank"
 						href="http://tinyurl.com/GP-Photographer"
 						variant="flat"
-						className="font-medium hover-gradient hidden sm:inline-block"
+						className="font-medium hover-gradient hidden text-black sm:inline-block"
 					>
 						Become a Photographer
 					</Button>
