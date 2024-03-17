@@ -13,7 +13,7 @@ import {
 import PhotographerProfile from "./photographer-profile";
 import Image from "next/image";
 import { Account, Photographer } from "@/utils/types";
-import { getAccount, getAssets } from "@/utils/api";
+import { getAccount, getAssets } from "@/utils/api2";
 import { shuffle } from "lodash";
 
 type PhotographerPreviewCardProps = {
