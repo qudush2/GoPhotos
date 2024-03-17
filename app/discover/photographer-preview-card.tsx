@@ -12,6 +12,7 @@ import {
 
 import PhotographerProfile from "./photographer-profile";
 import Image from "next/image";
+import Link from "next/link";
 import { Account, Photographer } from "@/utils/types";
 import { getAccount, getAssets } from "@/utils/api2";
 import { shuffle } from "lodash";
@@ -134,8 +135,9 @@ export default async function PhotographerPreviewCard({
         </div>
 
         {/* Book Now button */}
-        <div>
-          <Dialog>
+        <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
+          {/* <div> */}
+          {/* <Dialog>
             <DialogTrigger className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
               Book Now
             </DialogTrigger>
@@ -144,7 +146,12 @@ export default async function PhotographerPreviewCard({
               account={account}
               assets={assets}
             />
-          </Dialog>
+          </Dialog> */}
+          <Link
+            href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="flex justify-center"
+          >
+            Book Now
+          </Link>
         </div>
       </div>
     </div>

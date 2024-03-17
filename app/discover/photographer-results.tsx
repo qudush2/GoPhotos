@@ -1,4 +1,3 @@
-import { Photographer } from '@/utils/types'
 import { cn } from '@/utils/cn'
 
 import PhotographerPreviewCard from './photographer-preview-card'
@@ -13,7 +12,7 @@ export default async function PhotographerResults({
 	className,
 }: PhotographerResultsProps) {
 	const photographers = await getPhotographers()
-	shuffleArray(photographers)
+	// shuffleArray(photographers)
 
 	if (!photographers || !Array.isArray(photographers)) {
 		return <div className={cn('space-y-5', className)}>No photographers found.</div>
