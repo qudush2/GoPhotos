@@ -1,9 +1,9 @@
 import { Account, Asset, Photographer } from "./types";
 
 export async function getPhotographers(
-  eventType?: string
+  photographyType?: string
 ): Promise<Photographer[]> {
-  const queryParams = eventType ? `?eventType=${eventType}` : "";
+  const queryParams = photographyType ? `?photographyType=${photographyType}` : "";
   const { data } = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers${queryParams}`,
     {
@@ -14,7 +14,16 @@ export async function getPhotographers(
     }
   ).then((res) => res.json());
 
-  return data;
+  // change starts here
+  const filteredPhotographers = data.filter((photographer: Photographer) => {
+    if (photographyType) {
+      return photographer.skills.includes(photographyType);
+    }
+    return false;
+  });
+
+  return filteredPhotographers;
+  // change ends here
 }
 
 export async function getAccount(accountId: string): Promise<Account> {

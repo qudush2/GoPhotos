@@ -1,11 +1,9 @@
 import React from 'react'
 import { cn } from '@/utils/cn'
 
-import { Switch } from '@/components/switch'
 import { Playfair_Display as PlayfairDisplay } from 'next/font/google'
 import Image from 'next/image'
 import SearchArea from '@/app/discover/search-area'
-import { redirect } from 'next/navigation'
 
 const playfairDisplay = PlayfairDisplay({
 	subsets: ['latin'],
@@ -14,27 +12,8 @@ const playfairDisplay = PlayfairDisplay({
 })
 
 export default function LandingPage() {
-	const redirectOnSwitch = async () => {
-		'use server'
-
-		redirect('/photographer')
-	}
-
 	return (
 		<div className="relative h-auto bg-[#f4f4f4] py-20 sm:pb-7 sm:pt-5">
-			{/* <div className="mb-7 mt-10 flex items-center justify-center space-x-2">
-				<label htmlFor="hiring" className="text-lg text-black">
-					For Hiring
-				</label>
-				<Switch
-					onCheckedChange={redirectOnSwitch}
-					id="landing-page"
-					className="bg-black"
-				/>
-				<label htmlFor="photographers" className="text-lg text-black">
-					For Photographers
-				</label>
-			</div> */}
 			<div className="justify-right flex items-center space-x-7">
 				<div className="sm:w-1/2 px-8 sm:pl-20">
 					<div className="text-black">

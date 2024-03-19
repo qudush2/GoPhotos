@@ -7,12 +7,14 @@ import { getPhotographers } from '@/utils/api2'
 
 type PhotographerResultsProps = {
 	className?: string
+	photographers: Photographer[]; //change here
 }
 
 export default async function PhotographerResults({
 	className,
+	photographers, //change here
 }: PhotographerResultsProps) {
-	const photographers = await getPhotographers()
+	// const photographers = await getPhotographers() //change here
 	shuffleArray(photographers)
 
 	if (!photographers || !Array.isArray(photographers)) {
