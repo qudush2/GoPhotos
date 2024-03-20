@@ -13,6 +13,7 @@ interface IParams extends ParsedUrlQuery {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = context.params as IParams;
   const photographerName = params.photographerName;
+  console.log(photographerName)
   const decodedName = decodeURIComponent('Qudus%20Shittu');
   // const decodedName = decodeURIComponent(photographerName);
 

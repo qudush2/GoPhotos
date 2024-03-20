@@ -1,5 +1,13 @@
 import { Account, Asset, Photographer } from "@/utils/types";
 // import { getServerSideProps } from "./pgServerSideProps";
+import {GetServerSideProps} from "next"
+import { ParsedUrlQuery } from "querystring";
+import {
+  getAccountDetailsByName,
+  getPhotographer,
+  getAssets,
+} from "@/utils/api2";
+
 
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -17,14 +25,46 @@ import RequestQuotePanel from "../request-quote-panel";
 
 
 type PhotographerUniquePageProps = {
-  // photographer: Photographer;
-  // account: Account;
-  // assets: Asset[];
+  photographer: Photographer;
+  account: Account;
+  assets: Asset[];
 };
 
+// interface IParams extends ParsedUrlQuery {
+//   photographerName: string;
+// }
 
-import { getPhotographer, getAssets, getAccountDetailsByName } from "@/utils/api2";
-const decodedName = decodeURIComponent('Qudus%20Shittu');
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const params = context.params as IParams;
+//   const photographerName = params.photographerName;
+//   console.log(photographerName)
+//   // const decodedName = decodeURIComponent('Qudus%20Shittu');
+//   const decodedName = decodeURIComponent(photographerName);
+
+//   console.log('this is a test to make sure the photographer name is being decoded', decodedName);
+
+//   const account = await getAccountDetailsByName(decodedName);
+//   const photographer = await getPhotographer(account.id);
+//   const assets = await getAssets(photographer.accountId);
+
+//   if (!photographer) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+
+//   return {
+//     props: {
+//       photographer,
+//       account,
+//       assets,
+//     },
+//   };
+// };
+
+
+// import { getPhotographer, getAssets, getAccountDetailsByName } from "@/utils/api2";
+// const decodedName = decodeURIComponent('Qudus%20Shittu');
 
 // (async () => {
 //   const account = await getAccountDetailsByName(decodedName);
@@ -36,12 +76,16 @@ const decodedName = decodeURIComponent('Qudus%20Shittu');
 // })();
 
 
-export default async function PhotographerUniquePage({
-  // photographer,
-  // account,
-  // assets,
-}: PhotographerUniquePageProps) {
-
+export default async function PhotographerUniquePage(
+  
+//   {
+//   photographer,
+//   account,
+//   assets,
+// }: PhotographerUniquePageProps
+{params}:{params:{photographerName: string}}
+) {
+  const decodedName = decodeURIComponent(params.photographerName)
   const account = await getAccountDetailsByName(decodedName);
   const photographer = await getPhotographer(account.id);
   const assets = await getAssets(account.id);
