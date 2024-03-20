@@ -14,7 +14,6 @@ export async function getPhotographers(
     }
   ).then((res) => res.json());
 
-  // change starts here
   const filteredPhotographers = data.filter((photographer: Photographer) => {
     if (photographyType) {
       return photographer.skills.includes(photographyType);
@@ -23,7 +22,6 @@ export async function getPhotographers(
   });
 
   return filteredPhotographers;
-  // change ends here
 }
 
 export async function getAccount(accountId: string): Promise<Account> {

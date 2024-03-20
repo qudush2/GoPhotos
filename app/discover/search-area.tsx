@@ -1,22 +1,22 @@
-"use client"; //change here
+"use client";
 
 import { cn } from "@/utils/cn";
 import { Button } from "@nextui-org/react";
 import Link from "next/link";
-//change here
 import React, { useState } from "react";
 
 type SearchProps = {
   className?: string;
+  pgType?: string;
 };
 
-export default function SearchArea({ className }: SearchProps) {
-	// changes start here
-  const [photographyType, setPhotographyType] = useState(""); 
-  const handlePhotographyTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPhotographyType(e.target.value); 
+export default function SearchArea({ className, pgType }: SearchProps) {
+  const [photographyType, setPhotographyType] = useState(pgType ?? "Portrait");
+  const handlePhotographyTypeChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setPhotographyType(e.target.value);
   };
-  // changes end here
 
   return (
     <div className={cn("@container", className)}>
@@ -34,7 +34,6 @@ export default function SearchArea({ className }: SearchProps) {
           />
         </div>
 
-		{/* changed section */}
         <div className="@md:col-span-2">
           <label htmlFor="photographyType" className="text-sm font-medium">
             Photography Type
@@ -43,7 +42,8 @@ export default function SearchArea({ className }: SearchProps) {
             id="photographyType"
             name="photographyType"
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
-			onChange={handlePhotographyTypeChange}
+            onChange={handlePhotographyTypeChange}
+            defaultValue={pgType}
           >
             <option value="Portrait">Portrait</option>
             <option value="Candid">Candid</option>
@@ -57,17 +57,13 @@ export default function SearchArea({ className }: SearchProps) {
             <option value="Fashion">Fashion</option>
             <option value="Outdoor Photoshoot">Outdoor Photoshoot</option>
             <option value="Videography">Videography</option>
-            <option value="Surprise Me">Surprise Me</option>
           </select>
         </div>
-		{/* end changed section */}
 
-        <div
-          className="mt-3 @md:col-span-1 @md:col-start-5 @md:mt-6"
-        >
+        <div className="mt-3 @md:col-span-1 @md:col-start-5 @md:mt-6">
           <Button
             as={Link}
-            href="/discover"
+            href={`/discover?photographyType=${photographyType}`}
             className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
           >
             Search
