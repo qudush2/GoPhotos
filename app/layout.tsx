@@ -4,6 +4,9 @@ import Footer from '@/app/footer'
 import { Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import {ClerkProvider} from '@clerk/nextjs';
+
+const frontendApi = process.env.CLERK_FRONTEND_API;
 
 import { cn } from '@/utils/cn'
 
@@ -33,6 +36,7 @@ export default function RootLayout({
 	children: React.ReactNode
 }) {
 	return (
+		<ClerkProvider>
 		<html lang="en">
 			<body
 				className={cn(
@@ -48,5 +52,6 @@ export default function RootLayout({
 				<Footer />
 			</body>
 		</html>
+		</ClerkProvider>
 	)
 }

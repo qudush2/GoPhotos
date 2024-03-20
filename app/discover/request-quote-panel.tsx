@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { Account } from '@/utils/types'
 import { toast } from 'sonner'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
+import { useAuth, useUser } from "@clerk/nextjs"
 
 type RequestQuotePanelProps = {
 	photographer: Account
@@ -43,6 +44,12 @@ export default function RequestQuotePanel({
 		}
 	}, [state])
 
+	const { user, isLoaded, isSignedIn } = useUser()
+
+	if (!isLoaded || !isSignedIn) {
+		return null
+	}
+
 	return (
 		<div>
 			<p className="text-xl font-medium mb-2">Request a Quote</p>
@@ -62,8 +69,9 @@ export default function RequestQuotePanel({
 						id="name"
 						name="name"
 						required
-						className="w-full rounded-md border border-gray-200 text-sm outline-none"
-						placeholder = "John Doe"
+						className="w-full rounded-md border border-gray-200 text-sm outline-none placeholder-black"
+						placeholder = {user.firstName + ' ' + user.lastName}
+						readOnly
 					/>
 				</div>
 				<div className="">
@@ -75,11 +83,12 @@ export default function RequestQuotePanel({
 						name="email"
 						type="email"
 						required
-						className="w-full rounded-md border border-gray-200 text-sm outline-none"
-						placeholder= 'johndoe@gophotos.us'
+						className="w-full rounded-md border border-gray-200 text-sm outline-none placeholder-black"
+						placeholder= {user.emailAddresses[0].emailAddress}
+						readOnly
 					/>
 				</div>
-				<div className="">
+				{/* <div className="">
 					<label
 						htmlFor="phoneNumber"
 						className="sm text-sm font-medium"
@@ -90,9 +99,9 @@ export default function RequestQuotePanel({
 						id="phoneNumber"
 						name="phoneNumber"
 						className="w-full rounded-md border border-gray-200 text-sm outline-none"
-						placeholder= '123-456-7890'
+						placeholder= {user.phoneNumbers[0].phoneNumber}
 					/>
-				</div>
+				</div> */}
 				<div className="">
 					<label
 						htmlFor="location"
