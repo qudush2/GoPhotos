@@ -12,6 +12,7 @@ import {
 
 import PhotographerProfile from "./photographer-profile";
 import Image from "next/image";
+import Link from "next/link";
 import { Account, Photographer } from "@/utils/types";
 import { getAccount, getAssets } from "@/utils/api2";
 import { shuffle } from "lodash";
@@ -62,9 +63,9 @@ export default async function PhotographerPreviewCard({
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
               <Dialog>
-                <DialogTrigger className="text-md bg-white px-3 py-1 font-medium text-black shadow-md hover-gradient-bg absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform ">
+                <Link href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform ">
                   View all
-                </DialogTrigger>
+                </Link>
                 <PhotographerOverlay
                   photographer={photographer}
                   account={account}
@@ -134,17 +135,12 @@ export default async function PhotographerPreviewCard({
         </div>
 
         {/* Book Now button */}
-        <div>
-          <Dialog>
-            <DialogTrigger className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
-              Book Now
-            </DialogTrigger>
-            <PhotographerOverlay
-              photographer={photographer}
-              account={account}
-              assets={assets}
-            />
-          </Dialog>
+        <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
+          <Link
+            href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="flex justify-center"
+          >
+            Book Now
+          </Link>
         </div>
       </div>
     </div>
@@ -160,25 +156,6 @@ function PhotographerOverlay({
   account: Account;
   assets: any[];
 }) {
-  // 	return <DialogOverlay>
-  // 	<div className="fixed left-0 top-0 z-10 h-screen w-screen bg-black opacity-20" />
-  // 	<DialogContent className="fixed left-0 top-0 z-30 h-full w-full overflow-y-auto bg-white p-4 sm:left-1/2 sm:top-1/2 sm:h-[90%] sm:w-[90%] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-md lg:w-[80%]">
-  // 		<div className="mt-7">
-  // 			<PhotographerProfile
-  // 				photographer={photographer}
-  // 				account={account}
-  // 				assets={assets}
-  // 			/>
-  // 		</div>
-  // 		<DialogClose
-  // 			autoFocus={false}
-  // 			className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-  // 		>
-  // 			<XMarkIcon className="h-5 w-5" />
-  // 			<span className="sr-only">Close</span>
-  // 		</DialogClose>
-  // 	</DialogContent>
-  // </DialogOverlay>
   return (
     <DialogOverlay>
       {/* <div className="fixed inset-0 z-10 bg-black opacity-20" /> */}

@@ -46,16 +46,3 @@ export default function SearchArea({ className }: SearchProps) {
 		</div>
 	)
 }
-
-{
-	/* <div className="@xl:col-span-2">
-	<label htmlFor="dateRange" className="text-sm font-medium">
-		Date
-	</label>
-	<input
-		id="dateRange"
-		name="dateRange"
-		className="w-full rounded-md border border-gray-200 text-sm outline-none"
-	/>
-</div> */
-}
