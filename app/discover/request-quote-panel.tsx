@@ -121,6 +121,7 @@ export default function RequestQuotePanel({
 						name="eventDate"
 						required
 						className="w-full rounded-md border border-gray-200 text-sm outline-none"
+						min={new Date().toISOString().split('T')[0]}
 					/>
 				</div>
 				<div className="">
