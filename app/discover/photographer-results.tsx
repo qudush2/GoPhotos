@@ -2,17 +2,18 @@ import { cn } from '@/utils/cn'
 
 import PhotographerPreviewCard from './photographer-preview-card'
 import { Fragment } from 'react'
-import { getPhotographers } from '@/utils/api2'
+import {Photographer} from '@/utils/types'
 
 type PhotographerResultsProps = {
 	className?: string
+	photographers: Photographer[];
 }
 
 export default async function PhotographerResults({
 	className,
+	photographers,
 }: PhotographerResultsProps) {
-	const photographers = await getPhotographers()
-	// shuffleArray(photographers)
+	shuffleArray(photographers) // delete soon
 
 	if (!photographers || !Array.isArray(photographers)) {
 		return <div className={cn('space-y-5', className)}>No photographers found.</div>
@@ -33,6 +34,6 @@ export default async function PhotographerResults({
 function shuffleArray(array: any[]) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1))
-		;[array[i], array[j]] = [array[j], array[i]] // Swap elements
+		;[array[i], array[j]] = [array[j], array[i]]
 	}
 }

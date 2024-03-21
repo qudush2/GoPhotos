@@ -12,7 +12,6 @@ const playfairDisplay = PlayfairDisplay({
 })
 
 export default function LandingPage() {
-
 	return (
 		<div className="relative h-auto bg-[#f4f4f4] py-20 sm:pb-7 sm:pt-5">
 			<div className="justify-right flex items-center space-x-7">

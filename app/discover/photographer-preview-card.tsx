@@ -1,19 +1,11 @@
-import { PlusIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
 import Tag from "@/components/tag";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogTrigger,
-} from "@/components/dialog";
 
-import PhotographerProfile from "./photographer-profile";
 import Image from "next/image";
 import Link from "next/link";
-import { Account, Photographer } from "@/utils/types";
+import { Photographer } from "@/utils/types";
 import { getAccount, getAssets } from "@/utils/api2";
 import { shuffle } from "lodash";
 
@@ -62,16 +54,9 @@ export default async function PhotographerPreviewCard({
             ))}
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
-              <Dialog>
                 <Link href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform ">
                   View all
                 </Link>
-                <PhotographerOverlay
-                  photographer={photographer}
-                  account={account}
-                  assets={assets}
-                />
-              </Dialog>
               <div
                 className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                 style={{
@@ -90,7 +75,6 @@ export default async function PhotographerPreviewCard({
         <div>
           <div className="flex items-center justify-between">
             <div className="flex w-full items-center gap-2">
-              {/* <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" /> */}
               <div>
                 <p className="text-sm font-medium">{account.fullName}</p>
                 <p className="text-xs text-gray-600">{photographer.location}</p>
@@ -144,37 +128,5 @@ export default async function PhotographerPreviewCard({
         </div>
       </div>
     </div>
-  );
-}
-
-function PhotographerOverlay({
-  photographer,
-  account,
-  assets,
-}: {
-  photographer: Photographer;
-  account: Account;
-  assets: any[];
-}) {
-  return (
-    <DialogOverlay>
-      {/* <div className="fixed inset-0 z-10 bg-black opacity-20" /> */}
-      <DialogContent className="fixed inset-0 z-30 overflow-y-auto bg-white p-4">
-        <div className="my-10 mx-7">
-          <PhotographerProfile
-            photographer={photographer}
-            account={account}
-            assets={assets}
-          />
-        </div>
-        <DialogClose
-          autoFocus={false}
-          className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-        >
-          <XMarkIcon className="w-8" />
-          <span className="sr-only">Close</span>
-        </DialogClose>
-      </DialogContent>
-    </DialogOverlay>
   );
 }

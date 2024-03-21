@@ -1,4 +1,3 @@
-import { Account, Asset, Photographer } from "@/utils/types";
 import {
   getAccountDetailsByName,
   getPhotographer,
