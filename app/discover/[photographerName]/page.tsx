@@ -1,7 +1,4 @@
 import { Account, Asset, Photographer } from "@/utils/types";
-// import { getServerSideProps } from "./pgServerSideProps";
-import {GetServerSideProps} from "next"
-import { ParsedUrlQuery } from "querystring";
 import {
   getAccountDetailsByName,
   getPhotographer,
@@ -23,66 +20,8 @@ import {
 } from "@/components/dialog";
 import RequestQuotePanel from "../request-quote-panel";
 
-
-type PhotographerUniquePageProps = {
-  photographer: Photographer;
-  account: Account;
-  assets: Asset[];
-};
-
-// interface IParams extends ParsedUrlQuery {
-//   photographerName: string;
-// }
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const params = context.params as IParams;
-//   const photographerName = params.photographerName;
-//   console.log(photographerName)
-//   // const decodedName = decodeURIComponent('Qudus%20Shittu');
-//   const decodedName = decodeURIComponent(photographerName);
-
-//   console.log('this is a test to make sure the photographer name is being decoded', decodedName);
-
-//   const account = await getAccountDetailsByName(decodedName);
-//   const photographer = await getPhotographer(account.id);
-//   const assets = await getAssets(photographer.accountId);
-
-//   if (!photographer) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-
-//   return {
-//     props: {
-//       photographer,
-//       account,
-//       assets,
-//     },
-//   };
-// };
-
-
-// import { getPhotographer, getAssets, getAccountDetailsByName } from "@/utils/api2";
-// const decodedName = decodeURIComponent('Qudus%20Shittu');
-
-// (async () => {
-//   const account = await getAccountDetailsByName(decodedName);
-//   console.log(account);
-//   const photographer = await getPhotographer(account.id);
-//   console.log(photographer);
-//   const assets = await getAssets(account.id);
-//   console.log(assets.length);
-// })();
-
-
 export default async function PhotographerUniquePage(
   
-//   {
-//   photographer,
-//   account,
-//   assets,
-// }: PhotographerUniquePageProps
 {params}:{params:{photographerName: string}}
 ) {
   const decodedName = decodeURIComponent(params.photographerName)
@@ -168,7 +107,6 @@ export default async function PhotographerUniquePage(
             >
               <div className="sm:w-full">
                 <div className="flex w-full items-center">
-                  {/* <div className="mr-2 h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" /> */}
                   <div>
                     <p className="text-base sm:text-lg font-medium">
                       {account.fullName}

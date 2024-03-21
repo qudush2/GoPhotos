@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { AdjustmentsVerticalIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {
