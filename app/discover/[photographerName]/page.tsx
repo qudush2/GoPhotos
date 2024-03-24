@@ -4,7 +4,6 @@ import {
   getAssets,
 } from "@/utils/api2";
 
-
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
@@ -19,17 +18,18 @@ import {
 } from "@/components/dialog";
 import RequestQuotePanel from "../request-quote-panel";
 
-export default async function PhotographerUniquePage(
-  
-{params}:{params:{photographerName: string}}
-) {
-  const decodedName = decodeURIComponent(params.photographerName)
+export default async function PhotographerUniquePage({
+  params,
+}: {
+  params: { photographerName: string };
+}) {
+  const decodedName = decodeURIComponent(params.photographerName);
   const account = await getAccountDetailsByName(decodedName);
   const photographer = await getPhotographer(account.id);
   const assets = await getAssets(account.id);
 
   return (
-    <div className="grid gap-1 rounded-md py-1 px-8 sm:px-20 pt-7 pb-10" >
+    <div className="grid gap-1 rounded-md py-1 px-8 sm:px-20 pt-7 pb-10">
       <ScrollArea className="w-full">
         <div className="flex flex-col gap-1">
           <div className="flex w-max gap-1">

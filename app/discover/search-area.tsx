@@ -20,8 +20,8 @@ export default function SearchArea({ className, pgType }: SearchProps) {
 
   return (
     <div className={cn("@container", className)}>
-      <div className="grid @md:grid-cols-6 @md:gap-2">
-        <div className="mt-3 @md:col-span-2 @md:mt-0">
+      <div className="grid @md:grid-cols-8 @md:gap-2">
+        <div className="mt-3 @md:col-span-3 @md:mt-0">
           <label htmlFor="location" className="sm text-sm font-medium">
             Location
           </label>
@@ -34,7 +34,7 @@ export default function SearchArea({ className, pgType }: SearchProps) {
           />
         </div>
 
-        <div className="@md:col-span-2">
+        <div className="@md:col-span-3">
           <label htmlFor="photographyType" className="text-sm font-medium">
             Photography Type
           </label>
@@ -60,7 +60,7 @@ export default function SearchArea({ className, pgType }: SearchProps) {
           </select>
         </div>
 
-        <div className="mt-3 @md:col-span-1 @md:col-start-5 @md:mt-6">
+        <div className="mt-3 @md:col-span-2 @md:col-start-7 @md:mt-6">
           <Button
             as={Link}
             href={`/discover?photographyType=${photographyType}`}
