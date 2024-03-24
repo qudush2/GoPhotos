@@ -88,7 +88,7 @@ export default function RequestQuotePanel({
 						readOnly
 					/>
 				</div>
-				{/* <div className="">
+				<div className="">
 					<label
 						htmlFor="phoneNumber"
 						className="sm text-sm font-medium"
@@ -99,9 +99,10 @@ export default function RequestQuotePanel({
 						id="phoneNumber"
 						name="phoneNumber"
 						className="w-full rounded-md border border-gray-200 text-sm outline-none"
-						placeholder= {user.phoneNumbers[0].phoneNumber}
+						placeholder= {user.phoneNumbers[0]?.phoneNumber || '123-456-7890'}
+						readOnly = {user.phoneNumbers[0]?.phoneNumber ? true : false}
 					/>
-				</div> */}
+				</div>
 				<div className="">
 					<label
 						htmlFor="location"

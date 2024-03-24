@@ -13,11 +13,11 @@ export default function NavigationBar() {
         <Image src={gpLogo} alt="" width={150} height={800} />
       </Link>
 
-      <NavbarContent className="gap-4 sm:flex" justify="center">
+      <NavbarContent className="sm:flex" justify="center">
         <NavbarItem>
           <Link
             href="/discover"
-            className="hover-gradient text-lg sm:text-base font-medium"
+            className="hover-gradient text-lg sm:text-base font-medium mr-10 pr-10"
           >
             Discover
           </Link>
@@ -25,21 +25,30 @@ export default function NavigationBar() {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem>
-          <Button
-            as={Link}
-            color="primary"
-            target="_blank"
-            href="http://tinyurl.com/GP-Photographer"
-            variant="flat"
-            className="font-medium hover-gradient hidden sm:inline-block"
-          >
-            Become a Photographer
-          </Button>
-        </NavbarItem>
+        {/* <NavbarItem>
+          {userId ? null : (
+            <Button
+              as={Link}
+              color="primary"
+              target="_blank"
+              href="http://tinyurl.com/GP-Photographer"
+              variant="flat"
+              className="font-medium hover-gradient hidden sm:inline-block"
+            >
+              Become a Photographer
+            </Button>
+          )}
+        </NavbarItem> */}
         <NavbarItem>
           {userId ? (
-            <UserButton afterSignOutUrl="/" />
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "h-9 w-9",
+                },
+              }}
+            />
           ) : (
             <Button
               href="/sign-in"
