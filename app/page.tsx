@@ -13,7 +13,31 @@ const playfairDisplay = PlayfairDisplay({
 });
 
 export default async function LandingPage() {
-  updateClerk();
+  const { userId } = auth();
+  const user = await currentUser();
+
+  if (userId && user) {
+    const email = user.emailAddresses[0].emailAddress;
+    const fullName = user.firstName + ' ' + user.lastName;
+
+    if (await isPG_noClerk(email)) { //if their email already exists in the database w/o clerkID
+      await setPhotographerClerkid(email, userId); //updates db with clerkid
+      await clerkClient.users.updateUserMetadata(userId, { //updates clerk metadata to classify as photographer
+        publicMetadata: {
+          isPhotographer: true,
+        },
+      });
+    } 
+    
+    else if (!await isCustomer(email) && !await isPG(email)) { //if not already in db & not a photographer email
+      await createCustomer(email, fullName, userId) //updates db w/ clerkid
+      await clerkClient.users.updateUserMetadata(userId, { //updates clerk metadata to classify as customer
+        publicMetadata: {
+          isPhotographer: false,
+        },
+      });
+    }
+  }
 
   return (
     <div className="relative h-auto bg-[#f4f4f4] py-20 sm:pb-7 sm:pt-5">
@@ -55,32 +79,4 @@ export default async function LandingPage() {
       </div>
     </div>
   );
-}
-
-export async function updateClerk() {
-  const { userId } = auth();
-  const user = await currentUser();
-
-  if (userId && user) {
-    const email = user.emailAddresses[0].emailAddress;
-    const fullName = user.firstName + ' ' + user.lastName;
-
-    if (await isPG_noClerk(email)) { //if their email already exists in the database w/o clerkID
-      await setPhotographerClerkid(email, userId); //updates db with clerkid
-      await clerkClient.users.updateUserMetadata(userId, { //updates clerk metadata to classify as photographer
-        publicMetadata: {
-          isPhotographer: true,
-        },
-      });
-    } 
-    
-    else if (!await isCustomer(email) && !await isPG(email)) { //if not already in db & not a photographer email
-      await createCustomer(email, fullName, userId) //updates db w/ clerkid
-      await clerkClient.users.updateUserMetadata(userId, { //updates clerk metadata to classify as customer
-        publicMetadata: {
-          isPhotographer: false,
-        },
-      });
-    }
-  }
 }
