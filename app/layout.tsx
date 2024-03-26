@@ -6,8 +6,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import {ClerkProvider} from '@clerk/nextjs';
 
-const frontendApi = process.env.CLERK_FRONTEND_API;
-
 import { cn } from '@/utils/cn'
 
 import { Toaster } from 'sonner'
@@ -40,7 +38,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body
 				className={cn(
-					'max-w-screen overflow-x-hidden',
+					'max-w-screen overflow-x-hidden flex flex-col h-screen justify-between',
 					spaceGrotesk.className
 				)}
 			>

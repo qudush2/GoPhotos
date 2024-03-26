@@ -2,6 +2,7 @@ export type Account = {
 	id: string
 	email: string
 	fullName: string
+	clerkid : string
 }
 
 export type Photographer = {

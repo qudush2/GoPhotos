@@ -1,11 +1,26 @@
+"use client";
 import Link from "next/link";
-import { Navbar, NavbarContent, NavbarItem, Button } from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, Button, NavbarMenuToggle, NavbarMenu, } from "@nextui-org/react";
 import gpLogo from "../public/GoPhotos_logo.png";
 import Image from "next/image";
-import { UserButton, auth } from "@clerk/nextjs";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import React from "react";
 
 export default function NavigationBar() {
-  const { userId } = auth();
+  const { userId } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const menuItems_notSignedIn = [
+    "Discover",
+    "Sign In",
+    "Sign Up",
+  ];
+
+  const menuItems_signedIn = [
+    "Discover",
+    "Profile",
+    "Sign Out"
+  ]
 
   return (
     <Navbar isBlurred className="sticky z-10 bg-white px-8 sm:px-20 py-7">
@@ -48,6 +63,8 @@ export default function NavigationBar() {
                   userButtonAvatarBox: "h-9 w-9",
                 },
               }}
+              userProfileMode="navigation"
+              userProfileUrl="/user-profile"
             />
           ) : (
             <Button

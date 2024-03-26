@@ -160,25 +160,6 @@ function PhotographerOverlay({
   account: Account;
   assets: any[];
 }) {
-  // 	return <DialogOverlay>
-  // 	<div className="fixed left-0 top-0 z-10 h-screen w-screen bg-black opacity-20" />
-  // 	<DialogContent className="fixed left-0 top-0 z-30 h-full w-full overflow-y-auto bg-white p-4 sm:left-1/2 sm:top-1/2 sm:h-[90%] sm:w-[90%] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-md lg:w-[80%]">
-  // 		<div className="mt-7">
-  // 			<PhotographerProfile
-  // 				photographer={photographer}
-  // 				account={account}
-  // 				assets={assets}
-  // 			/>
-  // 		</div>
-  // 		<DialogClose
-  // 			autoFocus={false}
-  // 			className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-  // 		>
-  // 			<XMarkIcon className="h-5 w-5" />
-  // 			<span className="sr-only">Close</span>
-  // 		</DialogClose>
-  // 	</DialogContent>
-  // </DialogOverlay>
   return (
     <DialogOverlay>
       {/* <div className="fixed inset-0 z-10 bg-black opacity-20" /> */}
