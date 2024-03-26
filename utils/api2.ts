@@ -1,4 +1,4 @@
-import { Account, Asset, Photographer } from "./types";
+import { Account, Asset, Photographer} from "./types";
 
 export async function getPhotographers(
   photographyType?: string
@@ -60,7 +60,6 @@ export async function getAccountDetailsByName(name: string): Promise<Account> {
     }
   ).then((res) => res.json());
 
-  // Filter the accounts based on the fullName
   const account = data.find((account: Account) => account.fullName === name);
 
   return account;

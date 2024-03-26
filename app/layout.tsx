@@ -4,6 +4,7 @@ import Footer from '@/app/footer'
 import { Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import {ClerkProvider} from '@clerk/nextjs';
 
 import { cn } from '@/utils/cn'
 
@@ -33,10 +34,11 @@ export default function RootLayout({
 	children: React.ReactNode
 }) {
 	return (
+		<ClerkProvider>
 		<html lang="en">
 			<body
 				className={cn(
-					'max-w-screen overflow-x-hidden',
+					'max-w-screen overflow-x-hidden flex flex-col h-screen justify-between',
 					spaceGrotesk.className
 				)}
 			>
@@ -48,5 +50,6 @@ export default function RootLayout({
 				<Footer />
 			</body>
 		</html>
+		</ClerkProvider>
 	)
 }
