@@ -64,3 +64,11 @@ export async function isPG(email: string) {
     );
     return result.rows.length > 0;
   }
+
+export async function getPGinfo(email:string) {
+  const result = await client.query(
+    "SELECT p.location, p.\"hourlyPriceLow\", p.\"hourlyPriceHigh\", p.school, p.skills, p.about, p.hires FROM photographer p JOIN account a ON p.id = a.id WHERE a.email = $1",
+    [email]
+  );
+  return result.rows[0];
+}

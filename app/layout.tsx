@@ -38,7 +38,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body
 				className={cn(
-					'max-w-screen overflow-x-hidden flex flex-col h-screen justify-between',
+					'max-w-screen overflow-x-hidden flex flex-col',
 					spaceGrotesk.className
 				)}
 			>

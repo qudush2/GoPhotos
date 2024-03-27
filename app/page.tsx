@@ -10,6 +10,7 @@ import {
   isPG_noClerk,
   isCustomer,
   createCustomer,
+  getPGinfo,
 } from "../utils/db";
 
 const playfairDisplay = PlayfairDisplay({
@@ -26,6 +27,7 @@ export default async function LandingPage() {
     //necessary to avoid extra neon calls
     const email = user.emailAddresses[0].emailAddress;
     const fullName = user.firstName + " " + user.lastName;
+    const info = await getPGinfo(email);
 
     if (await isPG_noClerk(email)) {
       //if their email already exists in the database w/o clerkID
@@ -34,6 +36,13 @@ export default async function LandingPage() {
         //updates clerk metadata to classify as photographer
         publicMetadata: {
           isPhotographer: true,
+          location: info.location,
+          hourlyPriceLow: info.hourlyPriceLow,
+          hourlyPriceHigh: info.hourlyPriceHigh,
+          school: info.school,
+          skills: info.skills,
+          about: info.about,
+          hires: info.hires,
         },
       });
     } else if (!(await isCustomer(email)) && !(await isPG(email))) {
