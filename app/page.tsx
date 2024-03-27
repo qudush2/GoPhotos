@@ -4,7 +4,13 @@ import { Playfair_Display as PlayfairDisplay } from "next/font/google";
 import Image from "next/image";
 import SearchArea from "@/app/discover/search-area";
 import { auth, currentUser, clerkClient } from "@clerk/nextjs";
-import { setPhotographerClerkid, isPG, isPG_noClerk, isCustomer, createCustomer } from "../utils/db";
+import {
+  setPhotographerClerkid,
+  isPG,
+  isPG_noClerk,
+  isCustomer,
+  createCustomer,
+} from "../utils/db";
 
 const playfairDisplay = PlayfairDisplay({
   subsets: ["latin"],
@@ -16,22 +22,25 @@ export default async function LandingPage() {
   const { userId } = auth();
   const user = await currentUser();
 
-  if (userId && user) {
+  if (userId && user && user.publicMetadata.isPhotographer == null) {
+    //necessary to avoid extra neon calls
     const email = user.emailAddresses[0].emailAddress;
-    const fullName = user.firstName + ' ' + user.lastName;
+    const fullName = user.firstName + " " + user.lastName;
 
-    if (await isPG_noClerk(email)) { //if their email already exists in the database w/o clerkID
+    if (await isPG_noClerk(email)) {
+      //if their email already exists in the database w/o clerkID
       await setPhotographerClerkid(email, userId); //updates db with clerkid
-      await clerkClient.users.updateUserMetadata(userId, { //updates clerk metadata to classify as photographer
+      await clerkClient.users.updateUserMetadata(userId, {
+        //updates clerk metadata to classify as photographer
         publicMetadata: {
           isPhotographer: true,
         },
       });
-    } 
-    
-    else if (!await isCustomer(email) && !await isPG(email)) { //if not already in db & not a photographer email
-      await createCustomer(email, fullName, userId) //updates db w/ clerkid
-      await clerkClient.users.updateUserMetadata(userId, { //updates clerk metadata to classify as customer
+    } else if (!(await isCustomer(email)) && !(await isPG(email))) {
+      //if not already in db & not a photographer email
+      await createCustomer(email, fullName, userId); //updates db w/ clerkid
+      await clerkClient.users.updateUserMetadata(userId, {
+        //updates clerk metadata to classify as customer
         publicMetadata: {
           isPhotographer: false,
         },
