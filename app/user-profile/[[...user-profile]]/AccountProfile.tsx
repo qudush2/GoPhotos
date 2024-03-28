@@ -1,5 +1,5 @@
 "use client";
-import { UserProfile, useUser, useAuth } from "@clerk/nextjs";
+import { UserProfile, useUser } from "@clerk/nextjs";
 import Tag from "@/components/tag";
 
 export default function AccountProfile() {
@@ -13,6 +13,7 @@ export default function AccountProfile() {
   const school = user?.publicMetadata.school as string;
   const skills = user?.publicMetadata.skills as Array<string>;
   const hires = user?.publicMetadata.hires as number;
+  console.log(user?.publicMetadata.hires)
 
   return (
     <UserProfile path="/user-profile" routing="path">

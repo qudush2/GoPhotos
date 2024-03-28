@@ -13,7 +13,7 @@ export default async function PhotographerResults({
   className,
   photographers,
 }: PhotographerResultsProps) {
-  shuffleArray(photographers)
+  // shuffleArray(photographers)
 
   if (!photographers || !Array.isArray(photographers)) {
     return (
