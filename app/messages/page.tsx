@@ -3,6 +3,7 @@ import Talk from "talkjs";
 import { Session, Inbox } from "@talkjs/react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { useCallback, useRef } from "react";
+import BookingCard from "@/components/booking-card"
 
 export default function ChatPage() {
   // const session = useRef<Talk.Session>(); //???
@@ -17,43 +18,44 @@ export default function ChatPage() {
 
   // console.log('user full name',user?.fullName)
 
-  // const syncUser = useCallback(
-  //   () =>
-  //     new Talk.User({
-  //       id: "nina",
-  //       name: "its me",
-  //       email: "nina@example.com",
-  //       role: "default",
-  //       phone: "+13128434137",
-  //     }),
-  //   []
-  // );
+  const syncUser = useCallback(
+    () =>
+      new Talk.User({
+        id: "nina",
+        name: "its me",
+        email: "nina@example.com",
+        role: "default",
+        phone: "+13128434137",
+      }),
+    []
+  );
 
-  // const syncConversation = useCallback((session: any) => {
-  //   // JavaScript SDK code here
-  //   const conversation = session.getOrCreateConversation("welcome");
+  const syncConversation = useCallback((session: any) => {
+    // JavaScript SDK code here
+    const conversation = session.getOrCreateConversation("welcome");
 
-  //   const other = new Talk.User({
-  //     id: "frank",
-  //     name: "frank",
-  //     email: "frank@example.com",
-  //     role: "default",
-  //     phone: "+13128434137",
-  //   });
-  //   conversation.setParticipant(session.me);
-  //   conversation.setParticipant(other);
+    const other = new Talk.User({
+      id: "frank",
+      name: "frank",
+      email: "frank@example.com",
+      role: "default",
+      phone: "+13128434137",
+    });
+    conversation.setParticipant(session.me);
+    conversation.setParticipant(other);
 
-  //   return conversation;
-  // }, []);
+    return conversation;
+  }, []);
 
   return (
-    <div className="px-20">
-      {/* <Session appId="tSzF029K" syncUser={syncUser}>
+    <div className="px-20 mb-10 flex">
+      <Session appId="tSzF029K" syncUser={syncUser}>
         <Inbox
         syncConversation = {syncConversation}
-          className="w-full h-[500px]"
+          className="w-full h-[700px]"
         ></Inbox>
-      </Session> */}
+      </Session>
+      <BookingCard />
     </div>
   );
 }
