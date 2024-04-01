@@ -50,25 +50,33 @@ export async function isCustomer(email: string) {
   return result.rows.length > 0;
 }
 
-export async function createCustomer(email:string, fullName: string, clerkid: string) {
-    await client.query(
-        "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
-        [email, fullName, clerkid]
-    );
+export async function createCustomer(
+  email: string,
+  fullName: string,
+  clerkid: string
+) {
+  await client.query(
+    "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
+    [email, fullName, clerkid]
+  );
 }
 
 export async function isPG(email: string) {
-    const result = await client.query(
-      "SELECT email FROM account WHERE email = $1",
-      [email]
-    );
-    return result.rows.length > 0;
-  }
-
-export async function getPGinfo(email:string) {
   const result = await client.query(
-    "SELECT p.location, p.\"hourlyPriceLow\", p.\"hourlyPriceHigh\", p.school, p.skills, p.about, p.hires FROM photographer p JOIN account a ON p.id = a.id WHERE a.email = $1",
+    "SELECT email FROM account WHERE email = $1",
+    [email]
+  );
+  return result.rows.length > 0;
+}
+
+export async function getPGinfo(email: string) {
+  const result = await client.query(
+    'SELECT p.location, p."hourlyPriceLow", p."hourlyPriceHigh", p.school, p.skills, p.about, p.hires FROM photographer p JOIN account a ON p.id = a.id WHERE a.email = $1',
     [email]
   );
   return result.rows[0];
 }
+
+// functions to write customer/photographer info to database 
+// isPhotographer --> already checked with clerk user info
+// add stripe account id --> string
