@@ -43,6 +43,7 @@ export default async function LandingPage() {
           skills: info.skills,
           about: info.about,
           hires: info.hires,
+          hasStripeID : false
         },
       });
     } else if (!(await isCustomer(email)) && !(await isPG(email))) {
@@ -52,6 +53,7 @@ export default async function LandingPage() {
         //updates clerk metadata to classify as customer
         publicMetadata: {
           isPhotographer: false,
+          hasStripeID : false,
         },
       });
     }
