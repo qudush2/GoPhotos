@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { currentUser } from "@clerk/nextjs";
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
   apiVersion: "2023-10-16",
@@ -8,10 +9,13 @@ const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
 //need to check if charges enabled & photographer --> should only be controlled by photographers
 
 export async function POST(req: NextRequest) {
+  const user = await currentUser();
   const { price } = await setupProductAndPrice();
-  const account = "acct_1OzWdFFLIQHueOEv";
+  const account = user?.privateMetadata.StripeId as string;
+  const refererUrl = req.headers.get('referer') || "https://www.gophotos.us/"; // Fallback URL if referer is not found
 
   if (req.method === "POST") {
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [
@@ -20,14 +24,8 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      payment_intent_data: {
-        application_fee_amount: 123,
-        transfer_data: {
-          destination: account,
-        },
-      },
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: `${refererUrl}`, //fix this
+      cancel_url: `${refererUrl}`, //fix this
     });
 
     if (session.url === null) {
@@ -40,16 +38,29 @@ export async function POST(req: NextRequest) {
 }
 
 export async function setupProductAndPrice() {
+  const user = await currentUser();
+
   const product = await stripe.products.create({
-    name: "Amazing Productssss", //use photographer name
-    description: "Description of the amazing product", //user conversation name/ gig title given by customer
+    name: `${user?.firstName} ${user?.lastName}'s Photography Service`, //use photographer name
+    description: `This is the user conversation name / gig title by the customer`, //user conversation name/ gig title given by customer
   });
 
   const price = await stripe.prices.create({
     product: product.id,
-    unit_amount: 2000, //ask photographer for price
+    unit_amount: Math.round(50000 * 1.1), //user current_price from db --> grab this with a db.ts function call on the unique or conversation id
     currency: "usd",
   });
 
   return { product, price };
 }
+
+
+
+// <form
+//         action="/api/create-checkout-session"
+//         className="border-2 border-black p-2 w-1/6 my-5 bg-blue-300 flex justify-center"
+//         method="POST"
+//         target="_blank"
+//       >
+//         <button type="submit">Checkout</button>
+//       </form>

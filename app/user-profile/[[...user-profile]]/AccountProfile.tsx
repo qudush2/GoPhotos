@@ -69,7 +69,7 @@ export default function AccountProfile() {
           labelIcon={<MoneyIcon />}
           url="stripe-dashboard"
         >
-          hi
+          hi, you will be able to see your updated expected payout within a couple days of completing a job (returning a customer's picture)
           { !user.publicMetadata.hasStripeID ? (
             <form
               action="/api/stripe-account-setup"
@@ -83,6 +83,7 @@ export default function AccountProfile() {
               action="/api/stripe-account-setup"
               className="border-2 border-black p-2 my-5 bg-blue-300 flex justify-center"
               method="POST"
+              target="_blank"
             >
               <button type="submit">Manage Account</button>
             </form>
