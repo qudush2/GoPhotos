@@ -123,7 +123,7 @@ export default async function PhotographerPreviewCard({
           <Link
             href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="flex justify-center"
           >
-            Book Now
+            View Profile
           </Link>
         </div>
       </div>
