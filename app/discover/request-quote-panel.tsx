@@ -51,7 +51,7 @@ export default function RequestQuotePanel({
 	}
 
 	return (
-		<div>
+		<div className=''>
 			<p className="text-xl font-medium mb-2">Request a Quote</p>
 			<p className="text-sm text-gray-600">
 				Great! There is some information that we need before sending a
@@ -61,7 +61,7 @@ export default function RequestQuotePanel({
 				After submitting your request, an email chain will be created between yourself and the photographer.
 			</p>
 			<form className="mt-3 space-y-3" action={formAction}>
-				<div className="">
+				{/* <div className="">
 					<label htmlFor="name" className="sm text-sm font-medium">
 						Name
 					</label>
@@ -71,10 +71,11 @@ export default function RequestQuotePanel({
 						required
 						className="w-full rounded-md border border-gray-200 text-sm outline-none placeholder-black"
 						placeholder = {user.firstName + ' ' + user.lastName}
+						value = {user.firstName + ' ' + user.lastName}
 						readOnly
 					/>
-				</div>
-				<div className="">
+				</div> */}
+				{/* <div className="">
 					<label htmlFor="email" className="sm text-sm font-medium">
 						Email
 					</label>
@@ -85,10 +86,11 @@ export default function RequestQuotePanel({
 						required
 						className="w-full rounded-md border border-gray-200 text-sm outline-none placeholder-black"
 						placeholder= {user.emailAddresses[0].emailAddress}
+						value = {user.emailAddresses[0].emailAddress}
 						readOnly
 					/>
-				</div>
-				<div className="">
+				</div> */}
+				{/* <div className="">
 					<label
 						htmlFor="phoneNumber"
 						className="sm text-sm font-medium"
@@ -99,10 +101,11 @@ export default function RequestQuotePanel({
 						id="phoneNumber"
 						name="phoneNumber"
 						className="w-full rounded-md border border-gray-200 text-sm outline-none"
-						placeholder= {user.phoneNumbers[0]?.phoneNumber || '123-456-7890'}
-						readOnly = {user.phoneNumbers[0]?.phoneNumber ? true : false}
+						placeholder= {user.phoneNumbers[0]?.phoneNumber}
+						readOnly
+						value = {user.phoneNumbers[0]?.phoneNumber}
 					/>
-				</div>
+				</div> */}
 				<div className="">
 					<label
 						htmlFor="location"
