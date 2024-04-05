@@ -182,7 +182,7 @@ export default async function PhotographerUniquePage({
                   </DialogTrigger>
                 </div>
                 <DialogOverlay>
-                  <DialogContent className="fixed left-0 top-0 z-10 h-full w-full overflow-y-auto bg-white p-4">
+                  <DialogContent className="fixed left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white p-4">
                     <div className="my-7">
                       <RequestQuotePanel photographer={account} />
                     </div>
