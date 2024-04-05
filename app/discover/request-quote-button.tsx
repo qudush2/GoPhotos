@@ -1,27 +1,37 @@
 'use client'
 
-import { cn } from '@/utils/cn'
-import { useFormStatus } from 'react-dom'
+import Talk from "talkjs";
 
-export default function RequestQuoteButton() {
-	const { pending } = useFormStatus()
+export function RequestQuoteButton({customerID, photographerID, convoID}: {customerID : string, photographerID: string, convoID : string}) { //pass in pgID, CID, convoID=
 
-	return (
-		<div className="relative mt-2">
-			<button
-				type="submit"
-				className={cn(
-					'w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white'
-				)}
-			>
-				Send request
-			</button>
-			{pending && (
-				<>
-					<div className="absolute top-0 z-10 h-full w-full rounded-md bg-gray-800/60" />
-					<div className="absolute left-1/2 top-1/2 z-20 -m-2.5 h-5 w-5 animate-spin rounded-full border-4 border-b-transparent border-l-white border-r-white border-t-white" />
-				</>
-			)}
-		</div>
-	)
+    Talk.ready.then(function() {
+        const me = new Talk.User(customerID)
+        // const otherUser = new Talk.User(photographerID)
+        const otherUser = new Talk.User({
+            id : photographerID,
+            name : 'Qudus Shittu',
+            email: 'qudush10@gmail.com'
+        })
+
+        const session = new Talk.Session({
+            appId : 'tSzF029K',
+            me : me
+        })
+
+        const conversation = session.getOrCreateConversation(convoID)
+        conversation.setParticipant(me)
+        conversation.setParticipant(otherUser)
+        conversation.sendMessage('Hey, this is a sample welcome message!')
+    })
+
+    return (
+        <div className="relative mt-2">
+          <button
+            type="submit"
+            className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
+          >
+            Send request
+          </button>
+        </div>
+      );
 }

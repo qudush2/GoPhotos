@@ -15,6 +15,10 @@ const Footer = () => {
           Privacy Policy
         </a>
         <span className="mx-2">•</span>
+        <a href="http://tinyurl.com/GP-Photographer" className="pr-4 hover-gradient">
+          Become a Photographer
+        </a>
+        <span className="mx-2">•</span>
         <a href="mailto:hello@gophotos.us" className="hover-gradient">
           Contact Us
         </a>

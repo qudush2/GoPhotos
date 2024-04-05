@@ -1,5 +1,5 @@
 import SearchArea from "./search-area";
-import FilterDropdown from "./filter-dialog";
+// import FilterDropdown from "./filter-dialog";
 import PhotographerResults from "./photographer-results";
 
 import { getPhotographers } from "@/utils/api2";

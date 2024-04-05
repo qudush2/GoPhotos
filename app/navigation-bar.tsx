@@ -40,20 +40,6 @@ export default function NavigationBar() {
       </NavbarContent>
 
       <NavbarContent justify="end" className="gap-4">
-        {/* <NavbarItem>
-          {userId ? null : (
-            <Button
-              as={Link}
-              color="primary"
-              target="_blank"
-              href="http://tinyurl.com/GP-Photographer"
-              variant="flat"
-              className="font-medium hover-gradient hidden sm:inline-block"
-            >
-              Become a Photographer
-            </Button>
-          )}
-        </NavbarItem> */}
         <NavbarItem className="flex md:hidden">
           <NavigationLink
             href={`/discover?photographyType=${"Portrait"}`}

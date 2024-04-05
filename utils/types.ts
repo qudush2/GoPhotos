@@ -3,6 +3,7 @@ export type Account = {
 	email: string
 	fullName: string
 	clerkid : string
+	profile_picture_url : string
 }
 
 export type Photographer = {

@@ -26,14 +26,6 @@ export async function setPhotographerClerkid(
   return result;
 }
 
-export async function updateAbout(email: string, newAbout: string) {
-  const result = await client.query(
-    "UPDATE photographer SET about = $1 WHERE id = (SELECT id FROM account WHERE email = $2)",
-    [newAbout, email]
-  );
-  return result;
-}
-
 export async function isPG_noClerk(email: string) {
   const result = await client.query(
     "SELECT email FROM account WHERE email = $1 AND clerkid is NULL",
@@ -77,6 +69,29 @@ export async function getPGinfo(email: string) {
   return result.rows[0];
 }
 
-// functions to write customer/photographer info to database 
-// isPhotographer --> already checked with clerk user info
-// add stripe account id --> string
+export async function getAccountByEmail(email: string) {
+  const result = await client.query("SELECT * FROM account WHERE email = $1", [
+    email,
+  ]);
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
+export async function getAllJobIDs() {
+  const result = await client.query('SELECT job_id FROM jobs')
+  return result.rows
+}
+
+export async function createJob(photographerClerkID: string, customerClerkID: string, convoID: string) {
+  await client.query(
+    "INSERT INTO jobs (photographer_clerk_id, customer_clerk_id, conversation_id) VALUES ($1, $2, $3)",
+    [photographerClerkID, customerClerkID, convoID]
+  );
+}
+
+export async function getPGClerkId(email: string) {
+  const result = await client.query(
+    "SELECT clerkid FROM account WHERE email = $1",
+    [email]
+  );
+  return result.rows.length > 0 ? result.rows[0].clerkid : null;
+}

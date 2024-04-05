@@ -29,11 +29,11 @@ export async function POST(req: NextRequest) {
     });
 
     if (session.url === null) {
-      return new Response("Session URL is null", { status: 500 });
+      return new Response("Session URL is null", { status: 404 });
     }
     return NextResponse.redirect(session.url, 302);
   } else {
-    return new Response("not working :(", { status: 500 });
+    return new Response("not working :(", { status: 405 });
   }
 }
 
@@ -53,14 +53,3 @@ export async function setupProductAndPrice() {
 
   return { product, price };
 }
-
-
-
-// <form
-//         action="/api/create-checkout-session"
-//         className="border-2 border-black p-2 w-1/6 my-5 bg-blue-300 flex justify-center"
-//         method="POST"
-//         target="_blank"
-//       >
-//         <button type="submit">Checkout</button>
-//       </form>
