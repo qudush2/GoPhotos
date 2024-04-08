@@ -106,7 +106,7 @@ export default async function BookingCardCustomer({
 
         {!price_finalized && (
           <div className="flex flex-col items-center">
-            <br/>
+            <br />
             <p className="text-base mb-2">
               The quote of the job has not been finalized. After the price has
               been finazlied, you will be able to pay.
@@ -126,7 +126,8 @@ export default async function BookingCardCustomer({
           <div className="flex flex-col items-center">
             <br />
             <p className="text-base mb-2">
-            here is the price as agreed upon by you and the photographer: <span className="font-bold">${job_price}</span>
+              here is the price as agreed upon by you and the photographer:{" "}
+              <span className="font-bold">${job_price}</span>
             </p>
             <Button
               as={Link}
@@ -137,7 +138,8 @@ export default async function BookingCardCustomer({
               Pay Now
             </Button>
             <p className="text-sm italic">
-              final price includes service fees + additional charges that help maintain this platform
+              final price includes service fees + additional charges that help
+              maintain this platform
             </p>
           </div>
         )}
@@ -147,34 +149,38 @@ export default async function BookingCardCustomer({
         <p className="text-base italic">
           How it works:
           <ul className="list-disc">
-            <li className='mt-2'>
+            <li className="mt-2">
               After you accept the photographer's quoted price, you will be
               given payment instructions.
             </li>
-            <li className='mt-2'>
+            <li className="mt-2">
               The photographer will not recieve this payment until after they
               return your pictures from "{event_title}".
             </li>
-            <li className='mt-2'>
+            <li className="mt-2">
               They will be notified that you have paid, which will confirm the
               booking reservation.
             </li>
-            <li className='mt-2'>
+            <li className="mt-2">
               This is to remove any discrepancies and protect the money being
               transacted between you and the photographer.
             </li>
-            <li className='mt-2 italic'>
-              You may cancel for a full refund up to 1 week before the date of the event ({event_date})
+            <li className="mt-2 italic">
+              You may cancel for a full refund up to 1 week before the date of
+              the event ({event_date})
             </li>
           </ul>
         </p>
 
-          <br/>
+        <br />
         <p className="text-base italic font-bold">
-            If you have questions or concerns, please email {" "}
-            <a href="mailto:hello@gophotos.us" className="text-blue-500 hover:underline">
-              hello@gophotos.us
-            </a>
+          If you have questions or concerns, please email{" "}
+          <a
+            href="mailto:hello@gophotos.us"
+            className="text-blue-500 hover:underline"
+          >
+            hello@gophotos.us
+          </a>
         </p>
       </CardBody>
     </Card>

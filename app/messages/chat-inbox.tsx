@@ -83,10 +83,9 @@ export default function ChatInbox({
       []
     );
 
-    
     const syncConversation = useCallback((session: Talk.Session) => {
       const conversation = session.getOrCreateConversation(convoId);
-      
+
       let other;
       if (jobDetails.customer_clerk_id === id) {
         other = new Talk.User({
@@ -103,35 +102,35 @@ export default function ChatInbox({
           role: "Customer",
         });
       }
-      
+
       conversation.setParticipant(session.me);
       conversation.setParticipant(other);
 
-      const {message_sent} = jobDetails
-      const {event_title, event_date, description} = jobDetails
+      const { message_sent } = jobDetails;
+      const { event_title, event_date, description } = jobDetails;
       if (!message_sent) {
-        const pgFirstName = pgName.split(' ')[0]
-        const message = `Hey ${pgFirstName}, I am interested in booking you for ${event_title} on ${event_date}. Here is some more details: ${description}. Please let me know how much this will cost or if you need more information.` 
-        conversation.sendMessage(message)
+        const pgFirstName = pgName.split(" ")[0];
+        const message = `Hey ${pgFirstName}, I am interested in booking you for ${event_title} on ${event_date}. Here is some more details: ${description}. Please let me know how much this will cost or if you need more information.`;
+        conversation.sendMessage(message);
       }
 
-      conversation.subject = event_title
+      conversation.subject = event_title;
       return conversation;
     }, []);
 
     useEffect(() => {
       const updateMessageSent = async () => {
-        console.log('i got here', convoId)
-        await fetch('/api/updateMessageSent', {
-          method: 'POST',
+        console.log("i got here", convoId);
+        await fetch("/api/updateMessageSent", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ convoId }),
         });
       };
       updateMessageSent();
-    })
+    });
 
     return (
       //change appId --> LIVE: xAillrJK TEST: tSzF029K

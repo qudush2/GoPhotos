@@ -37,8 +37,8 @@ export async function POST() {
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
       type: "account_onboarding",
-      refresh_url: "http://localhost:3000/user-profile/profile-page",
-      return_url: "http://localhost:3000/user-profile/profile-page",
+      refresh_url: "https://www.gophotos.us/user-profile/profile-page",
+      return_url: "https://www.gophotos.us/user-profile/profile-page",
     });
 
     const accountInfoComplete = (await stripe.accounts.retrieve(account.id))

@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 
     if (req.method === "POST") {
       return NextResponse.redirect(
-        `http://localhost:3000/messages/${encodeURIComponent(convoId)}`, //change before merge to main
+        `https://www.gophotos.us/messages/${encodeURIComponent(convoId)}`, //change before merge to main
         302
       );
     } else {

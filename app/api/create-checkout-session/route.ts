@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `http://localhost:3000/messages/${encodeURIComponent(convoID)}`, //change before merge to main
-      cancel_url: `http://localhost:3000/messages/${encodeURIComponent(convoID)}`, //change before merge to main
+      success_url: `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`, //change before merge to main
+      cancel_url: `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`, //change before merge to main
     });
 
     if (session.url === null) {
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
     updateJobPaymentUrl(convoID, session.url);
     return NextResponse.redirect(
-      `http://localhost:3000/messages/${encodeURIComponent(convoID)}`, //change before merge to main
+      `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`, //change before merge to main
       302
     );
   } else {
