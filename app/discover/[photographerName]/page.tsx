@@ -2,7 +2,7 @@ import {
   getAccountDetailsByName,
   getPhotographer,
   getAssets,
-} from "@/utils/api2";
+} from "@/utils/api";
 
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -16,7 +16,7 @@ import {
   DialogOverlay,
   DialogTrigger,
 } from "@/components/dialog";
-import RequestQuotePanel from "../request-quote-panel";
+import RequestQuotePanel from "../create-chat-panel";
 
 export default async function PhotographerUniquePage({
   params,
@@ -184,7 +184,7 @@ export default async function PhotographerUniquePage({
                 <DialogOverlay>
                   <DialogContent className="fixed left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white p-4">
                     <div className="my-7">
-                      <RequestQuotePanel photographer={account} />
+                      <RequestQuotePanel account={account} />
                     </div>
                     <DialogClose
                       autoFocus={false}

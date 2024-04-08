@@ -6,15 +6,17 @@ import { ScrollArea, ScrollBar } from "@/components/scroll-area";
 import Image from "next/image";
 import Link from "next/link";
 import { Photographer } from "@/utils/types";
-import { getAccount, getAssets } from "@/utils/api2";
+import { getAccount, getAssets } from "@/utils/api";
 import { shuffle } from "lodash";
 
 type PhotographerPreviewCardProps = {
   photographer: Photographer;
+  pgType : string
 };
 
 export default async function PhotographerPreviewCard({
   photographer,
+  pgType
 }: PhotographerPreviewCardProps) {
   const account = await getAccount(photographer.accountId);
   const assets = await getAssets(photographer.accountId);
@@ -54,9 +56,14 @@ export default async function PhotographerPreviewCard({
             ))}
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
-                <Link href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform ">
-                  View all
-                </Link>
+              <Link
+                href={`/discover/${encodeURIComponent(account.fullName)}`}
+                passHref
+                target="_blank"
+                className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform "
+              >
+                View all
+              </Link>
               <div
                 className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                 style={{
@@ -81,11 +88,18 @@ export default async function PhotographerPreviewCard({
               </div>
             </div>
             <div className="whitespace-nowrap pt-2 text-right">
-              <p className="text-xs text-gray-600">Est. Hourly Price</p>
-              <p className="text-lg font-semibold">
-                ${photographer.estimatedHourlyPriceRange[0]} - $
-                {photographer.estimatedHourlyPriceRange[1]}
-              </p>
+              {pgType !== 'Graduation' && (
+                <>
+                  <p className="text-xs text-gray-600">Est. Hourly Price</p>
+                  <p className="text-lg font-semibold">
+                    ${photographer.estimatedHourlyPriceRange[0]} - $
+                    {photographer.estimatedHourlyPriceRange[1]}
+                  </p>
+                </>
+              )}
+              {pgType === 'Graduation' && (<>
+                <div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 bg-[#FC4D74] text-white text-xs sm:text-sm font-medium">Special Grad Pricing</div>
+              </>)}
             </div>
           </div>
           <div className="mt-1 grid gap-1 sm:grid-cols-2 sm:grid-rows-1 md:grid-cols-1 md:grid-rows-[auto_auto]">
@@ -121,7 +135,10 @@ export default async function PhotographerPreviewCard({
         {/* Book Now button */}
         <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
           <Link
-            href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="flex justify-center"
+            href={`/discover/${encodeURIComponent(account.fullName)}`}
+            passHref
+            target="_blank"
+            className="flex justify-center"
           >
             View Profile
           </Link>

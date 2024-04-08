@@ -37,23 +37,20 @@ export default function NavigationBar() {
             Discover
           </NavigationLink>
         </NavbarItem>
+        {userId && (
+          <NavbarItem>
+            <NavigationLink
+              href={`/messages`}
+              linkPath="/messages"
+              className="hover-gradient text-lg sm:text-base font-medium"
+            >
+              Messages
+            </NavigationLink>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       <NavbarContent justify="end" className="gap-4">
-        {/* <NavbarItem>
-          {userId ? null : (
-            <Button
-              as={Link}
-              color="primary"
-              target="_blank"
-              href="http://tinyurl.com/GP-Photographer"
-              variant="flat"
-              className="font-medium hover-gradient hidden sm:inline-block"
-            >
-              Become a Photographer
-            </Button>
-          )}
-        </NavbarItem> */}
         <NavbarItem className="flex md:hidden">
           <NavigationLink
             href={`/discover?photographyType=${"Portrait"}`}
@@ -61,6 +58,15 @@ export default function NavigationBar() {
             className="hover-gradient sm:text-base font-medium"
           >
             Discover
+          </NavigationLink>
+        </NavbarItem>
+        <NavbarItem className="flex md:hidden">
+          <NavigationLink
+            href={`/messages`}
+            linkPath="/messages"
+            className="hover-gradient sm:text-base font-medium"
+          >
+            Messages
           </NavigationLink>
         </NavbarItem>
         <NavbarItem>

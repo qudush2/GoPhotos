@@ -1,36 +1,83 @@
-import GigEmailTemplate from '@/components/gig-email-template'
-import { Resend } from 'resend'
+import { Account, Asset, Photographer} from "./types";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-export async function sendEmail(client: {
-    email: string;
-    name: string;
-    date: string;
-    location: string;
-    startTime?: string;
-    endTime?: string;
-    phoneNumber: string;
-    eventDescription: string;
-    organization?: string;
-}, photographer: { email: string; name: string }) {
-    const formattedDate = new Date(client.date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
-    const { error } = await resend.emails.send({
-        from: 'gigs@gophotos.us',
-        to: photographer.email,
-        cc: client.email,
-        bcc: 'gigs@gophotos.us',
-        subject: `GoPhotos - Photography Gig Request [${formattedDate}]`,
-        react: GigEmailTemplate({ client, photographer }),
-    })
-
-    console.log(error)
-    return {
-        isSent: error === null,
-        hasError: error !== null,
+export async function getPhotographers(
+  photographyType?: string
+): Promise<Photographer[]> {
+  const queryParams = photographyType ? `?photographyType=${photographyType}` : "";
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers${queryParams}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
+      },
+      cache: "no-cache",
     }
+  ).then((res) => res.json());
+
+  const filteredPhotographers = data.filter((photographer: Photographer) => {
+    if (photographyType) {
+      return photographer.skills.includes(photographyType);
+    }
+    return false;
+  });
+
+  return filteredPhotographers;
+}
+
+export async function getAccount(accountId: string): Promise<Account> {
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/accounts/${accountId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
+      },
+    }
+  ).then((res) => res.json());
+
+  return data;
+}
+
+export async function getAssets(accountId: string): Promise<Asset[]> {
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/assets?accountId=${accountId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
+      },
+    }
+  ).then((res) => res.json());
+
+  return data;
+}
+
+export async function getAccountDetailsByName(name: string): Promise<Account> {
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/accounts`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
+      },
+    }
+  ).then((res) => res.json());
+
+  const account = data.find((account: Account) => account.fullName === name);
+
+  return account;
+}
+
+export async function getPhotographer(
+  accountId: string
+): Promise<Photographer> {
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
+      },
+    }
+  ).then((res) => res.json());
+
+  const photographer = data.find((photographer: Photographer) => photographer.accountId === accountId);
+
+  return photographer;
 }

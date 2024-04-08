@@ -24,16 +24,13 @@ export default async function LandingPage() {
   const user = await currentUser();
 
   if (userId && user && user.publicMetadata.isPhotographer == null) {
-    //necessary to avoid extra neon calls
     const email = user.emailAddresses[0].emailAddress;
     const fullName = user.firstName + " " + user.lastName;
     const info = await getPGinfo(email);
 
     if (await isPG_noClerk(email)) {
-      //if their email already exists in the database w/o clerkID
-      await setPhotographerClerkid(email, userId); //updates db with clerkid
+      await setPhotographerClerkid(email, userId);
       await clerkClient.users.updateUserMetadata(userId, {
-        //updates clerk metadata to classify as photographer
         publicMetadata: {
           isPhotographer: true,
           location: info.location,
@@ -43,13 +40,12 @@ export default async function LandingPage() {
           skills: info.skills,
           about: info.about,
           hires: info.hires,
+          hasStripeID: false,
         },
       });
     } else if (!(await isCustomer(email)) && !(await isPG(email))) {
-      //if not already in db & not a photographer email
-      await createCustomer(email, fullName, userId); //updates db w/ clerkid
+      await createCustomer(email, fullName, userId);
       await clerkClient.users.updateUserMetadata(userId, {
-        //updates clerk metadata to classify as customer
         publicMetadata: {
           isPhotographer: false,
         },
