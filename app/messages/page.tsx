@@ -1,4 +1,4 @@
-import BookingCardDefault from "@/app/messages/booking-card-default";
+import BookingCardDefault from "@/components/booking-card-default";
 import ChatInbox from "./chat-inbox";
 
 export default async function Messages() {
