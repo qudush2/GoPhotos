@@ -22,6 +22,7 @@ export default function ChatInbox({
   pgClerkID?: string;
   customer?: Customer;
 }) {
+  const router = useRouter();
   const { user } = useUser();
 
   if (!user) {
@@ -30,7 +31,6 @@ export default function ChatInbox({
 
   const id = user.id || "";
 
-  const router = useRouter();
   const handleSubmit = (event: Talk.SelectConversationEvent) => {
     const conversation = event.conversation;
     const cID = conversation.id;
@@ -120,7 +120,6 @@ export default function ChatInbox({
 
     useEffect(() => {
       const updateMessageSent = async () => {
-        console.log("i got here", convoId);
         await fetch("/api/updateMessageSent", {
           method: "POST",
           headers: {

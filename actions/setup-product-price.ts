@@ -1,8 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { currentUser } from "@clerk/nextjs";
-import { updateJobPaymentUrl, getJobDetails, updateJobPrice } from "@/utils/db";
-import { JobDetails } from "@/utils/types";
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
     apiVersion: "2023-10-16",
