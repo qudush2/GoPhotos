@@ -6,7 +6,7 @@ import {
   getJobDetails,
   getAccountByEmail,
   getEmailByClerk,
-  getCustomerInfo,
+  // getCustomerInfo,
 } from "../../../utils/db";
 import { currentUser } from "@clerk/nextjs";
 import { JobDetails, Customer, Account } from "@/utils/types";
@@ -17,9 +17,9 @@ export default async function MessageUniquePage({
   params: { convoId: string };
 }) {
   const jobDetails = (await getJobDetails(params.convoId)) as JobDetails;
-  const customer = (await getCustomerInfo(
-    jobDetails.customer_clerk_id
-  )) as Customer;
+  // const customer = (await getCustomerInfo(
+  //   jobDetails.customer_clerk_id
+  // )) as Customer;
   const pgClerkID = jobDetails.photographer_clerk_id;
   const account = (await getAccountByEmail(
     await getEmailByClerk(pgClerkID)
@@ -35,7 +35,6 @@ export default async function MessageUniquePage({
 
   if (user) {
     const isPG = user.publicMetadata.isPhotographer as boolean;
-    console.log('this is the customer',customer)
 
     return (
       <div className="px-20 mb-10 grid grid-cols-7 h-[80vh]">
@@ -46,7 +45,7 @@ export default async function MessageUniquePage({
             pgEmail={account.email}
             pgName={account.fullName}
             pgClerkID={pgClerkID}
-            customer={customer}
+            // customer={customer}
           />
         </div>
         <div className="col-span-2 border border-blue-500 overflow-auto">
@@ -60,7 +59,7 @@ export default async function MessageUniquePage({
           {isPG && (
             <BookingCardPhotographer
               jobDetails={jobDetails}
-              customer={customer}
+              // customer={customer}
               className="h-full"
             />
           )}

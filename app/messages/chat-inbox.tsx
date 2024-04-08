@@ -69,7 +69,7 @@ export default function ChatInbox({
     );
   }
 
-  if (convoId && pgEmail && pgName && pgClerkID && jobDetails && customer) {
+  if (convoId && pgEmail && pgName && pgClerkID && jobDetails ){//&& customer) {
     const syncUser = useCallback(
       () =>
         new Talk.User({
@@ -87,21 +87,21 @@ export default function ChatInbox({
       const conversation = session.getOrCreateConversation(convoId);
 
       let other;
-      if (jobDetails.customer_clerk_id === id) {
+      // if (jobDetails.customer_clerk_id === id) {
         other = new Talk.User({
           id: pgClerkID,
           name: pgName,
           email: pgEmail,
           role: "Photographer",
         });
-      } else {
-        other = new Talk.User({
-          id: customer.clerkid,
-          name: customer.full_name,
-          email: customer.email,
-          role: "Customer",
-        });
-      }
+      // } else {
+      //   other = new Talk.User({
+      //     id: customer.clerkid,
+      //     name: customer.full_name,
+      //     email: customer.email,
+      //     role: "Customer",
+      //   });
+      // }
 
       conversation.setParticipant(session.me);
       conversation.setParticipant(other);

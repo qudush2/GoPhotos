@@ -13,11 +13,11 @@ import PhotographerPriceForm from "./photographer-price-form";
 
 export default function BookingCardPhotographer({
   jobDetails,
-  customer,
+  // customer,
   className,
 }: {
   jobDetails: JobDetails;
-  customer: Customer;
+  // customer?: Customer;
   className?: string;
 }) {
   const {
