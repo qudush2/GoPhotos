@@ -7,13 +7,23 @@ import { Photographer } from "@/utils/types";
 type PhotographerResultsProps = {
   className?: string;
   photographers: Photographer[];
+  pgType: string
 };
 
 export default async function PhotographerResults({
   className,
   photographers,
+  pgType
 }: PhotographerResultsProps) {
-  shuffleArray(photographers)
+  const hiddenAccounts = [
+    "gbHJdmf",
+    "EfhxLZ9",
+    "xhoCpeN",
+    "s18jaGo",
+    "ROeNhrw",
+    "L3pHOn6",
+  ];
+  shuffleArray(photographers);
 
   if (!photographers || !Array.isArray(photographers)) {
     return (
@@ -23,12 +33,16 @@ export default async function PhotographerResults({
 
   return (
     <div className={cn("space-y-5", className)}>
-      {photographers.map((photographer, idx) => (
-        <Fragment key={photographer.id}>
-          <PhotographerPreviewCard photographer={photographer} />
-          {idx !== photographers.length - 1}
-        </Fragment>
-      ))}
+      {photographers
+        .filter(
+          (photographer) => !hiddenAccounts.includes(photographer.accountId)
+        )
+        .map((photographer, idx) => (
+          <Fragment key={photographer.id}>
+            <PhotographerPreviewCard photographer={photographer} pgType={pgType}/>
+            {idx !== photographers.length - 1}
+          </Fragment>
+        ))}
     </div>
   );
 }

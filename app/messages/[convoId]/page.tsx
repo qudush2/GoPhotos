@@ -1,5 +1,6 @@
 import ChatBox from "../chat-inbox";
-import BookingCard from "../booking-card";
+import BookingCardCustomer from "../booking-card-customer";
+import BookingCardPhotographer from "../booking-card-photographer";
 
 import {
   getJobDetails,
@@ -37,7 +38,7 @@ export default async function MessageUniquePage({
 
     return (
       <div className="px-20 mb-10 grid grid-cols-7 h-[80vh]">
-        <div className="border-2 border-red-500 w-full h-full col-span-5">
+        <div className="border-2 border-red-500 w-full col-span-5">
           <ChatBox
             jobDetails={jobDetails}
             convoId={decodedId}
@@ -47,12 +48,21 @@ export default async function MessageUniquePage({
             customer={customer}
           />
         </div>
-        <div className="col-span-2 h-full">
-          <BookingCard
-            jobDetails={jobDetails}
-            isPG={isPG}
-            className="border border-blue-500 h-full"
-          />
+        <div className="col-span-2 border border-blue-500 overflow-auto">
+          {!isPG && (
+            <BookingCardCustomer
+              jobDetails={jobDetails}
+              pgName={account.fullName}
+              className="h-full"
+            />
+          )}
+          {isPG && (
+            <BookingCardPhotographer
+              jobDetails={jobDetails}
+              customer={customer}
+              className="h-full"
+            />
+          )}
         </div>
       </div>
     );

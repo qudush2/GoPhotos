@@ -54,7 +54,7 @@ export default function ChatInbox({
           photoUrl: photoUrl,
           role: role,
         });
-        const session = new Talk.Session({ appId: "tSzF029K", me: me }); //change to live mode
+        const session = new Talk.Session({ appId: "xAillrJK", me: me }); //change to live mode --> xAillrJK
         const inbox = session.createInbox();
 
         inbox.mount(document.getElementById("inbox-container"));
@@ -83,9 +83,10 @@ export default function ChatInbox({
       []
     );
 
+    
     const syncConversation = useCallback((session: Talk.Session) => {
       const conversation = session.getOrCreateConversation(convoId);
-
+      
       let other;
       if (jobDetails.customer_clerk_id === id) {
         other = new Talk.User({
@@ -102,16 +103,40 @@ export default function ChatInbox({
           role: "Customer",
         });
       }
-
+      
       conversation.setParticipant(session.me);
       conversation.setParticipant(other);
+
+      const {message_sent} = jobDetails
+      const {event_title, event_date, description} = jobDetails
+      if (!message_sent) {
+        const pgFirstName = pgName.split(' ')[0]
+        const message = `Hey ${pgFirstName}, I am interested in booking you for ${event_title} on ${event_date}. Here is some more details: ${description}. Please let me know how much this will cost or if you need more information.` 
+        conversation.sendMessage(message)
+      }
+
+      conversation.subject = event_title
       return conversation;
     }, []);
 
+    useEffect(() => {
+      const updateMessageSent = async () => {
+        console.log('i got here', convoId)
+        await fetch('/api/updateMessageSent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ convoId }),
+        });
+      };
+      updateMessageSent();
+    })
+
     return (
-      //change appId
+      //change appId --> LIVE: xAillrJK TEST: tSzF029K
       <div className="h-full w-full">
-        <Session syncUser={syncUser} appId="tSzF029K">
+        <Session syncUser={syncUser} appId="xAillrJK">
           <Inbox
             syncConversation={syncConversation}
             className="h-full"

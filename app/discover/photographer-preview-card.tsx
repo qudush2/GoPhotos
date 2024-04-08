@@ -11,10 +11,12 @@ import { shuffle } from "lodash";
 
 type PhotographerPreviewCardProps = {
   photographer: Photographer;
+  pgType : string
 };
 
 export default async function PhotographerPreviewCard({
   photographer,
+  pgType
 }: PhotographerPreviewCardProps) {
   const account = await getAccount(photographer.accountId);
   const assets = await getAssets(photographer.accountId);
@@ -86,11 +88,18 @@ export default async function PhotographerPreviewCard({
               </div>
             </div>
             <div className="whitespace-nowrap pt-2 text-right">
-              <p className="text-xs text-gray-600">Est. Hourly Price</p>
-              <p className="text-lg font-semibold">
-                ${photographer.estimatedHourlyPriceRange[0]} - $
-                {photographer.estimatedHourlyPriceRange[1]}
-              </p>
+              {pgType !== 'Graduation' && (
+                <>
+                  <p className="text-xs text-gray-600">Est. Hourly Price</p>
+                  <p className="text-lg font-semibold">
+                    ${photographer.estimatedHourlyPriceRange[0]} - $
+                    {photographer.estimatedHourlyPriceRange[1]}
+                  </p>
+                </>
+              )}
+              {pgType === 'Graduation' && (<>
+                <div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 bg-[#FC4D74] text-white text-xs sm:text-sm font-medium">Special Grad Pricing</div>
+              </>)}
             </div>
           </div>
           <div className="mt-1 grid gap-1 sm:grid-cols-2 sm:grid-rows-1 md:grid-cols-1 md:grid-rows-[auto_auto]">

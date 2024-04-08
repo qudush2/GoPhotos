@@ -77,11 +77,15 @@ export async function getAccountByEmail(email: string) {
 }
 
 export async function getAllJobIDs() {
-  const result = await client.query('SELECT job_id FROM jobs')
-  return result.rows
+  const result = await client.query("SELECT job_id FROM jobs");
+  return result.rows;
 }
 
-export async function createJob(photographerClerkID: string, customerClerkID: string, convoID: string) {
+export async function createJob(
+  photographerClerkID: string,
+  customerClerkID: string,
+  convoID: string
+) {
   await client.query(
     "INSERT INTO jobs (photographer_clerk_id, customer_clerk_id, conversation_id) VALUES ($1, $2, $3)",
     [photographerClerkID, customerClerkID, convoID]
@@ -89,14 +93,32 @@ export async function createJob(photographerClerkID: string, customerClerkID: st
 
   return {
     isSent: true,
-    hasError : true
-  }
+    hasError: true,
+  };
 }
 
-export async function addJobDetails(convoID: string, eventTitle: string, location: string, startTime: string, endTime : string, eventDate : string, organization: string, description: string) {
+export async function addJobDetails(
+  convoID: string,
+  eventTitle: string,
+  location: string,
+  startTime: string,
+  endTime: string,
+  eventDate: string,
+  organization: string,
+  description: string
+) {
   await client.query(
     "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-    [convoID, eventTitle, location, startTime, endTime, eventDate, organization, description]
+    [
+      convoID,
+      eventTitle,
+      location,
+      startTime,
+      endTime,
+      eventDate,
+      organization,
+      description,
+    ]
   );
 }
 
@@ -116,37 +138,46 @@ export async function getEmailByClerk(clerkID: string) {
   return result.rows[0].email;
 }
 
-export async function getJobDetails(convoID : string){
+export async function getJobDetails(convoID: string) {
   const result = await client.query(
-    'SELECT * FROM jobs j JOIN job_detail jd ON j.conversation_id = jd.conversation_id WHERE j.conversation_id = $1',
+    "SELECT * FROM jobs j JOIN job_detail jd ON j.conversation_id = jd.conversation_id WHERE j.conversation_id = $1",
     [convoID]
   );
-  return result.rows[0]
+  return result.rows[0];
 }
 
-export async function getCustomerInfo(clerkID : string){
+export async function getCustomerInfo(clerkID: string) {
   const result = await client.query(
-    'SELECT * FROM customer_account WHERE clerkid = $1',
+    "SELECT * FROM customer_account WHERE clerkid = $1",
     [clerkID]
   );
-  return result.rows[0]
+  return result.rows[0];
 }
 
-
-export async function updateJobPrice(convoID : string, job_price : string) {
+export async function updateJobPrice(convoID: string, job_price: string) {
   await client.query(
-    'UPDATE jobs SET job_price = $1, price_finalized = true WHERE conversation_id = $2',
+    "UPDATE jobs SET job_price = $1, price_finalized = true WHERE conversation_id = $2",
     [job_price, convoID]
   );
   return {
     isSent: true,
-    hasError : true
-  }
+    hasError: true,
+  };
 }
 
-export async function updateJobPaymentUrl(convoID : string, payment_url : string) {
+export async function updateJobPaymentUrl(
+  convoID: string,
+  payment_url: string
+) {
   await client.query(
-    'UPDATE jobs SET payment_url = $1 WHERE conversation_id = $2',
+    "UPDATE jobs SET payment_url = $1 WHERE conversation_id = $2",
     [payment_url, convoID]
+  );
+}
+
+export async function updateMessageSent(convoID: string) {
+  await client.query(
+    "UPDATE jobs set message_sent = true WHERE conversation_id = $1",
+    [convoID]
   );
 }

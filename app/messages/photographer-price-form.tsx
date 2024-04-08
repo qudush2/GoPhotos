@@ -25,11 +25,11 @@ export default function PhotographerPriceForm({
   return (
     <>
       <form
-        className="border-2 border-green-500 mt-5 pt-5 px-3"
+        className="mt-5 pt-5 px-3"
         method="POST"
         onSubmit={handleSubmit}
       >
-        <label htmlFor="price">Enter the price:</label>
+        <label htmlFor="price" className='pr-3'>Enter the price (in USD):</label>
         <input type="text" id="price" name="price" pattern="[0-9]+" required />
         <SendPriceButton />
       </form>

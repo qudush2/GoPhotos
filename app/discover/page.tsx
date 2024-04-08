@@ -22,6 +22,7 @@ export default async function DiscoverPage({
       <PhotographerResults
         className="mt-6 px-8 sm:px-20 pb-5"
         photographers={photographers}
+        pgType={searchParams.photographyType as string}
       />
     </div>
   );
