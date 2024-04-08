@@ -1,35 +1,66 @@
+"use client";
 import { Account } from "@/utils/types";
-import { getAllJobIDs, getPGClerkId, createJob } from "@/utils/db";
-import {RequestQuoteButton} from './request-quote-button'
-import { currentUser } from "@clerk/nextjs";
+import { v4 as uuidv4 } from "uuid";
+import { useUser } from "@clerk/nextjs";
+import { useFormStatus, useFormState } from "react-dom";
+import { cn } from "@/utils/cn";
+import sendQuoteRequestAction from "@/actions/start-chat";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
+export default function RequestQuotePanel({ account }: { account: Account }) {
+  const { user } = useUser();
 
-export default async function RequestQuotePanel({
-  photographer,
-}: {
-  photographer: Account;
-}) {
+  if (!user) {
+    return null;
+  }
 
-	const user = await currentUser()
-	const convoID = await generateUniqueID()
-	const photographerClerkID = await getPGClerkId(photographer.email) // will return null if DNE
-	const customerClerkID = user?.id || ''
+  const userID = user.id;
 
-	// await createJob(photographerClerkID, customerClerkID, convoID)
+  const convoID = useMemo(() => uuidv4(), []);
+
+  const bindedAction = sendQuoteRequestAction.bind(
+    null,
+    account,
+    userID,
+    convoID
+  );
+  const [state, formAction] = useFormState(bindedAction, {
+    isSent: false,
+    hasError: false,
+  });
+
+  const router = useRouter();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    router.push(`/messages/${encodeURIComponent(convoID)}`);
+  };
 
   return (
     <div>
       <p className="text-xl font-medium mb-2">Request a Quote</p>
       <p className="text-sm text-gray-600 pb-3">
         Great! There is some information that we need before you can start
-        chatting with {photographer.fullName}
+        chatting with {account.fullName}
       </p>
       <form
         className="mt-3 space-y-3"
-        action="/messages"
-        target="_blank"
+        action={formAction}
         method="POST"
+        onSubmit={handleSubmit}
       >
+        <div>
+          <label htmlFor="eventTitle" className="sm text-sm font-medium">
+            Event Title{" "}
+          </label>
+          <input
+            id="eventTitle"
+            name="eventTitle"
+            required
+            className="w-full rounded-md border border-gray-200 text-sm outline-none"
+            placeholder="Grad Pics"
+          />
+        </div>
         <div>
           <label htmlFor="location" className="sm text-sm font-medium">
             Location{" "}
@@ -38,9 +69,9 @@ export default async function RequestQuotePanel({
           <input
             id="location"
             name="location"
-            // required
+            required
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
-            placeholder="MIT Media Lab"
+            placeholder="MIT Dome"
           />
         </div>
         <div>
@@ -51,7 +82,7 @@ export default async function RequestQuotePanel({
             type="date"
             id="eventDate"
             name="eventDate"
-            // required
+            required
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
             min={new Date().toISOString().split("T")[0]}
           />
@@ -64,6 +95,7 @@ export default async function RequestQuotePanel({
             type="time"
             id="startTime"
             name="startTime"
+            defaultValue=""
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
           />
         </div>
@@ -75,16 +107,18 @@ export default async function RequestQuotePanel({
             type="time"
             id="endTime"
             name="endTime"
+            defaultValue=""
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
           />
         </div>
         <div>
           <label htmlFor="organization" className="sm text-sm font-medium">
-            Organization <i>(optional)</i>
+            Organization <i>(if applicable)</i>
           </label>
           <input
             id="organization"
             name="organization"
+            defaultValue=""
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
             placeholder="GoPhotos"
           />
@@ -96,24 +130,36 @@ export default async function RequestQuotePanel({
           <textarea
             id="eventDescription"
             name="eventDescription"
-            // required
+            required
             className="w-full rounded-md border border-gray-200 text-sm outline-none"
             placeholder="Please be sure to include an overall description of the event, types of photos you expect, & any other necessary information."
           />
         </div>
-        <RequestQuoteButton customerID={customerClerkID} photographerID ={photographerClerkID} convoID={convoID}/>
+        <RequestQuoteButton />
       </form>
     </div>
   );
 }
 
-async function generateUniqueID() {
-  const existingIDs = await getAllJobIDs();
-  let uniqueID;
-  do {
-    uniqueID = Math.floor(100000 + Math.random() * 900000).toString();
-  } while (existingIDs.includes(uniqueID));
-  return uniqueID;
-}
+export function RequestQuoteButton() {
+  const { pending } = useFormStatus();
 
-// write the form response to job details table --> this can happen on the api then it redirects after it writes to db
+  return (
+    <div className="relative mt-2">
+      <button
+        type="submit"
+        className={cn(
+          "w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
+        )}
+      >
+        Send request
+      </button>
+      {pending && (
+        <>
+          <div className="absolute top-0 z-10 h-full w-full rounded-md bg-gray-800/60" />
+          <div className="absolute left-1/2 top-1/2 z-20 -m-2.5 h-5 w-5 animate-spin rounded-full border-4 border-b-transparent border-l-white border-r-white border-t-white" />
+        </>
+      )}
+    </div>
+  );
+}

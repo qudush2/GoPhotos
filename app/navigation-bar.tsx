@@ -37,6 +37,17 @@ export default function NavigationBar() {
             Discover
           </NavigationLink>
         </NavbarItem>
+        {userId && (
+          <NavbarItem>
+            <NavigationLink
+              href={`/messages`}
+              linkPath="/messages"
+              className="hover-gradient text-lg sm:text-base font-medium"
+            >
+              Messages
+            </NavigationLink>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       <NavbarContent justify="end" className="gap-4">
@@ -47,6 +58,15 @@ export default function NavigationBar() {
             className="hover-gradient sm:text-base font-medium"
           >
             Discover
+          </NavigationLink>
+        </NavbarItem>
+        <NavbarItem className="flex md:hidden">
+          <NavigationLink
+            href={`/messages`}
+            linkPath="/messages"
+            className="hover-gradient sm:text-base font-medium"
+          >
+            Messages
           </NavigationLink>
         </NavbarItem>
         <NavbarItem>

@@ -13,7 +13,7 @@ export default function AccountProfile() {
   const school = user?.publicMetadata.school as string;
   const skills = user?.publicMetadata.skills as Array<string>;
   const hires = user?.publicMetadata.hires as number;
-  console.log(user?.publicMetadata.hires)
+  console.log(user?.publicMetadata.hires);
 
   if (user && !isPhotographer) {
     return <UserProfile path="/user-profile" routing="path" />;
@@ -70,8 +70,9 @@ export default function AccountProfile() {
           labelIcon={<MoneyIcon />}
           url="stripe-dashboard"
         >
-          hi, you will be able to see your updated expected payout within a couple days of completing a job (returning a customer's picture)
-          { !user.publicMetadata.hasStripeID ? (
+          hi, you will be able to see your updated expected payout within a
+          couple days of completing a job (returning a customer's picture)
+          {!user.publicMetadata.hasStripeID ? (
             <form
               action="/api/stripe-account-setup"
               className="border-2 border-black p-2 my-5 bg-blue-300 flex justify-center"

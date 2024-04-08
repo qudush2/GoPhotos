@@ -1,8 +1,7 @@
 import SearchArea from "./search-area";
-// import FilterDropdown from "./filter-dialog";
 import PhotographerResults from "./photographer-results";
 
-import { getPhotographers } from "@/utils/api2";
+import { getPhotographers } from "@/utils/api";
 type DiscoverPageProps = {
   searchParams: { photographyType?: string };
 };
@@ -20,9 +19,6 @@ export default async function DiscoverPage({
           Currently available in Boston, MA & Cambridge, MA areas
         </p>
       </div>
-      {/* <div className="mt-2 flex justify-end">
-				<FilterDropdown />
-			</div> */}
       <PhotographerResults
         className="mt-6 px-8 sm:px-20 pb-5"
         photographers={photographers}

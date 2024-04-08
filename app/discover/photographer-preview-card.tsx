@@ -6,7 +6,7 @@ import { ScrollArea, ScrollBar } from "@/components/scroll-area";
 import Image from "next/image";
 import Link from "next/link";
 import { Photographer } from "@/utils/types";
-import { getAccount, getAssets } from "@/utils/api2";
+import { getAccount, getAssets } from "@/utils/api";
 import { shuffle } from "lodash";
 
 type PhotographerPreviewCardProps = {
@@ -54,9 +54,14 @@ export default async function PhotographerPreviewCard({
             ))}
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
-                <Link href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform ">
-                  View all
-                </Link>
+              <Link
+                href={`/discover/${encodeURIComponent(account.fullName)}`}
+                passHref
+                target="_blank"
+                className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform "
+              >
+                View all
+              </Link>
               <div
                 className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                 style={{
@@ -121,7 +126,10 @@ export default async function PhotographerPreviewCard({
         {/* Book Now button */}
         <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
           <Link
-            href={`/discover/${encodeURIComponent(account.fullName)}`} passHref target="_blank" className="flex justify-center"
+            href={`/discover/${encodeURIComponent(account.fullName)}`}
+            passHref
+            target="_blank"
+            className="flex justify-center"
           >
             Book Now
           </Link>

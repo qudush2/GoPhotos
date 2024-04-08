@@ -11,13 +11,11 @@ export async function POST() {
   const user = await currentUser();
   let account;
 
-  // add case where account set up is not complete
   if (
     user &&
     !user.publicMetadata.hasStripeID &&
     user.publicMetadata.isPhotographer
   ) {
-    //checks if logged in & is a photographer w/o stripe ID
     account = await stripe.accounts.create({
       type: "express",
       country: "US",
@@ -33,8 +31,6 @@ export async function POST() {
         last_name: user.lastName || "",
         email: user.emailAddresses[0].emailAddress || "",
         phone: user.phoneNumbers[0].phoneNumber || "",
-        // add GoPhotos URL as website default
-        //
       },
     });
 
@@ -45,13 +41,10 @@ export async function POST() {
       return_url: "http://localhost:3000/user-profile/profile-page",
     });
 
-    
-
-    // only run if charges_enables --> stripe set up is complete otherwise redirect to continue onboarding
-    // const accountInfoComplete = (await stripe.accounts.retrieve(account.id)).payouts_enabled
-    // if (accountInfoComplete) {
+    const accountInfoComplete = (await stripe.accounts.retrieve(account.id))
+      .payouts_enabled;
+    if (accountInfoComplete) {
       await clerkClient.users.updateUserMetadata(user.id, {
-        //updates clerk metadata with Stripe ID
         privateMetadata: {
           StripeId: account.id,
         },
@@ -59,21 +52,17 @@ export async function POST() {
           hasStripeID: true,
         },
       });
-    // }
-
-    console.log("this is the account link url from Stripe", accountLink.url);
-
-    return NextResponse.redirect(accountLink.url, 302);
-  }
-
-  else if (user &&
-    user.publicMetadata.hasStripeID &&
-    user.publicMetadata.isPhotographer) {
-      const user_diff = await clerkClient.users.getUser(user.id)
-      account = user_diff.privateMetadata.StripeId as string
-      const accountLink = await stripe.accounts.createLoginLink(account)
-      return NextResponse.redirect(accountLink.url, 302);
     }
 
-
+    return NextResponse.redirect(accountLink.url, 302);
+  } else if (
+    user &&
+    user.publicMetadata.hasStripeID &&
+    user.publicMetadata.isPhotographer
+  ) {
+    const user_diff = await clerkClient.users.getUser(user.id);
+    account = user_diff.privateMetadata.StripeId as string;
+    const accountLink = await stripe.accounts.createLoginLink(account);
+    return NextResponse.redirect(accountLink.url, 302);
+  }
 }

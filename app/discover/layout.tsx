@@ -1,13 +1,9 @@
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 
 type DiscoverLayoutProps = {
-    children?: ReactNode
-}
+  children?: ReactNode;
+};
 
 export default function DiscoverLayout({ children }: DiscoverLayoutProps) {
-    return (
-        <div>
-            {children}
-        </div>
-    )
+  return <div>{children}</div>;
 }
