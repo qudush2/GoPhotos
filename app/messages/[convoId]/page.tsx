@@ -35,6 +35,7 @@ export default async function MessageUniquePage({
 
   if (user) {
     const isPG = user.publicMetadata.isPhotographer as boolean;
+    console.log('this is the customer',customer)
 
     return (
       <div className="px-20 mb-10 grid grid-cols-7 h-[80vh]">

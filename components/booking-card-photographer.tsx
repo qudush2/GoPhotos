@@ -43,7 +43,8 @@ export default function BookingCardPhotographer({
       <Divider className="h-[1px] bg-black my-2" />
       <CardBody>
         <p className="text-lg font-medium">
-          {event_title} for {customer.full_name}
+          {event_title}
+          {/* {event_title} for {customer.full_name} */}
         </p>
         <br />
         <p className="text-lg underline">Proposed Booking Details</p>
