@@ -6,9 +6,11 @@ import { useFormStatus, useFormState } from "react-dom";
 import { cn } from "@/utils/cn";
 import sendQuoteRequestAction from "@/actions/start-chat";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { FormEvent } from 'react'
 
 export default function RequestQuotePanel({ account }: { account: Account }) {
+  const router = useRouter();
   const { user } = useUser();
 
   if (!user) {
@@ -18,21 +20,41 @@ export default function RequestQuotePanel({ account }: { account: Account }) {
   const userID = user.id;
 
   const convoID = useMemo(() => uuidv4(), []);
+  const accountEmail = account.email;
 
-  const bindedAction = sendQuoteRequestAction.bind(
-    null,
-    account,
-    userID,
-    convoID
-  );
-  const [state, formAction] = useFormState(bindedAction, {
-    isSent: false,
-    hasError: false,
-  });
+  // const bindedAction = sendQuoteRequestAction.bind(
+  //   null,
+  //   account,
+  //   userID,
+  //   convoID
+  // );
+  // const [state, formAction] = useFormState(bindedAction, {
+  //   isSent: false,
+  //   hasError: false,
+  // });
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   router.push(`/messages/${encodeURIComponent(convoID)}`);
+  // };
+
+  // useEffect(() => {
+
+  // });
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+ 
+    const formData = new FormData(event.currentTarget)
+    formData.append('convoID',convoID)
+    formData.append('userID',userID)
+    formData.append('accountEmail',accountEmail)
+
+    await fetch("/api/createChat", {
+      method: "POST",
+      body: formData,
+    });
     router.push(`/messages/${encodeURIComponent(convoID)}`);
   };
 
@@ -45,7 +67,7 @@ export default function RequestQuotePanel({ account }: { account: Account }) {
       </p>
       <form
         className="mt-3 space-y-3"
-        action={formAction}
+        // action={formAction}
         method="POST"
         onSubmit={handleSubmit}
       >

@@ -27,7 +27,7 @@ export default async function sendQuoteRequestAction(
 
   const pgClerkId = await getPGClerkId(account.email);
 
-  addJobDetails(
+  await addJobDetails(
     convoID,
     eventTitle.toString(),
     location.toString(),
