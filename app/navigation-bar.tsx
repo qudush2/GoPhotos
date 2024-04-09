@@ -37,7 +37,7 @@ export default function NavigationBar() {
             Discover
           </NavigationLink>
         </NavbarItem>
-        {userId && (
+        {/* {userId && (
           <NavbarItem>
             <NavigationLink
               href={`/messages`}
@@ -47,7 +47,7 @@ export default function NavigationBar() {
               Messages
             </NavigationLink>
           </NavbarItem>
-        )}
+        )} */}
       </NavbarContent>
 
       <NavbarContent justify="end" className="gap-4">
@@ -60,6 +60,7 @@ export default function NavigationBar() {
             Discover
           </NavigationLink>
         </NavbarItem>
+        {/* {userId && (
         <NavbarItem className="flex md:hidden">
           <NavigationLink
             href={`/messages`}
@@ -69,6 +70,7 @@ export default function NavigationBar() {
             Messages
           </NavigationLink>
         </NavbarItem>
+          )} */}
         <NavbarItem>
           {userId ? (
             <UserButton
