@@ -13,11 +13,11 @@ import PhotographerPriceForm from "./photographer-price-form";
 
 export default function BookingCardPhotographer({
   jobDetails,
-  // customer,
+  customer,
   className,
 }: {
   jobDetails: JobDetails;
-  // customer?: Customer;
+  customer: Customer;
   className?: string;
 }) {
   const {
@@ -43,8 +43,7 @@ export default function BookingCardPhotographer({
       <Divider className="h-[1px] bg-black my-2" />
       <CardBody>
         <p className="text-lg font-medium">
-          {event_title}
-          {/* {event_title} for {customer.full_name} */}
+          {event_title} for {customer.full_name}
         </p>
         <br />
         <p className="text-lg underline">Proposed Booking Details</p>
