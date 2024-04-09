@@ -39,7 +39,7 @@ export default async function MessageUniquePage({
 
     return (
       <div className="px-20 mb-10 grid grid-cols-7 h-[80vh]">
-        <div className="border-2 border-red-500 w-full col-span-5">
+        <div className="border-2 w-full col-span-5">
           <ChatBox
             jobDetails={jobDetails}
             convoId={decodedId}
@@ -49,7 +49,7 @@ export default async function MessageUniquePage({
             customer={customer}
           />
         </div>
-        <div className="col-span-2 border border-blue-500 overflow-auto">
+        <div className="col-span-2 overflow-auto">
           {!isPG && (
             <BookingCardCustomer
               jobDetails={jobDetails}

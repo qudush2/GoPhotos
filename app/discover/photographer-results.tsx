@@ -19,7 +19,6 @@ export default async function PhotographerResults({
     "gbHJdmf",
     "EfhxLZ9",
     "xhoCpeN",
-    "s18jaGo",
     "ROeNhrw",
     "L3pHOn6",
   ];
