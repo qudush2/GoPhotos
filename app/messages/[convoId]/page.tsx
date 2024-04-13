@@ -17,7 +17,6 @@ export default async function MessageUniquePage({
   params: { convoId: string };
 }) {
   const jobDetails = (await getJobDetails(params.convoId)) as JobDetails;
-  console.log(jobDetails)
   const customer = (await getCustomerInfo(
     jobDetails.customer_clerk_id
   )) as Customer;
@@ -69,13 +68,3 @@ export default async function MessageUniquePage({
     );
   }
 }
-
-
-
-// export default function Page() {
-//   return (
-//     <div className='px-20 my-10'>
-//       Sorry, it looks like this page is not working right now. We are working hard to fix it. 
-//     </div>
-//   )
-// }

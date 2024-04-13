@@ -15,9 +15,6 @@ export async function POST(req: NextRequest) {
     const organization = body.get('organization') as string;
     const eventDescription = body.get('eventDescription') as string;
 
-
-    console.log('api call made', convoID, userID)
-
     const pgClerkID = await getPGClerkId(accountEmail);
     await addJobDetails(
     convoID,
@@ -32,16 +29,16 @@ export async function POST(req: NextRequest) {
 
     await createJob(pgClerkID, userID, convoID);
 
-    if (req.method === "POST") {
-    //   return NextResponse.redirect(
-    //     // `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`, //change before merge to main
-    //     `http://localhost:3000/messages/${encodeURIComponent(convoID)}`,
-    //     302
-    //   );
-    return new Response('It works',{status: 200})
-    } else {
-      return new Response("not working :(", { status: 405 });
-    }
+    // if (req.method === "POST") {
+    // //   return NextResponse.redirect(
+    // //     // `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`, //change before merge to main
+    // //     `http://localhost:3000/messages/${encodeURIComponent(convoID)}`,
+    // //     302
+    // //   );
+    // return new Response('It works',{status: 200})
+    // } else {
+    //   return new Response("not working :(", { status: 405 });
+    // }
   }
   // Send a response back to the client
 }

@@ -54,7 +54,8 @@ export default function ChatInbox({
           photoUrl: photoUrl,
           role: role,
         });
-        const session = new Talk.Session({ appId: "xAillrJK", me: me }); //change to live mode --> xAillrJK
+        // const session = new Talk.Session({ appId: "xAillrJK", me: me });
+        const session = new Talk.Session({ appId: "tSzF029K", me: me });
         const inbox = session.createInbox();
 
         inbox.mount(document.getElementById("inbox-container"));
@@ -132,9 +133,9 @@ export default function ChatInbox({
     });
 
     return (
-      //change appId --> LIVE: xAillrJK TEST: tSzF029K
       <div className="h-full w-full">
-        <Session syncUser={syncUser} appId="xAillrJK">
+        {/* <Session syncUser={syncUser} appId="xAillrJK"> */}
+        <Session syncUser={syncUser} appId="tSzF029K"> 
           <Inbox
             syncConversation={syncConversation}
             className="h-full"

@@ -2,11 +2,10 @@
 import { Account } from "@/utils/types";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { cn } from "@/utils/cn";
-import sendQuoteRequestAction from "@/actions/start-chat";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { FormEvent } from 'react'
 
 export default function RequestQuotePanel({ account }: { account: Account }) {
@@ -21,27 +20,6 @@ export default function RequestQuotePanel({ account }: { account: Account }) {
 
   const convoID = useMemo(() => uuidv4(), []);
   const accountEmail = account.email;
-
-  // const bindedAction = sendQuoteRequestAction.bind(
-  //   null,
-  //   account,
-  //   userID,
-  //   convoID
-  // );
-  // const [state, formAction] = useFormState(bindedAction, {
-  //   isSent: false,
-  //   hasError: false,
-  // });
-
-  // const router = useRouter();
-
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   router.push(`/messages/${encodeURIComponent(convoID)}`);
-  // };
-
-  // useEffect(() => {
-
-  // });
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,7 +45,6 @@ export default function RequestQuotePanel({ account }: { account: Account }) {
       </p>
       <form
         className="mt-3 space-y-3"
-        // action={formAction}
         method="POST"
         onSubmit={handleSubmit}
       >
