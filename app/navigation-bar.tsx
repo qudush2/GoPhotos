@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/react";
 import gpLogo from "../public/GoPhotos_logo.png";
 import Image from "next/image";
-import { UserButton, useAuth } from "@clerk/nextjs";
+import { UserButton, useAuth, SignInButton } from "@clerk/nextjs";
 import React, { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
@@ -61,16 +61,16 @@ export default function NavigationBar() {
           </NavigationLink>
         </NavbarItem>
         {userId && (
-        <NavbarItem className="flex md:hidden">
-          <NavigationLink
-            href={`/messages`}
-            linkPath="/messages"
-            className="hover-gradient sm:text-base font-medium"
-          >
-            Messages
-          </NavigationLink>
-        </NavbarItem>
-          )}
+          <NavbarItem className="flex md:hidden">
+            <NavigationLink
+              href={`/messages`}
+              linkPath="/messages"
+              className="hover-gradient sm:text-base font-medium"
+            >
+              Messages
+            </NavigationLink>
+          </NavbarItem>
+        )}
         <NavbarItem>
           {userId ? (
             <UserButton
@@ -84,15 +84,9 @@ export default function NavigationBar() {
               userProfileUrl="/user-profile"
             />
           ) : (
-            <Button
-              href="/sign-in"
-              as={Link}
-              color="primary"
-              variant="flat"
-              className="font-medium hover-gradient"
-            >
-              Sign In{" "}
-            </Button>
+            <SignInButton>
+              <Button className="font-medium hover-gradient">Sign In </Button>
+            </SignInButton>
           )}
         </NavbarItem>
       </NavbarContent>

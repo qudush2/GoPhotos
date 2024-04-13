@@ -6,6 +6,7 @@ import {
 
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { Button } from "@nextui-org/react";
 
 import Tag from "@/components/tag";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
@@ -17,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/dialog";
 import RequestQuotePanel from "../create-chat-panel";
+import { currentUser, SignInButton } from "@clerk/nextjs";
 
 export default async function PhotographerUniquePage({
   params,
@@ -27,6 +29,7 @@ export default async function PhotographerUniquePage({
   const account = await getAccountDetailsByName(decodedName);
   const photographer = await getPhotographer(account.id);
   const assets = await getAssets(account.id);
+  const user = await currentUser();
 
   return (
     <div className="grid gap-1 rounded-md py-1 px-8 sm:px-20 pt-7 pb-10">
@@ -175,27 +178,38 @@ export default async function PhotographerUniquePage({
                 ${photographer.estimatedHourlyPriceRange[0]} - $
                 {photographer.estimatedHourlyPriceRange[1]}
               </p>
-              <Dialog>
+              {user && (
+                <Dialog>
+                  <div className="flex justify-center">
+                    <DialogTrigger className="mt-2 w-1/2 rounded-md bg-black px-2 py-1 text-base sm:text-lg font-medium text-white">
+                      Request quote
+                    </DialogTrigger>
+                  </div>
+                  <DialogOverlay>
+                    <DialogContent className="fixed left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white p-4">
+                      <div className="my-7">
+                        <RequestQuotePanel account={account} />
+                      </div>
+                      <DialogClose
+                        autoFocus={false}
+                        className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                      >
+                        <XMarkIcon className="w-8" />
+                        <span className="sr-only">Close</span>
+                      </DialogClose>
+                    </DialogContent>
+                  </DialogOverlay>
+                </Dialog>
+              )}
+              {!user && (
                 <div className="flex justify-center">
-                  <DialogTrigger className="mt-2 w-1/2 rounded-md bg-black px-2 py-1 text-base sm:text-lg font-medium text-white">
-                    Request quote
-                  </DialogTrigger>
+                  <SignInButton>
+                    <Button className="mt-2 w-1/2 rounded-md bg-black px-2 py-1 text-base sm:text-lg font-medium text-white">
+                      Sign In to Request quote{" "}
+                    </Button>
+                  </SignInButton>
                 </div>
-                <DialogOverlay>
-                  <DialogContent className="fixed left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white p-4">
-                    <div className="my-7">
-                      <RequestQuotePanel account={account} />
-                    </div>
-                    <DialogClose
-                      autoFocus={false}
-                      className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-                    >
-                      <XMarkIcon className="w-8" />
-                      <span className="sr-only">Close</span>
-                    </DialogClose>
-                  </DialogContent>
-                </DialogOverlay>
-              </Dialog>
+              )}
             </div>
           </div>
         </div>
