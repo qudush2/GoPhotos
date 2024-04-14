@@ -3,11 +3,8 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Divider,
-  Image,
   Link,
-  Button,
 } from "@nextui-org/react";
 
 export default function BookingCardDefault({

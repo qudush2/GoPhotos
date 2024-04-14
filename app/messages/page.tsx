@@ -17,11 +17,3 @@ export default async function Messages() {
     </div>
   );
 }
-
-// export default function Page() {
-//   return (
-//     <div className='px-20 my-10'>
-//       Sorry, it looks like this page is not working right now. We are working hard to fix it. 
-//     </div>
-//   )
-// }

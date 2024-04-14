@@ -9,14 +9,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST() {
   const user = await currentUser();
-  let account;
 
   if (
     user &&
     !user.publicMetadata.hasStripeID &&
     user.publicMetadata.isPhotographer
   ) {
-    account = await stripe.accounts.create({
+    const account = await stripe.accounts.create({
       type: "express",
       country: "US",
       email: user.emailAddresses[0].emailAddress,
@@ -61,7 +60,7 @@ export async function POST() {
     user.publicMetadata.isPhotographer
   ) {
     const user_diff = await clerkClient.users.getUser(user.id);
-    account = user_diff.privateMetadata.StripeId as string;
+    const account = user_diff.privateMetadata.StripeId as string;
     const accountLink = await stripe.accounts.createLoginLink(account);
     return NextResponse.redirect(accountLink.url, 302);
   }

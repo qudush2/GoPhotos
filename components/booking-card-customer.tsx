@@ -2,17 +2,15 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Divider,
   Link,
   Button,
 } from "@nextui-org/react";
-import { JobDetails, Account, Photographer, Asset } from "@/utils/types";
+import { JobDetails, Account, Asset } from "@/utils/types";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
 import {
   getAccountDetailsByName,
   getAssets,
-  getPhotographer,
 } from "@/utils/api";
 import { shuffle } from "lodash";
 import Image from "next/image";

@@ -5,10 +5,9 @@ import { useUser } from "@clerk/nextjs";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/utils/cn";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
-import { FormEvent } from 'react'
+import { useMemo, FormEvent } from "react";
 
-export default function RequestQuotePanel({ account }: { account: Account }) {
+export default function CreateChatPanel({ account }: { account: Account }) {
   const router = useRouter();
   const { user } = useUser();
 
@@ -17,17 +16,16 @@ export default function RequestQuotePanel({ account }: { account: Account }) {
   }
 
   const userID = user.id;
-
   const convoID = useMemo(() => uuidv4(), []);
   const accountEmail = account.email;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
- 
-    const formData = new FormData(event.currentTarget)
-    formData.append('convoID',convoID)
-    formData.append('userID',userID)
-    formData.append('accountEmail',accountEmail)
+
+    const formData = new FormData(event.currentTarget);
+    formData.append("convoID", convoID);
+    formData.append("userID", userID);
+    formData.append("accountEmail", accountEmail);
 
     await fetch("/api/createChat", {
       method: "POST",
@@ -43,11 +41,7 @@ export default function RequestQuotePanel({ account }: { account: Account }) {
         Great! There is some information that we need before you can start
         chatting with {account.fullName}
       </p>
-      <form
-        className="mt-3 space-y-3"
-        method="POST"
-        onSubmit={handleSubmit}
-      >
+      <form className="mt-3 space-y-3" method="POST" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="eventTitle" className="sm text-sm font-medium">
             Event Title{" "}

@@ -60,7 +60,7 @@ export default function SearchArea({ className, pgType }: SearchProps) {
           </select>
         </div>
 
-        <div className="mt-3 @md:col-span-2 @md:col-start-7 @md:mt-6">
+        <div className="mt-3 @md:col-span-2 @md:col-start-7 @md:mt-[30px]">
           <Button
             as={Link}
             href={`/discover?photographyType=${photographyType}`}

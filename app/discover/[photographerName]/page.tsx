@@ -17,7 +17,7 @@ import {
   DialogOverlay,
   DialogTrigger,
 } from "@/components/dialog";
-import RequestQuotePanel from "../create-chat-panel";
+import CreateChatPanel from "../create-chat-panel";
 import { currentUser, SignInButton } from "@clerk/nextjs";
 
 export default async function PhotographerUniquePage({
@@ -92,7 +92,6 @@ export default async function PhotographerUniquePage({
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      {/* overlay section */}
       <div className="mt-2">
         <div>
           <div
@@ -188,7 +187,7 @@ export default async function PhotographerUniquePage({
                   <DialogOverlay>
                     <DialogContent className="fixed left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white p-4">
                       <div className="my-7">
-                        <RequestQuotePanel account={account} />
+                        <CreateChatPanel account={account} />
                       </div>
                       <DialogClose
                         autoFocus={false}

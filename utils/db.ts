@@ -42,6 +42,14 @@ export async function isCustomer(email: string) {
   return result.rows.length > 0;
 }
 
+export async function isPG(email: string) {
+  const result = await client.query(
+    "SELECT email FROM account WHERE email = $1",
+    [email]
+  );
+  return result.rows.length > 0;
+}
+
 export async function createCustomer(
   email: string,
   fullName: string,
@@ -51,34 +59,6 @@ export async function createCustomer(
     "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
     [email, fullName, clerkid]
   );
-}
-
-export async function isPG(email: string) {
-  const result = await client.query(
-    "SELECT email FROM account WHERE email = $1",
-    [email]
-  );
-  return result.rows.length > 0;
-}
-
-export async function getPGinfo(email: string) {
-  const result = await client.query(
-    'SELECT p.location, p."hourlyPriceLow", p."hourlyPriceHigh", p.school, p.skills, p.about, p.hires FROM photographer p JOIN account a ON p.id = a.id WHERE a.email = $1',
-    [email]
-  );
-  return result.rows[0];
-}
-
-export async function getAccountByEmail(email: string) {
-  const result = await client.query("SELECT * FROM account WHERE email = $1", [
-    email,
-  ]);
-  return result.rows.length > 0 ? result.rows[0] : null;
-}
-
-export async function getAllJobIDs() {
-  const result = await client.query("SELECT job_id FROM jobs");
-  return result.rows;
 }
 
 export async function createJob(
@@ -97,7 +77,7 @@ export async function createJob(
   };
 }
 
-export async function addJobDetails(
+export async function createJobDetails(
   convoID: string,
   eventTitle: string,
   location: string,
@@ -120,6 +100,26 @@ export async function addJobDetails(
       description,
     ]
   );
+}
+
+export async function getPGinfo(email: string) {
+  const result = await client.query(
+    'SELECT p.location, p."hourlyPriceLow", p."hourlyPriceHigh", p.school, p.skills, p.about, p.hires FROM photographer p JOIN account a ON p.id = a.id WHERE a.email = $1',
+    [email]
+  );
+  return result.rows[0];
+}
+
+export async function getAccountByEmail(email: string) {
+  const result = await client.query("SELECT * FROM account WHERE email = $1", [
+    email,
+  ]);
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
+export async function getAllJobIDs() {
+  const result = await client.query("SELECT job_id FROM jobs");
+  return result.rows;
 }
 
 export async function getPGClerkId(email: string) {

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getPGClerkId, createJob, addJobDetails } from "@/utils/db";
+import { NextRequest } from "next/server";
+import { getPGClerkId, createJob, createJobDetails } from "@/utils/db";
 
 export async function POST(req: NextRequest) {
   if (req.method === "POST") {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     const eventDescription = body.get("eventDescription") as string;
 
     const pgClerkID = await getPGClerkId(accountEmail);
-    await addJobDetails(
+    await createJobDetails(
       convoID,
       eventTitle,
       location,

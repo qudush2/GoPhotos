@@ -46,12 +46,12 @@ export type JobDetails = {
   event_date: string;
   organization: string;
   description: string;
-  payment_url : string;
-  message_sent: boolean
+  payment_url: string;
+  message_sent: boolean;
 };
 
-export type Customer ={
-  full_name :string
-  email : string
-  clerkid : string
-}
+export type Customer = {
+  full_name: string;
+  email: string;
+  clerkid: string;
+};

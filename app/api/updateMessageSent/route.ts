@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
 
     if (req.method === "POST") {
       return NextResponse.redirect(
-        `https://www.gophotos.us/messages/${encodeURIComponent(convoId)}`, //change before merge to main
+        // CHANGE BEFORE PUSH TO MAIN
+        `https://www.gophotos.us/messages/${encodeURIComponent(convoId)}`,
         // `http://localhost:3000/messages/${encodeURIComponent(convoId)}`,
         302
       );
@@ -18,5 +19,4 @@ export async function POST(req: NextRequest) {
       return new Response("not working :(", { status: 405 });
     }
   }
-  // Send a response back to the client
 }

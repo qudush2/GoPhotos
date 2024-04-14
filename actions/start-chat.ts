@@ -1,7 +1,7 @@
 "use server";
 
 import { Account } from "@/utils/types";
-import { createJob, getPGClerkId, addJobDetails } from "@/utils/db";
+import { createJob, getPGClerkId, createJobDetails } from "@/utils/db";
 
 type State = {
   isSent: boolean;
@@ -27,7 +27,7 @@ export default async function sendQuoteRequestAction(
 
   const pgClerkId = await getPGClerkId(account.email);
 
-  await addJobDetails(
+  await createJobDetails(
     convoID,
     eventTitle.toString(),
     location.toString(),

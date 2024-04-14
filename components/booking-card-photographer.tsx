@@ -2,11 +2,7 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   Divider,
-  Image,
-  Link,
-  Button,
 } from "@nextui-org/react";
 import { JobDetails, Customer } from "@/utils/types";
 import PhotographerPriceForm from "./photographer-price-form";
