@@ -43,7 +43,7 @@ export default async function MessageUniquePage({
         <ViewportBanner />
 
         <div
-          className="grid grid-cols-3 w-full h-full
+          className="grid grid-cols-3 w-full h-full border-2
         lg:grid-cols-7"
         >
           <div
@@ -61,7 +61,7 @@ export default async function MessageUniquePage({
           </div>
 
           <div
-            className="hidden h-[80vh] overflow-auto
+            className="hidden h-[80vh] overflow-auto border-l
           lg:block lg:col-span-2"
           >
             {!isPG && (
