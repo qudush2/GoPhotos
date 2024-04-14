@@ -44,9 +44,7 @@ export default async function MessageUniquePage({
 
         <div
           className="grid grid-cols-3 w-full h-full
-        border-2 border-green-500
-        md:border-2 md:border-blue-500 
-        lg:grid-cols-7 lg:border-2 lg:border-red-500"
+        lg:grid-cols-7"
         >
           <div
             className="col-span-3
