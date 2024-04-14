@@ -3,15 +3,25 @@ import ChatInbox from "./chat-inbox";
 
 export default async function Messages() {
   return (
-    <div className="md:px-20 md:mb-10 flex h-[80vh] overflow-auto">
-      <div className="w-full h-full">
-        <div className="md:px-20 md:mb-10 grid grid-cols-3 md:grid-cols-7 h-[80vh]">
-          <div className="w-full h-full  col-span-2 md:col-span-5">
-            <ChatInbox />
-          </div>
-          <div className=" col-span-1 md:col-span-2 h-full">
-            <BookingCardDefault className="h-full" />
-          </div>
+    <div className="flex h-[80vh] overflow-auto px-7 sm:px-20 sm:mb-10">
+      <div
+        className="grid grid-cols-3 w-full h-full
+        border-2 border-green-500
+        md:border-2 md:border-blue-500 
+        xl:grid-cols-7 xl:border-2 xl:border-red-500"
+      >
+        <div
+          className="col-span-3 
+          xl:col-span-5"
+        >
+          <ChatInbox />
+        </div>
+
+        <div
+          className="hidden 
+          xl:block xl:col-span-2"
+        >
+          <BookingCardDefault className="h-full" />
         </div>
       </div>
     </div>

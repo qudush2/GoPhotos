@@ -71,6 +71,7 @@ export default function ChatInbox({
   }
 
   if (convoId && pgEmail && pgName && pgClerkID && jobDetails && customer) {
+    const { message_sent, event_title, event_date, description } = jobDetails;
     const syncUser = useCallback(
       () =>
         new Talk.User({
@@ -107,8 +108,6 @@ export default function ChatInbox({
       conversation.setParticipant(session.me);
       conversation.setParticipant(other);
 
-      const { message_sent } = jobDetails;
-      const { event_title, event_date, description } = jobDetails;
       if (!message_sent) {
         const pgFirstName = pgName.split(" ")[0];
         const message = `Hey ${pgFirstName}, I am interested in booking you for ${event_title} on ${event_date}. Here is some more details: ${description}. Please let me know how much this will cost or if you need more information.`;
@@ -119,23 +118,25 @@ export default function ChatInbox({
       return conversation;
     }, []);
 
-    useEffect(() => {
-      const updateMessageSent = async () => {
-        await fetch("/api/updateMessageSent", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ convoId }),
-        });
-      };
-      updateMessageSent();
-    });
+    if (!message_sent) {
+      useEffect(() => {
+        const updateMessageSent = async () => {
+          await fetch("/api/updateMessageSent", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ convoId }),
+          });
+        };
+        updateMessageSent();
+      });
+    }
 
     return (
       <div className="h-full w-full">
         {/* <Session syncUser={syncUser} appId="xAillrJK"> */}
-        <Session syncUser={syncUser} appId="tSzF029K"> 
+        <Session syncUser={syncUser} appId="tSzF029K">
           <Inbox
             syncConversation={syncConversation}
             className="h-full"

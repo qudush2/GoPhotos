@@ -1,6 +1,8 @@
 import ChatBox from "../chat-inbox";
 import BookingCardCustomer from "../../../components/booking-card-customer";
 import BookingCardPhotographer from "../../../components/booking-card-photographer";
+import { Banner, BannerCollapseButton } from "flowbite-react";
+import { HiX } from "react-icons/hi";
 
 import {
   getJobDetails,
@@ -37,34 +39,65 @@ export default async function MessageUniquePage({
     const isPG = user.publicMetadata.isPhotographer as boolean;
 
     return (
-      <div className="px-20 mb-10 grid grid-cols-7 h-[80vh]">
-        <div className="border-2 w-full col-span-5">
-          <ChatBox
-            jobDetails={jobDetails}
-            convoId={decodedId}
-            pgEmail={account.email}
-            pgName={account.fullName}
-            pgClerkID={pgClerkID}
-            customer={customer}
-          />
-        </div>
-        <div className="col-span-2 overflow-auto">
-          {!isPG && (
-            <BookingCardCustomer
+      <div className="flex h-[80vh] w-full overflow-auto px-7 sm:px-20 sm:mb-10">
+        <ViewportBanner />
+
+        <div
+          className="grid grid-cols-3 w-full h-full
+        border-2 border-green-500
+        md:border-2 md:border-blue-500 
+        lg:grid-cols-7 lg:border-2 lg:border-red-500"
+        >
+          <div
+            className="col-span-3
+          lg:col-span-5"
+          >
+            <ChatBox
               jobDetails={jobDetails}
+              convoId={decodedId}
+              pgEmail={account.email}
               pgName={account.fullName}
-              className="h-full"
-            />
-          )}
-          {isPG && (
-            <BookingCardPhotographer
-              jobDetails={jobDetails}
+              pgClerkID={pgClerkID}
               customer={customer}
-              className="h-full"
             />
-          )}
+          </div>
+
+          <div
+            className="hidden h-[80vh] overflow-auto
+          lg:block lg:col-span-2"
+          >
+            {!isPG && (
+              <BookingCardCustomer
+                jobDetails={jobDetails}
+                pgName={account.fullName}
+                className="h-full"
+              />
+            )}
+            {isPG && (
+              <BookingCardPhotographer
+                jobDetails={jobDetails}
+                customer={customer}
+                className="h-full"
+              />
+            )}
+          </div>
         </div>
       </div>
     );
   }
+}
+
+export function ViewportBanner() {
+  return (
+    <Banner className="absolute w-screen z-50 bg-black lg:hidden left-0">
+      <div className="flex w-full justify-between p-4">
+        <p className="flex items-center text-sm font-normal text-white">
+          Open on desktop to view full booking menu.
+        </p>
+        <BannerCollapseButton className="border-0 bg-transparent text-gray-500 pl-4">
+          <HiX className="h-4 w-4" />
+        </BannerCollapseButton>
+      </div>
+    </Banner>
+  );
 }
