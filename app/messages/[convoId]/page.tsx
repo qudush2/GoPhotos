@@ -40,7 +40,16 @@ export default async function MessageUniquePage({
 
     return (
       <div className="flex h-[80vh] w-full overflow-auto px-7 sm:px-20 sm:mb-10">
-        <ViewportBanner />
+        <Banner className="absolute w-screen z-50 bg-black lg:hidden left-0">
+          <div className="flex w-full justify-between p-4">
+            <p className="flex items-center text-sm font-normal text-white">
+              Open on desktop to view full booking menu.
+            </p>
+            <BannerCollapseButton className="border-0 bg-transparent text-gray-500 pl-4">
+              <HiX className="h-4 w-4" />
+            </BannerCollapseButton>
+          </div>
+        </Banner>
 
         <div
           className="grid grid-cols-3 w-full h-full border-2
@@ -83,19 +92,4 @@ export default async function MessageUniquePage({
       </div>
     );
   }
-}
-
-export function ViewportBanner() {
-  return (
-    <Banner className="absolute w-screen z-50 bg-black lg:hidden left-0">
-      <div className="flex w-full justify-between p-4">
-        <p className="flex items-center text-sm font-normal text-white">
-          Open on desktop to view full booking menu.
-        </p>
-        <BannerCollapseButton className="border-0 bg-transparent text-gray-500 pl-4">
-          <HiX className="h-4 w-4" />
-        </BannerCollapseButton>
-      </div>
-    </Banner>
-  );
 }
