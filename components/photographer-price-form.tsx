@@ -20,6 +20,13 @@ export default function PhotographerPriceForm({
       },
       body: JSON.stringify({ convoID, job_price }),
     });
+    await fetch("/api/send-payment-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ convoID }),
+    });
   };
 
   return (

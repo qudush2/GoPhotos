@@ -39,7 +39,7 @@ export default async function MessageUniquePage({
     const isPG = user.publicMetadata.isPhotographer as boolean;
 
     return (
-      <div className="flex h-[80vh] w-full overflow-auto px-7 sm:px-20 sm:mb-10">
+      <div className="flex h-[80vh] w-full overflow-auto px-8 sm:px-20 sm:mb-10">
         <Banner className="absolute w-screen z-50 bg-black lg:hidden left-0">
           <div className="flex w-full justify-between p-4">
             <p className="flex items-center text-sm font-normal text-white">

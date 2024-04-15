@@ -1,9 +1,37 @@
-import { Account, Asset, Photographer} from "./types";
+import { Account, Asset, Photographer } from "./types";
 
 export async function getPhotographers(
   photographyType?: string
 ): Promise<Photographer[]> {
-  const queryParams = photographyType ? `?photographyType=${photographyType}` : "";
+  const queryParams = photographyType
+    ? `?photographyType=${photographyType}`
+    : "";
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers${queryParams}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
+      },
+      cache: "no-cache",
+    }
+  ).then((res) => res.json());
+
+  const filteredPhotographers = data.filter((photographer: Photographer) => {
+    if (photographyType) {
+      return photographer.skills.includes(photographyType);
+    }
+    return false;
+  });
+
+  return filteredPhotographers;
+}
+
+export async function getPhotographersNoParam(
+  photographyType?: string
+): Promise<Photographer[]> {
+  const queryParams = photographyType
+    ? `?photographyType=${photographyType}`
+    : "";
   const { data } = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers${queryParams}`,
     {
@@ -77,7 +105,9 @@ export async function getPhotographer(
     }
   ).then((res) => res.json());
 
-  const photographer = data.find((photographer: Photographer) => photographer.accountId === accountId);
+  const photographer = data.find(
+    (photographer: Photographer) => photographer.accountId === accountId
+  );
 
   return photographer;
 }

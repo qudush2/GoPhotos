@@ -28,11 +28,8 @@ export async function POST(req: NextRequest) {
     );
 
     await createJob(pgClerkID, userID, convoID);
-
-    if (req.method === "POST") {
-      return new Response("It works", { status: 200 });
-    } else {
-      return new Response("not working :(", { status: 405 });
-    }
+    return new Response("It works", { status: 200 });
+  } else {
+    return new Response("not working :(", { status: 405 });
   }
 }
