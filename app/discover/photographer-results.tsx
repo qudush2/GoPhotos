@@ -7,13 +7,13 @@ import { Photographer } from "@/utils/types";
 type PhotographerResultsProps = {
   className?: string;
   photographers: Photographer[];
-  pgType: string
+  pgType: string;
 };
 
 export default async function PhotographerResults({
   className,
   photographers,
-  pgType
+  pgType,
 }: PhotographerResultsProps) {
   const hiddenAccounts = [
     "gbHJdmf",
@@ -21,7 +21,8 @@ export default async function PhotographerResults({
     "xhoCpeN",
     "ROeNhrw",
     "L3pHOn6",
-    "2KY5XM6"
+    "2KY5XM6",
+    "prklVeM",
   ];
   shuffleArray(photographers);
 
@@ -39,7 +40,10 @@ export default async function PhotographerResults({
         )
         .map((photographer, idx) => (
           <Fragment key={photographer.id}>
-            <PhotographerPreviewCard photographer={photographer} pgType={pgType}/>
+            <PhotographerPreviewCard
+              photographer={photographer}
+              pgType={pgType}
+            />
             {idx !== photographers.length - 1}
           </Fragment>
         ))}
