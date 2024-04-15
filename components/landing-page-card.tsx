@@ -31,7 +31,7 @@ export default async function LandingPageCard({
     "ROeNhrw",
     "L3pHOn6",
     "2KY5XM6",
-    //'prklVeM' //REMOVE
+    // 'prklVeM' //REMOVE
   ];
   shuffleArray(photographers);
 

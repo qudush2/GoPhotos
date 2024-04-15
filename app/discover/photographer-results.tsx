@@ -22,7 +22,7 @@ export default async function PhotographerResults({
     "ROeNhrw",
     "L3pHOn6",
     "2KY5XM6",
-    //add fake pg account
+    //'prklVeM'//add fake pg account
   ];
   shuffleArray(photographers);
 
