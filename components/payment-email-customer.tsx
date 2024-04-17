@@ -21,6 +21,8 @@ export default function PaymentEmailCustomer({
 
       <p>Visit <a href={`https://www.gophotos.us/discover/${encodeURIComponent(photographerName)}`}>{photographerName}'s profile</a></p>
       <p> <a href={payment_url}>Pay Now </a> to confirm your booking</p>
+
+      <p className="font-bold"> Please note that the photographer will not receive thier payment until after your pictures have been returned. </p>
       
       <p className='mt-2 italic'>
         If you have any questions or concerns, feel free to reply to this email to get help from GoPhotos.

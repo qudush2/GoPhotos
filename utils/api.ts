@@ -23,33 +23,11 @@ export async function getPhotographers(
     return false;
   });
 
-  return filteredPhotographers;
-}
+  if (photographyType) {
+    return filteredPhotographers
+  }
 
-export async function getPhotographersNoParam(
-  photographyType?: string
-): Promise<Photographer[]> {
-  const queryParams = photographyType
-    ? `?photographyType=${photographyType}`
-    : "";
-  const { data } = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers${queryParams}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.SERVER_SECRET}`,
-      },
-      cache: "no-cache",
-    }
-  ).then((res) => res.json());
-
-  const filteredPhotographers = data.filter((photographer: Photographer) => {
-    if (photographyType) {
-      return photographer.skills.includes(photographyType);
-    }
-    return false;
-  });
-
-  return filteredPhotographers;
+  return data;
 }
 
 export async function getAccount(accountId: string): Promise<Account> {

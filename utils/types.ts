@@ -17,6 +17,18 @@ export type Photographer = {
   hires: number;
 };
 
+export type Photographer2 = {
+  id: string;
+  accountId: string;
+  location: string;
+  hourlyPriceLow: number;
+  hourlyPriceHigh : number;
+  school: string;
+  skills: string[];
+  about: string;
+  hires: number;
+};
+
 export type Asset = {
   id: string;
   ownerAccountId: string;

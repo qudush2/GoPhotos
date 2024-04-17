@@ -30,7 +30,7 @@ export default function NavigationBar() {
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         <NavbarItem>
           <NavigationLink
-            href={`/discover?photographyType=${"Portrait"}`}
+            href={`/discover`}
             linkPath="/discover"
             className="hover-gradient text-lg sm:text-base font-medium"
           >
@@ -53,7 +53,7 @@ export default function NavigationBar() {
       <NavbarContent justify="end" className="gap-4">
         <NavbarItem className="flex md:hidden">
           <NavigationLink
-            href={`/discover?photographyType=${"Portrait"}`}
+            href={`/discover`}
             linkPath="/discover"
             className="hover-gradient sm:text-base font-medium"
           >

@@ -24,7 +24,6 @@ export default async function LandingPage() {
   const { userId } = auth();
   const user = await currentUser();
   const photographers = await getPhotographers();
-  console.log("hey im here", photographers);
 
   if (userId && user && user.publicMetadata.isPhotographer == null) {
     const email = user.emailAddresses[0].emailAddress;
@@ -87,9 +86,9 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div>
-            <LandingPageCard photographers={photographers} />
-          </div>
+          {/* <div className="mt-10">
+            <LandingPageCard photographers={photographers} className=""/>
+          </div> */}
         </div>
       </div>
     </div>

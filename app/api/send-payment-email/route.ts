@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
     const convoID = body.convoID as string;
     const jobDetails = (await getJobDetails(convoID)) as JobDetails
     const {customer_clerk_id, event_title, photographer_clerk_id, payment_url} = jobDetails
+    console.log('here', jobDetails)
 
     const customer = (await getCustomerInfo(customer_clerk_id)) as Customer;
     const customer_name = customer.full_name.split(' ')[0]

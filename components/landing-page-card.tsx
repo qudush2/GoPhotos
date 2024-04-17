@@ -31,7 +31,12 @@ export default async function LandingPageCard({
     "ROeNhrw",
     "L3pHOn6",
     "2KY5XM6",
-    // 'prklVeM' //REMOVE
+    // "prklVeM", //REMOVE
+    // hide photographers w/o best profiles zach (4), aimee (12), isabella (20)
+    "VqXmZF3",
+    "vEmzDoN",
+    "PQNMcnN",
+    "nJqfPa3",
   ];
   shuffleArray(photographers);
 
@@ -42,42 +47,47 @@ export default async function LandingPageCard({
   }
 
   return (
-    <div className={cn("space-y-5", className)}>
+    <div
+      className={cn(
+        "flex flex-row overflow-x-auto space-x-5 border-2 border-orange-300",
+        className
+      )}
+    >
       {photographers
         .filter(
           (photographer) => !hiddenAccounts.includes(photographer.accountId)
         )
         .map((photographer, idx) => (
           <Fragment key={photographer.id}>
-            <Card photographer={photographer}/>
+            <Card photographer={photographer} />
             {idx !== photographers.length - 1}
           </Fragment>
         ))}
+      <Link
+        href="/discover"
+        passHref
+        className="inline-block self-center justify-self-center px-20 py-2 bg-black text-white font-semibold rounded-md whitespace-nowrap"
+      >
+        See More
+      </Link>
     </div>
   );
 }
 
-
-
-export async function Card({
-  photographer,
-}: PhotographerPreviewCardProps) {
+export async function Card({ photographer }: PhotographerPreviewCardProps) {
   const account = await getAccount(photographer.accountId);
   const assets = await getAssets(photographer.accountId);
 
   return (
-    <div className="my-2 grid gap-5 rounded-md bg-white py-5 md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1">
-      <ScrollArea className="h-full w-full rounded-md md:col-start-2">
+    <div className="my-2 py-5 rounded-md bg-white border-2 border-purple-700 w-[30%] h-full">
+      <ScrollArea className="h-full w-full rounded-md border-2 border-blue-200">
         <div className="flex w-max gap-1">
           {shuffle(assets)
             .slice(0, 7)
             .map((asset, idx) => (
               <div
                 key={idx}
-                className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 md:w-80 lg:w-[28rem]"
-                style={{
-                  position: "relative",
-                }}
+                className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border md:w-80 lg:w-[28rem]"
               >
                 <div
                   className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
@@ -121,51 +131,45 @@ export async function Card({
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      {/* brief pg info section */}
-      <div className="flex flex-col justify-between gap-2 rounded-md p-2 shadow-lg md:row-start-1 pl-3">
-        <div>
-          <div className="flex items-center justify-between">
-            <div className="flex w-full items-center gap-2">
-              <div>
-                <p className="text-sm font-medium">{account.fullName}</p>
-                <p className="text-xs text-gray-600">{photographer.location}</p>
-              </div>
-            </div>
-            <div className="whitespace-nowrap pt-2 text-right">
-                  <p className="text-xs text-gray-600">Est. Hourly Price</p>
-                  <p className="text-lg font-semibold">
-                    ${photographer.estimatedHourlyPriceRange[0]} - $
-                    {photographer.estimatedHourlyPriceRange[1]}
-                  </p>
+      <div className="flex flex-col justify-between gap-2 rounded-md p-2 shadow-lg md:row-start-1 pl-3 border-2 border-red-700 ">
+        <div className="flex items-center justify-between">
+          <div className="flex w-full items-center gap-2">
+            <div>
+              <p className="text-sm font-medium">{account.fullName}</p>
+              <p className="text-xs text-gray-600">{photographer.location}</p>
             </div>
           </div>
-          <div className="mt-1 grid gap-1 sm:grid-cols-2 sm:grid-rows-1 md:grid-cols-1 md:grid-rows-[auto_auto]">
-            <div className="sm:col-start-1 sm:row-start-1">
-              <p className="mt-2 text-xs uppercase text-gray-600">About</p>
-              <p className="line-clamp-2 text-sm md:line-clamp-3">
-                {photographer.about}
-              </p>
-            </div>
-            <div className="md:row-start-2">
-              <p className="mt-2 text-xs uppercase text-gray-600">School</p>
-              <p className="text-sm">{photographer.school}</p>
-            </div>
-            <div className="sm:col-start-2 sm:row-start-1 md:col-start-1 md:row-start-3">
-              <p className="mt-2 text-xs uppercase text-gray-600">Skills</p>
-              <div className="mt-0.5 flex flex-wrap gap-1">
-                {photographer.skills.slice(0, 3).map((skill) => (
-                  <Tag key={skill}>{skill}</Tag>
-                ))}
-                {photographer.skills.length - 3 > 0 && (
-                  <Tag key={photographer.skills[0]}>
-                    <span className="flex items-center font-medium">
-                      <PlusIcon className="h-3 w-3" />
-                      {photographer.skills.length - 3}
-                    </span>
-                  </Tag>
-                )}
-              </div>
-            </div>
+          <div className="whitespace-nowrap pt-2 text-right">
+            <p className="text-xs text-gray-600">Est. Hourly Price</p>
+            <p className="text-lg font-semibold">
+              ${photographer.estimatedHourlyPriceRange[0]} - $
+              {photographer.estimatedHourlyPriceRange[1]}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-1">
+          <p className="mt-2 text-xs uppercase text-gray-600">About</p>
+          <p className="line-clamp-2 text-sm ">
+            {photographer.about}
+          </p>
+
+          <p className="mt-2 text-xs uppercase text-gray-600">School</p>
+          <p className="text-sm">{photographer.school}</p>
+
+          <p className="mt-2 text-xs uppercase text-gray-600">Skills</p>
+          <div className="mt-0.5 flex flex-wrap gap-1">
+            {photographer.skills.slice(0, 3).map((skill) => (
+              <Tag key={skill}>{skill}</Tag>
+            ))}
+            {photographer.skills.length - 3 > 0 && (
+              <Tag key={photographer.skills[0]}>
+                <span className="flex items-center font-medium">
+                  <PlusIcon className="h-3 w-3" />
+                  {photographer.skills.length - 3}
+                </span>
+              </Tag>
+            )}
           </div>
         </div>
 
