@@ -13,7 +13,7 @@ export default async function setupProductAndPrice(
   
     const product = await stripe.products.create({
       name: `${user?.firstName} ${user?.lastName}'s Photography Service`,
-      description: `${event_title}`,
+      description: `${event_title}. \nPlease note that there is an additional GoPhotos fee added on to the final price. This helps keep GoPhotos alive and growing!`,
     });
   
     const price = await stripe.prices.create({
