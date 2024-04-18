@@ -2,6 +2,16 @@ import SearchArea from "./search-area";
 import PhotographerResults from "./photographer-results";
 
 import { getPhotographers } from "@/utils/api";
+import { auth, currentUser, clerkClient } from "@clerk/nextjs";
+import {
+  setPhotographerClerkid,
+  isPG,
+  isPG_noClerk,
+  isCustomer,
+  createCustomer,
+  getPGinfo,
+} from "@/utils/db";
+
 type DiscoverPageProps = {
   searchParams: { photographyType?: string };
 };
@@ -9,6 +19,42 @@ type DiscoverPageProps = {
 export default async function DiscoverPage({
   searchParams,
 }: DiscoverPageProps) {
+
+  // move this to better location, temp solution
+  const { userId } = auth();
+  const user = await currentUser();
+
+  if (userId && user && user.publicMetadata.isPhotographer == null) {
+    const email = user.emailAddresses[0].emailAddress;
+    const fullName = user.firstName + " " + user.lastName;
+    const info = await getPGinfo(email);
+
+    if (await isPG_noClerk(email)) {
+      await setPhotographerClerkid(email, userId);
+      await clerkClient.users.updateUserMetadata(userId, {
+        publicMetadata: {
+          isPhotographer: true,
+          location: info.location,
+          hourlyPriceLow: info.hourlyPriceLow,
+          hourlyPriceHigh: info.hourlyPriceHigh,
+          school: info.school,
+          skills: info.skills,
+          about: info.about,
+          hires: info.hires,
+          hasStripeID: false,
+        },
+      });
+    } else if (!(await isCustomer(email)) && !(await isPG(email))) {
+      await createCustomer(email, fullName, userId);
+      await clerkClient.users.updateUserMetadata(userId, {
+        publicMetadata: {
+          isPhotographer: false,
+        },
+      });
+    }
+  }
+  // move to better location
+  
   const photographers = await getPhotographers(searchParams.photographyType);
 
   return (
