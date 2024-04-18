@@ -245,7 +245,7 @@ export default async function PhotographerUniquePage({
               {!user && (
                 <div className="flex justify-center">
                   <SignInButton>
-                    <Button className="mt-2 w-1/2 rounded-md bg-black px-2 py-1 text-base sm:text-lg font-medium text-white">
+                    <Button className="mt-2 w-fit rounded-md bg-black px-2 py-1 text-base sm:text-lg font-medium text-white">
                       Sign In to Request quote{" "}
                     </Button>
                   </SignInButton>
