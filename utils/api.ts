@@ -1,9 +1,11 @@
-import { Account, Asset, Photographer} from "./types";
+import { Account, Asset, Photographer } from "./types";
 
 export async function getPhotographers(
   photographyType?: string
 ): Promise<Photographer[]> {
-  const queryParams = photographyType ? `?photographyType=${photographyType}` : "";
+  const queryParams = photographyType
+    ? `?photographyType=${photographyType}`
+    : "";
   const { data } = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_HOST}/v1/photographers${queryParams}`,
     {
@@ -21,7 +23,11 @@ export async function getPhotographers(
     return false;
   });
 
-  return filteredPhotographers;
+  if (photographyType) {
+    return filteredPhotographers
+  }
+
+  return data;
 }
 
 export async function getAccount(accountId: string): Promise<Account> {
@@ -77,7 +83,9 @@ export async function getPhotographer(
     }
   ).then((res) => res.json());
 
-  const photographer = data.find((photographer: Photographer) => photographer.accountId === accountId);
+  const photographer = data.find(
+    (photographer: Photographer) => photographer.accountId === accountId
+  );
 
   return photographer;
 }

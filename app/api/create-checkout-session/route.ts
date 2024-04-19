@@ -41,12 +41,7 @@ export async function POST(req: NextRequest) {
       return new Response("Session URL is null", { status: 404 });
     }
     await updateJobPaymentUrl(convoID, session.url);
-    return NextResponse.redirect(
-      // CHANGE BEFORE MERGE TO MAIN
-      `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`,
-      // `http://localhost:3000/messages/${encodeURIComponent(convoID)}`,
-      302
-    );
+    return new Response("It works", { status: 200 });
   } else {
     return new Response("not working :(", { status: 405 });
   }

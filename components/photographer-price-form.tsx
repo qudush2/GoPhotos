@@ -13,12 +13,21 @@ export default function PhotographerPriceForm({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const job_price = event.currentTarget.price.value;
+    
     await fetch("/api/create-checkout-session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ convoID, job_price }),
+    });
+    
+    await fetch("/api/send-payment-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ convoID }),
     });
   };
 

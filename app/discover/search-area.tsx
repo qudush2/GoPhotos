@@ -57,17 +57,20 @@ export default function SearchArea({ className, pgType }: SearchProps) {
             <option value="Fashion">Fashion</option>
             <option value="Outdoor Photoshoot">Outdoor Photoshoot</option>
             <option value="Videography">Videography</option>
+            <option value="View All">View All</option>
           </select>
         </div>
 
         <div className="mt-3 @md:col-span-2 @md:col-start-7 @md:mt-[30px]">
           <Button
             as={Link}
-            href={`/discover?photographyType=${photographyType}`}
+            href={photographyType === 'View All' ? '/discover' : `/discover?photographyType=${photographyType}`}
             className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
           >
             Search
           </Button>
+
+          
         </div>
       </div>
     </div>

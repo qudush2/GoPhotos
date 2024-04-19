@@ -48,7 +48,7 @@ export default async function Messages() {
   //move to better location
 
   return (
-    <div className="flex h-[80vh] overflow-auto px-7 sm:px-20 sm:mb-10">
+    <div className="flex h-[80vh] overflow-auto px-8 sm:px-20 sm:mb-10">
       <div
         className="grid grid-cols-3 w-full h-full border-2
         xl:grid-cols-7"

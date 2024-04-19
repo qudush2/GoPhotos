@@ -121,7 +121,7 @@ export default function ChatInbox({
     if (!message_sent) {
       useEffect(() => {
         const updateMessageSent = async () => {
-          await fetch("/api/updateMessageSent", {
+          await fetch("/api/update-message-sent", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

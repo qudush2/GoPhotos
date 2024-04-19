@@ -11,7 +11,7 @@ import { shuffle } from "lodash";
 
 type PhotographerPreviewCardProps = {
   photographer: Photographer;
-  pgType : string
+  pgType? : string
 };
 
 export default async function PhotographerPreviewCard({
@@ -88,7 +88,7 @@ export default async function PhotographerPreviewCard({
               </div>
             </div>
             <div className="whitespace-nowrap pt-2 text-right">
-              {pgType !== 'Graduation' && (
+              {(!pgType || pgType !== 'Graduation') && (
                 <>
                   <p className="text-xs text-gray-600">Est. Hourly Price</p>
                   <p className="text-lg font-semibold">
@@ -144,6 +144,7 @@ export default async function PhotographerPreviewCard({
           </Link>
         </div>
       </div>
+      
     </div>
   );
 }

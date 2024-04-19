@@ -1,12 +1,13 @@
 import {
-  getAccountDetailsByName,
-  getPhotographer,
   getAssets,
 } from "@/utils/api";
+import {getAccountDetailsByName, getPhotographer} from '@/utils/db'
 
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
+import { Account, Photographer2, Asset } from "@/utils/types";
+
 
 import Tag from "@/components/tag";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
@@ -34,9 +35,9 @@ export default async function PhotographerUniquePage({
   params: { photographerName: string };
 }) {
   const decodedName = decodeURIComponent(params.photographerName);
-  const account = await getAccountDetailsByName(decodedName);
-  const photographer = await getPhotographer(account.id);
-  const assets = await getAssets(account.id);
+  const account = await getAccountDetailsByName(decodedName) as Account;
+  const photographer = await getPhotographer(account.id) as Photographer2;
+  const assets = await getAssets(photographer.accountId) as Asset[];
   const user = await currentUser();
 
   // move this to better location, temp solution
@@ -216,8 +217,8 @@ export default async function PhotographerUniquePage({
                 average hourly price range.
               </p>
               <p className="mt-0.5 text-lg font-semibold">
-                ${photographer.estimatedHourlyPriceRange[0]} - $
-                {photographer.estimatedHourlyPriceRange[1]}
+                ${photographer.hourlyPriceLow} - 
+                ${photographer.hourlyPriceHigh}
               </p>
               {user && (
                 <Dialog>

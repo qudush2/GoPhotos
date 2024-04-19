@@ -110,9 +110,31 @@ export async function getPGinfo(email: string) {
   return result.rows[0];
 }
 
+export async function getPhotographer(id: string) {
+  const result = await client.query(
+    'SELECT * FROM photographer WHERE id = $1',
+    [id]
+  );
+  return result.rows[0];
+}
+
 export async function getAccountByEmail(email: string) {
   const result = await client.query("SELECT * FROM account WHERE email = $1", [
     email,
+  ]);
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
+export async function getAccountByClerkId(clerkId: string) {
+  const result = await client.query("SELECT * FROM account WHERE clerkid = $1", [
+    clerkId,
+  ]);
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
+export async function getAccountDetailsByName(name : string) {
+  const result = await client.query("SELECT * FROM account WHERE \"fullName\" = $1", [
+    name,
   ]);
   return result.rows.length > 0 ? result.rows[0] : null;
 }
