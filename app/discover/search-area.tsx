@@ -11,7 +11,7 @@ type SearchProps = {
 };
 
 export default function SearchArea({ className, pgType }: SearchProps) {
-  const [photographyType, setPhotographyType] = useState(pgType);
+  const [photographyType, setPhotographyType] = useState(pgType ?? 'Graduation');
   const handlePhotographyTypeChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -45,13 +45,13 @@ export default function SearchArea({ className, pgType }: SearchProps) {
             onChange={handlePhotographyTypeChange}
             defaultValue={pgType}
           >
+            <option value="Graduation">Graduation</option>
             <option value="Portrait">Portrait</option>
             <option value="Candid">Candid</option>
             <option value="Corporate Event">Corporate Event</option>
             <option value="University Event">University Event</option>
             <option value="Sport">Sport</option>
             <option value="Journalism">Journalism</option>
-            <option value="Graduation">Graduation</option>
             <option value="Headshot">Headshot</option>
             <option value="Concert">Concert</option>
             <option value="Fashion">Fashion</option>
@@ -69,6 +69,8 @@ export default function SearchArea({ className, pgType }: SearchProps) {
           >
             Search
           </Button>
+
+          
         </div>
       </div>
     </div>

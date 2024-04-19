@@ -125,6 +125,13 @@ export async function getAccountByEmail(email: string) {
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
+export async function getAccountByClerkId(clerkId: string) {
+  const result = await client.query("SELECT * FROM account WHERE clerkid = $1", [
+    clerkId,
+  ]);
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
 export async function getAccountDetailsByName(name : string) {
   const result = await client.query("SELECT * FROM account WHERE \"fullName\" = $1", [
     name,

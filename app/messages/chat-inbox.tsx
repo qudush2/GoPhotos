@@ -119,7 +119,6 @@ export default function ChatInbox({
     }, []);
 
     if (!message_sent) {
-      console.log('here')
       useEffect(() => {
         const updateMessageSent = async () => {
           await fetch("/api/update-message-sent", {
@@ -130,7 +129,6 @@ export default function ChatInbox({
             body: JSON.stringify({ convoId }),
           });
         };
-        console.log('hiiiii')
         updateMessageSent();
       });
     }
