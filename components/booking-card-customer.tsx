@@ -14,6 +14,7 @@ import {
 } from "@/utils/api";
 import { shuffle } from "lodash";
 import Image from "next/image";
+import { format, subDays } from 'date-fns';
 
 export default async function BookingCardCustomer({
   jobDetails,
@@ -30,6 +31,7 @@ export default async function BookingCardCustomer({
     event_date,
     price_finalized,
     job_price,
+    paid
   } = jobDetails;
 
   const account = (await getAccountDetailsByName(pgName)) as Account;
@@ -111,7 +113,7 @@ export default async function BookingCardCustomer({
             </Button>
           </div>
         )}
-        {price_finalized && (
+        {price_finalized && !paid && (
           <>
           <div className="flex flex-col items-center">
             <br />
@@ -127,10 +129,20 @@ export default async function BookingCardCustomer({
           </div>
           </>
         )}
+        {price_finalized && paid && (
+          <>
+          <div className="mt-10">
+            <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
+              Congrats, your event {event_title} has been confirmed!
+            </p>
+            <p className="mt-10 italic">
+            You may cancel for a full refund by {format(subDays(new Date(event_date), 7), 'PPP')}
+            </p>
+          </div>
+          </>
+        )}
 
-        <br />
-        <br />
-        <p className="text-base italic">
+        {!paid && (<p className="text-base mt-10">
           How it works:
           <ul className="list-disc">
             <li className="mt-2">
@@ -150,14 +162,13 @@ export default async function BookingCardCustomer({
               transacted between you and the photographer.
             </li>
             <li className="mt-2 italic">
-              You may cancel for a full refund up to 1 week before the date of
-              the event ({event_date})
+            You may cancel for a full refund by {format(subDays(new Date(event_date), 7), 'PPP')}
             </li>
           </ul>
-        </p>
+        </p>)}
 
         <br />
-        <p className="text-base italic font-bold">
+        <p className="text-base font-bold">
           If you have questions or concerns, please email{" "}
           <a
             href="mailto:hello@gophotos.us"

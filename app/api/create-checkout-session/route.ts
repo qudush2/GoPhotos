@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const jobDetails = (await getJobDetails(convoID)) as JobDetails;
   const { event_title, photographer_clerk_id } = jobDetails;
 
-  const { price } = await setupProductAndPrice(job_price_num, event_title, photographer_clerk_id);
+  const { price } = await setupProductAndPrice(job_price_num, event_title, photographer_clerk_id, convoID);
 
   if (req.method === "POST") {
     const session = await stripe.checkout.sessions.create({
@@ -32,6 +32,9 @@ export async function POST(req: NextRequest) {
       ],
       success_url: `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`,
       cancel_url: `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`,
+      metadata : {
+        convoID : convoID
+      }
     });
 
     if (session.url === null) {

@@ -9,13 +9,17 @@ const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
 export default async function setupProductAndPrice(
     job_price: number,
     event_title: string,
-    photographer_clerk_id : string
+    photographer_clerk_id : string,
+    convoID : string
   ) {
     const photographer = (await getAccountByClerkId(photographer_clerk_id)) as Account
   
     const product = await stripe.products.create({
       name: `${photographer.fullName}'s Photography Service`,
       description: `${event_title}. lease note that there is an additional GoPhotos fee added on to the final price. This helps keep GoPhotos alive and growing!`,
+      metadata : {
+        convoID : convoID
+      }
     });
   
     const price = await stripe.prices.create({

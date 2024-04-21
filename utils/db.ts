@@ -112,7 +112,7 @@ export async function getPGinfo(email: string) {
 
 export async function getPhotographer(id: string) {
   const result = await client.query(
-    'SELECT * FROM photographer WHERE id = $1',
+    "SELECT * FROM photographer WHERE id = $1",
     [id]
   );
   return result.rows[0];
@@ -126,16 +126,18 @@ export async function getAccountByEmail(email: string) {
 }
 
 export async function getAccountByClerkId(clerkId: string) {
-  const result = await client.query("SELECT * FROM account WHERE clerkid = $1", [
-    clerkId,
-  ]);
+  const result = await client.query(
+    "SELECT * FROM account WHERE clerkid = $1",
+    [clerkId]
+  );
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
-export async function getAccountDetailsByName(name : string) {
-  const result = await client.query("SELECT * FROM account WHERE \"fullName\" = $1", [
-    name,
-  ]);
+export async function getAccountDetailsByName(name: string) {
+  const result = await client.query(
+    'SELECT * FROM account WHERE "fullName" = $1',
+    [name]
+  );
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
@@ -192,4 +194,10 @@ export async function updateMessageSent(convoID: string) {
     "UPDATE jobs set message_sent = true WHERE conversation_id = $1",
     [convoID]
   );
+}
+
+export async function updatePaid(convoID: string) {
+  await client.query("UPDATE jobs set paid = true WHERE conversation_id = $1", [
+    convoID,
+  ]);
 }
