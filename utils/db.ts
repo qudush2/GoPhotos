@@ -187,16 +187,6 @@ export async function updateJobPrice(convoID: string, job_price: string) {
   };
 }
 
-export async function updateJobPaymentUrl(
-  convoID: string,
-  payment_url: string
-) {
-  await client.query(
-    "UPDATE jobs SET payment_url = $1 WHERE conversation_id = $2",
-    [payment_url, convoID]
-  );
-}
-
 export async function updateMessageSent(convoID: string) {
   await client.query(
     "UPDATE jobs set message_sent = true WHERE conversation_id = $1",

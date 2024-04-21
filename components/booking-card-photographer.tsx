@@ -24,10 +24,8 @@ export default function BookingCardPhotographer({
     event_date,
     organization,
     description,
-    conversation_id,
     price_finalized,
     job_price,
-    payment_url,
   } = jobDetails;
   return (
     <Card className="px-2">

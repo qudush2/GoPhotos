@@ -58,7 +58,6 @@ export type JobDetails = {
   event_date: string;
   organization: string;
   description: string;
-  payment_url: string;
   message_sent: boolean;
 };
 

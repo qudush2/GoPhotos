@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { updateJobPaymentUrl, getJobDetails, updateJobPrice } from "@/utils/db";
+import { getJobDetails, updateJobPrice } from "@/utils/db";
 import { JobDetails } from "@/utils/types";
 import setupProductAndPrice from "@/actions/setup-product-price";
 
@@ -9,9 +9,9 @@ const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
 });
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const convoID = body.convoID as string;
-  const job_price = body.job_price as string;
+  const body = await req.formData();
+  const convoID = body.get('conversation_id') as string;
+  const job_price = body.get("job_price") as string;
   const job_price_num = parseInt(job_price, 10);
 
   await updateJobPrice(convoID, job_price);
@@ -30,18 +30,14 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      // CHANGE BEFORE MERGE TO MAIN
       success_url: `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`,
       cancel_url: `https://www.gophotos.us/messages/${encodeURIComponent(convoID)}`,
-      // success_url: `http://localhost:3000/messages/${encodeURIComponent(convoID)}`,
-      // cancel_url: `http://localhost:3000/messages/${encodeURIComponent(convoID)}`,
     });
 
     if (session.url === null) {
       return new Response("Session URL is null", { status: 404 });
     }
-    await updateJobPaymentUrl(convoID, session.url);
-    return new Response("It works", { status: 200 });
+    return NextResponse.redirect(session.url, 302);
   } else {
     return new Response("not working :(", { status: 405 });
   }

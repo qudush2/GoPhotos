@@ -27,15 +27,9 @@ export default async function BookingCardCustomer({
   const {
     event_title,
     loc,
-    start_time,
-    end_time,
     event_date,
-    organization,
-    description,
-    conversation_id,
     price_finalized,
     job_price,
-    payment_url,
   } = jobDetails;
 
   const account = (await getAccountDetailsByName(pgName)) as Account;
@@ -110,9 +104,6 @@ export default async function BookingCardCustomer({
               been finazlied, you will be able to pay.
             </p>
             <Button
-              as={Link}
-              href={payment_url}
-              target="_blank"
               className="w-full rounded-md bg-gray-300 px-3 py-2 text-sm font-medium text-gray-500 flex items-center justify-center"
               disabled
             >
@@ -121,25 +112,20 @@ export default async function BookingCardCustomer({
           </div>
         )}
         {price_finalized && (
+          <>
           <div className="flex flex-col items-center">
             <br />
             <p className="text-base mb-2">
               here is the price as agreed upon by you and the photographer:{" "}
               <span className="font-bold">${job_price}</span>
             </p>
-            <Button
-              as={Link}
-              href={payment_url}
-              target="_blank"
-              className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
-            >
-              Pay Now
-            </Button>
+            <PayNowButton jobDetails={jobDetails}/>
             <p className="text-sm italic">
               final price includes service fees + additional charges that help
               maintain this platform
             </p>
           </div>
+          </>
         )}
 
         <br />
@@ -182,5 +168,31 @@ export default async function BookingCardCustomer({
         </p>
       </CardBody>
     </Card>
+  );
+}
+
+
+export function PayNowButton({
+  jobDetails,
+}: {
+  jobDetails: JobDetails;
+}) {
+  const { conversation_id, job_price } = jobDetails;
+
+  return (
+    <>
+      <form
+        action="/api/create-checkout-session"
+        method="POST"
+        target='_blank'
+        className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
+      >
+        <input type="hidden" name="conversation_id" value={conversation_id} />
+        <input type="hidden" name="job_price" value={job_price} />
+        <Button type="submit">
+          Pay Now
+        </Button>
+      </form>
+    </>
   );
 }
