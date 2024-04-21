@@ -17,9 +17,9 @@ export async function POST(req: NextRequest) {
   await updateJobPrice(convoID, job_price);
 
   const jobDetails = (await getJobDetails(convoID)) as JobDetails;
-  const { event_title } = jobDetails;
+  const { event_title, photographer_clerk_id } = jobDetails;
 
-  const { price } = await setupProductAndPrice(job_price_num, event_title);
+  const { price } = await setupProductAndPrice(job_price_num, event_title, photographer_clerk_id);
 
   if (req.method === "POST") {
     const session = await stripe.checkout.sessions.create({

@@ -1,5 +1,6 @@
 import Stripe from "stripe";
-import { currentUser } from "@clerk/nextjs";
+import {getAccountByClerkId} from '@/utils/db'
+import {Account} from '@/utils/types'
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
     apiVersion: "2023-10-16",
@@ -7,13 +8,14 @@ const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
 
 export default async function setupProductAndPrice(
     job_price: number,
-    event_title: string
+    event_title: string,
+    photographer_clerk_id : string
   ) {
-    const user = await currentUser();
+    const photographer = (await getAccountByClerkId(photographer_clerk_id)) as Account
   
     const product = await stripe.products.create({
-      name: `${user?.firstName} ${user?.lastName}'s Photography Service`,
-      description: `${event_title}. \nPlease note that there is an additional GoPhotos fee added on to the final price. This helps keep GoPhotos alive and growing!`,
+      name: `${photographer.fullName}'s Photography Service`,
+      description: `${event_title}. lease note that there is an additional GoPhotos fee added on to the final price. This helps keep GoPhotos alive and growing!`,
     });
   
     const price = await stripe.prices.create({
