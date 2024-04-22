@@ -2,7 +2,7 @@
 import { Account } from "@/utils/types";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
-import { useFormStatus } from "react-dom";
+import React, { useState } from "react";
 import { cn } from "@/utils/cn";
 import { useRouter } from "next/navigation";
 import { useMemo, FormEvent } from "react";
@@ -10,6 +10,7 @@ import { useMemo, FormEvent } from "react";
 export default function CreateChatPanel({ account }: { account: Account }) {
   const router = useRouter();
   const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!user) {
     return null;
@@ -21,7 +22,7 @@ export default function CreateChatPanel({ account }: { account: Account }) {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    setIsLoading(true);
     const formData = new FormData(event.currentTarget);
     formData.append("convoID", convoID);
     formData.append("userID", userID);
@@ -32,6 +33,7 @@ export default function CreateChatPanel({ account }: { account: Account }) {
       body: formData,
     });
     router.push(`/messages/${encodeURIComponent(convoID)}`);
+    setIsLoading(false)
   };
 
   return (
@@ -41,7 +43,12 @@ export default function CreateChatPanel({ account }: { account: Account }) {
         Great! There is some information that we need before you can start
         chatting with {account.fullName}
       </p>
-      <form className="mt-3 space-y-3" method="POST" onSubmit={handleSubmit}>
+      <form
+        className="mt-3 space-y-3"
+        method="POST"
+        onSubmit={handleSubmit}
+        target="_blank"
+      >
         <div>
           <label htmlFor="eventTitle" className="sm text-sm font-medium">
             Event Title{" "}
@@ -128,28 +135,28 @@ export default function CreateChatPanel({ account }: { account: Account }) {
             placeholder="Please be sure to include an overall description of the event, types of photos you expect, & any other necessary information."
           />
         </div>
-        <RequestQuoteButton />
+        <RequestQuoteButton isLoading={isLoading} />
       </form>
     </div>
   );
 }
 
-export function RequestQuoteButton() {
-  const { pending } = useFormStatus();
+export function RequestQuoteButton({ isLoading }: { isLoading: boolean }) {
 
   return (
     <div className="relative mt-2">
       <button
         type="submit"
+        disabled={isLoading}
         className={cn(
           "w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
         )}
       >
-        Send request
+        {isLoading ? "Sending..." : "Send request"}
       </button>
-      {pending && (
+      {isLoading && (
         <>
-          <div className="absolute top-0 z-10 h-full w-full rounded-md bg-gray-800/60" />
+          <div className="absolute top-0 z-10 h-full w-full rounded-md bg-gray-800/60 " />
           <div className="absolute left-1/2 top-1/2 z-20 -m-2.5 h-5 w-5 animate-spin rounded-full border-4 border-b-transparent border-l-white border-r-white border-t-white" />
         </>
       )}
