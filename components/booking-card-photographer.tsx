@@ -26,6 +26,7 @@ export default function BookingCardPhotographer({
     description,
     price_finalized,
     job_price,
+    paid,
   } = jobDetails;
   return (
     <Card className="px-2">
@@ -55,7 +56,8 @@ export default function BookingCardPhotographer({
             <br />
           </>
         )}
-        {price_finalized && (
+        {price_finalized && !paid && (
+          <>
           <div>
             <br />
             here is the price of the job that the customer will pay:{" "}
@@ -64,7 +66,6 @@ export default function BookingCardPhotographer({
             will then confirm the booking.
             <br /> <br />
           </div>
-        )}
         <>
           <p className="font-medium text-xl">How it works:</p>
           <ul className="list-disc">
@@ -97,6 +98,30 @@ export default function BookingCardPhotographer({
             </li>
           </ul>
         </>
+        </>
+        )}
+
+      {price_finalized && paid && (
+          <>
+          <div className="mt-10">
+            <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
+              Congrats, your event {event_title} has been confirmed! <br/> {customer.full_name.split(' ')[0]} has paid ${job_price}.
+            </p>
+
+            <p className="font-medium text-xl mt-10">What's Next:</p>
+          <ul className="list-disc">
+            <li className="mt-2">
+              A section to upload your images will appear hear closer to the date of the gig.
+            </li>
+            <li className="mt-2">
+              After you submit your photos and {customer.full_name.split(' ')[0]} has confirmed recieving it (or after 3 days), the payout process will begin for you.
+              You should then receive your payment within a week! 
+            </li>
+          </ul>
+          </div>
+          </>
+        )}
+
         <p className="text-base italic font-bold mt-5">
           If you have questions or concerns, or have ideas to improve the logic
           of GoPhotos, please email me:{" "}

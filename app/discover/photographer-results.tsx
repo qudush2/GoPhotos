@@ -22,7 +22,7 @@ export default async function PhotographerResults({
     "ROeNhrw",
     "L3pHOn6",
     "2KY5XM6",
-    "prklVeM", //REMOVE BEFORE PUSH EDIT
+    // "prklVeM", //REMOVE BEFORE PUSH EDIT
   ];
   shuffleArray(photographers);
 
