@@ -22,7 +22,7 @@ export type Photographer2 = {
   accountId: string;
   location: string;
   hourlyPriceLow: number;
-  hourlyPriceHigh : number;
+  hourlyPriceHigh: number;
   school: string;
   skills: string[];
   about: string;
@@ -44,13 +44,12 @@ export type JobDetails = {
   conversation_id: string;
   job_price: number;
   price_finalized: boolean;
+  picture_upload_time: string;
   paid: boolean;
   pictures_uploaded: boolean;
-  picture_folder: string;
-  job_complete_pg: boolean;
+  picture_url: string;
   job_complete_customer: boolean;
   closed: boolean;
-  cancelled: boolean;
   event_title: string;
   loc: string;
   start_time: string;

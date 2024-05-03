@@ -8,13 +8,10 @@ import {
 } from "@nextui-org/react";
 import { JobDetails, Account, Asset } from "@/utils/types";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
-import {
-  getAccountDetailsByName,
-  getAssets,
-} from "@/utils/api";
+import { getAccountDetailsByName, getAssets } from "@/utils/api";
 import { shuffle } from "lodash";
 import Image from "next/image";
-import { format, subDays } from 'date-fns';
+import { format, subDays } from "date-fns";
 
 export default async function BookingCardCustomer({
   jobDetails,
@@ -31,7 +28,9 @@ export default async function BookingCardCustomer({
     event_date,
     price_finalized,
     job_price,
-    paid
+    paid,
+    pictures_uploaded,
+    picture_url,
   } = jobDetails;
 
   const account = (await getAccountDetailsByName(pgName)) as Account;
@@ -98,7 +97,7 @@ export default async function BookingCardCustomer({
         <p>Location: {loc}</p>
         <p>Date: {event_date}</p>
 
-        {!price_finalized && (
+        {!price_finalized && !paid && !pictures_uploaded && (
           <div className="flex flex-col items-center">
             <br />
             <p className="text-base mb-2">
@@ -113,59 +112,82 @@ export default async function BookingCardCustomer({
             </Button>
           </div>
         )}
-        {price_finalized && !paid && (
+        {price_finalized && !paid && !pictures_uploaded && (
           <>
-          <div className="flex flex-col items-center">
-            <br />
-            <p className="text-base mb-2">
-              here is the price as agreed upon by you and the photographer:{" "}
-              <span className="font-bold">${job_price}</span>
-            </p>
-            <PayNowButton jobDetails={jobDetails}/>
-            <p className="text-sm italic">
-              final price includes service fees + additional charges that help
-              maintain this platform
-            </p>
-          </div>
+            <div className="flex flex-col items-center">
+              <br />
+              <p className="text-base mb-2">
+                here is the price as agreed upon by you and the photographer:{" "}
+                <span className="font-bold">${job_price}</span>
+              </p>
+              <PayNowButton jobDetails={jobDetails} />
+              <p className="text-sm italic">
+                final price includes service fees + additional charges that help
+                maintain this platform
+              </p>
+            </div>
           </>
         )}
-        {price_finalized && paid && (
+        {price_finalized && paid && !pictures_uploaded && (
           <>
-          <div className="mt-10">
-            <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
-              Congrats, your event {event_title} has been confirmed!
-            </p>
-            <p className="mt-10 italic">
-            You may cancel for a full refund by {format(subDays(new Date(event_date), 7), 'PPP')}
-            </p>
-          </div>
+            <div className="mt-10">
+              <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
+                Congrats, your event {event_title} has been confirmed!
+              </p>
+
+              <p className="mt-5">
+                You will be notified via email when your images have been
+                uploaded.
+              </p>
+
+              <p className="mt-5 italic">
+                You may cancel for a full refund by{" "}
+                {format(subDays(new Date(event_date), 7), "PPP")}
+              </p>
+            </div>
           </>
         )}
 
-        {!paid && (<p className="text-base mt-10">
-          How it works:
-          <ul className="list-disc">
-            <li className="mt-2">
-              After you accept the photographer's quoted price, you will be
-              given payment instructions.
-            </li>
-            <li className="mt-2">
-              The photographer will not recieve this payment until after they
-              return your pictures from "{event_title}".
-            </li>
-            <li className="mt-2">
-              They will be notified that you have paid, which will confirm the
-              booking reservation.
-            </li>
-            <li className="mt-2">
-              This is to remove any discrepancies and protect the money being
-              transacted between you and the photographer.
-            </li>
-            <li className="mt-2 italic">
-            You may cancel for a full refund by {format(subDays(new Date(event_date), 7), 'PPP')}
-            </li>
-          </ul>
-        </p>)}
+        {!paid && !pictures_uploaded && (
+          <p className="text-base mt-10">
+            How it works:
+            <ul className="list-disc">
+              <li className="mt-2">
+                After you accept the photographer's quoted price, you will be
+                given payment instructions.
+              </li>
+              <li className="mt-2">
+                The photographer will not recieve this payment until after they
+                return your pictures from "{event_title}".
+              </li>
+              <li className="mt-2">
+                They will be notified that you have paid, which will confirm the
+                booking reservation.
+              </li>
+              <li className="mt-2">
+                This is to remove any discrepancies and protect the money being
+                transacted between you and the photographer.
+              </li>
+              <li className="mt-2 italic">
+                You may cancel for a full refund by{" "}
+                {format(subDays(new Date(event_date), 7), "PPP")}
+              </li>
+            </ul>
+          </p>
+        )}
+
+        {paid && pictures_uploaded && (
+          <div className="mt-10">
+            <p className="flex flex-col items-center text-lg">
+              Your pictures are ready to be viewed!
+            </p>
+            <a href={picture_url} className="underline" target="_blank">
+              <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
+                Click to view your pictures
+              </p>
+            </a>
+          </div>
+        )}
 
         <br />
         <p className="text-base font-bold">
@@ -182,12 +204,7 @@ export default async function BookingCardCustomer({
   );
 }
 
-
-export function PayNowButton({
-  jobDetails,
-}: {
-  jobDetails: JobDetails;
-}) {
+export function PayNowButton({ jobDetails }: { jobDetails: JobDetails }) {
   const { conversation_id, job_price } = jobDetails;
 
   return (
@@ -195,14 +212,12 @@ export function PayNowButton({
       <form
         action="/api/create-checkout-session"
         method="POST"
-        target='_blank'
+        target="_blank"
         className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
       >
         <input type="hidden" name="conversation_id" value={conversation_id} />
         <input type="hidden" name="job_price" value={job_price} />
-        <Button type="submit">
-          Pay Now
-        </Button>
+        <Button type="submit">Pay Now</Button>
       </form>
     </>
   );

@@ -83,11 +83,13 @@ export default async function LandingPage() {
       </div>
       <div className="hidden md:flex w-1/2 items-center justify-end pr-16">
         <Image
-          src="/images/photographer.JPG"
+          // src="/images/grad1.JPG"
+          src='https://res.cloudinary.com/dklvhnniq/image/upload/f_auto,q_auto/kymcdxwxu270hpjh8gfz'
+          // src="/images/photographer.JPG"
           alt="Photographer taking a picture"
-          width={750}
+          width={700}
           height={100}
-          className="rounded-2xl"
+          className="rounded-md"
         />
       </div>
     </div>

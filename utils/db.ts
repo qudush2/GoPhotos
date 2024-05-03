@@ -201,3 +201,11 @@ export async function updatePaid(convoID: string) {
     convoID,
   ]);
 }
+
+export async function updateJobPictures(convoID: string, pictureURL: string, currentDate: Date) {
+  const isoDate = currentDate.toISOString()
+  await client.query(
+    "UPDATE jobs SET picture_url = $1, pictures_uploaded = true, picture_upload_time = $2 WHERE conversation_id = $3",
+    [pictureURL, isoDate, convoID]
+  );
+}
