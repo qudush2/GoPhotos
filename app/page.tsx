@@ -96,3 +96,7 @@ export default async function LandingPage() {
   </div>
   );
 }
+
+{/* <div className="mt-10">
+  <LandingPageCard photographers={photographers} className=""/>
+</div> */}
