@@ -1,36 +1,66 @@
-import {getPhotographers, getAccount} from '@/utils/api'
+import {
+  getAllAccounts,
+  getJobDetails,
+  getPhotographer,
+  getAllJobIDs,
+} from "@/utils/db";
 
 export default async function AdminPage() {
+  const accounts = await getAllAccounts();
+  const jobIDs = await getAllJobIDs();
+  const jobDetails = await Promise.all(
+    jobIDs.map((conversation_id) =>
+      getJobDetails(conversation_id.conversation_id)
+    )
+  );
 
-    const photographers = await getPhotographers()
+  const jobCountByPhotographerClerkID = jobDetails.reduce(
+    (acc: { [key: string]: number }, job) => {
+      const clerkID = job.photographer_clerk_id;
+      acc[clerkID] = (acc[clerkID] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
-    const photographersWithAccount = await Promise.all(photographers.map(async (photographer) => {
-        const account = await getAccount(photographer.accountId);
-        return { ...photographer, account };
-    }));
+  const accountsWithPhotographer = await Promise.all(
+    accounts.map(async (account) => {
+      const photographer = await getPhotographer(account.id);
+      const jobCount = jobCountByPhotographerClerkID[account.clerkid] || 0;
+      return { ...account, photographer, jobCount };
+    })
+  );
+
+  accountsWithPhotographer.sort((a, b) => b.jobCount - a.jobCount);
 
   return (
     <div className="bg-[#f4f4f4] py-20 px-8 sm:pb-7 sm:pt-7 sm:pl-20 ">
-      This is the admin page
-        <div>
-            here are the photographers:
-            <table className="table-auto w-full">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="px-4 py-2">Photographer Name</th>
-                        <th className="px-4 py-2">Photographer Account ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {photographersWithAccount.map((photographer, index) => (
-                        <tr key={index} className="bg-white">
-                            <td className="border px-4 py-2">{photographer.account.fullName}</td>
-                            <td className="border px-4 py-2">{photographer.accountId}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+      This is the admin data page
+      <div>
+        here are the photographers:
+        <table className="table-auto w-full">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Email</th>
+              <th className="px-4 py-2">Clerk ID</th>
+              <th className="px-4 py-2"># of Jobs Contacted For</th>
+            </tr>
+          </thead>
+          <tbody>
+            {accountsWithPhotographer.map((account, index) => (
+              <tr key={index} className="bg-white">
+                <td className="border px-4 py-2">{account.fullName}</td>
+                <td className="border px-4 py-2">{account.email}</td>
+                <td className="border px-4 py-2">
+                  {account.clerkid || "No Clerk ID set"}
+                </td>
+                <td className="border px-4 py-2">{account.jobCount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
