@@ -9,7 +9,7 @@ type PhotographerResultsProps = {
   className?: string;
   photographers: Photographer[];
   pgType: string;
-  bypassVisibility : boolean,
+  bypassVisibility? : boolean,
 };
 
 export default async function PhotographerResults({
