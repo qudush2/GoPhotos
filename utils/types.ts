@@ -15,6 +15,7 @@ export type Photographer = {
   skills: string[];
   about: string;
   hires: number;
+  visible : boolean;
 };
 
 export type Photographer2 = {
@@ -27,6 +28,7 @@ export type Photographer2 = {
   skills: string[];
   about: string;
   hires: number;
+  visible : boolean;
 };
 
 export type Asset = {

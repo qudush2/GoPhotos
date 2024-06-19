@@ -50,6 +50,14 @@ export async function isPG(email: string) {
   return result.rows.length > 0;
 }
 
+export async function isVisible(accountID: string) {
+  const result = await client.query(
+    'SELECT visible FROM photographer WHERE "accountId" = $1',
+    [accountID]
+  );
+  return result.rows[0].visible
+}
+
 export async function createCustomer(
   email: string,
   fullName: string,
@@ -202,8 +210,12 @@ export async function updatePaid(convoID: string) {
   ]);
 }
 
-export async function updateJobPictures(convoID: string, pictureURL: string, currentDate: Date) {
-  const isoDate = currentDate.toISOString()
+export async function updateJobPictures(
+  convoID: string,
+  pictureURL: string,
+  currentDate: Date
+) {
+  const isoDate = currentDate.toISOString();
   await client.query(
     "UPDATE jobs SET picture_url = $1, pictures_uploaded = true, picture_upload_time = $2 WHERE conversation_id = $3",
     [pictureURL, isoDate, convoID]
