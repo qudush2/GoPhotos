@@ -3,20 +3,20 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 import Tag from "@/components/tag";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
 
-import Image from "next/image";
 import Link from "next/link";
+import ImageModal from "@/components/image-modal";
 import { Photographer } from "@/utils/types";
 import { getAccount, getAssets } from "@/utils/api";
 import { shuffle } from "lodash";
 
 type PhotographerPreviewCardProps = {
   photographer: Photographer;
-  pgType? : string
+  pgType?: string;
 };
 
 export default async function PhotographerPreviewCard({
   photographer,
-  pgType
+  pgType,
 }: PhotographerPreviewCardProps) {
   const account = await getAccount(photographer.accountId);
   const assets = await getAssets(photographer.accountId);
@@ -44,13 +44,11 @@ export default async function PhotographerPreviewCard({
                     opacity: 0.5,
                   }}
                 />
-                <Image
+                <ImageModal
                   alt=""
                   src={asset.cdnPath}
                   placeholder="blur"
                   blurDataURL={asset.placeholderBase64}
-                  fill
-                  style={{ objectFit: "contain", zIndex: 1 }}
                 />
               </div>
             ))}
@@ -88,7 +86,7 @@ export default async function PhotographerPreviewCard({
               </div>
             </div>
             <div className="whitespace-nowrap pt-2 text-right">
-              {(!pgType || pgType !== 'Graduation') && (
+              {(!pgType || pgType !== "Graduation") && (
                 <>
                   <p className="text-xs text-gray-600">Est. Hourly Price</p>
                   <p className="text-lg font-semibold">
@@ -97,9 +95,13 @@ export default async function PhotographerPreviewCard({
                   </p>
                 </>
               )}
-              {pgType === 'Graduation' && (<>
-                <div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 bg-[#FC4D74] text-white text-xs sm:text-sm font-medium">Special Grad Pricing</div>
-              </>)}
+              {pgType === "Graduation" && (
+                <>
+                  <div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 bg-[#FC4D74] text-white text-xs sm:text-sm font-medium">
+                    Special Grad Pricing
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="mt-1 grid gap-1 sm:grid-cols-2 sm:grid-rows-1 md:grid-cols-1 md:grid-rows-[auto_auto]">
@@ -144,7 +146,6 @@ export default async function PhotographerPreviewCard({
           </Link>
         </div>
       </div>
-      
     </div>
   );
 }
