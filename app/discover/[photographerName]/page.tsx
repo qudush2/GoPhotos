@@ -1,8 +1,8 @@
 import { getAssets } from "@/utils/api";
 import { getAccountDetailsByName, getPhotographer } from "@/utils/db";
 
-import ImageModal from "@/components/image-modal";
-import ViewAllImages from "@/components/view-all-images";
+import ImageModal from "@/components/images/image-modal";
+import ViewAllImages from "@/components/images/view-all-images";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 import { Account, Photographer2, Asset } from "@/utils/types";

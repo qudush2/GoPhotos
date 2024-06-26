@@ -6,7 +6,7 @@ import {
   getAccountByClerkId,
 } from "@/utils/db";
 import { Customer, JobDetails, Account } from "@/utils/types";
-import PaymentEmailCustomer from "@/components/payment-email-customer";
+import PaymentEmailCustomer from "@/components/payment/payment-email-customer";
 
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);

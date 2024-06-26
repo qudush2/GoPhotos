@@ -1,6 +1,6 @@
 import ChatBox from "../chat-inbox";
-import BookingCardCustomer from "../../../components/booking-card-customer";
-import BookingCardPhotographer from "../../../components/booking-card-photographer";
+import BookingCardCustomer from "../../../components/booking-cards/customer";
+import BookingCardPhotographer from "../../../components/booking-cards/photographer";
 import { Banner, BannerCollapseButton } from "flowbite-react";
 import { HiX } from "react-icons/hi";
 

@@ -150,6 +150,14 @@ export async function getAccountByClerkId(clerkId: string) {
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
+export async function getAccountByPhotographerId(pgId: string) : Promise<Account> {
+  const result = await client.query(
+    'SELECT * FROM account a JOIN photographer p ON a.id = p.id WHERE p."accountId" = $1',
+    [pgId]
+  );
+  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
 export async function getAccountDetailsByName(name: string) {
   const result = await client.query(
     'SELECT * FROM account WHERE "fullName" = $1',
@@ -193,6 +201,13 @@ export async function getCustomerInfo(clerkID: string) {
     [clerkID]
   );
   return result.rows[0];
+}
+
+export async function updateProfilePicture(clerkID : string, pfpURL : string) {
+  await client.query(
+    "UPDATE account SET profile_picture_url = $1 WHERE clerkID = $2",
+    [pfpURL, clerkID]
+  )
 }
 
 export async function updateJobPrice(convoID: string, job_price: string) {

@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 import { JobDetails, Customer } from "@/utils/types";
-import PhotographerPriceForm from "./photographer-price-form";
+import PhotographerPriceForm from "../payment/photographer-price-form";
 import React, { useState } from "react";
 
 export default function BookingCardPhotographer({

@@ -4,10 +4,12 @@ import Tag from "@/components/tag";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
 
 import Link from "next/link";
-import ImageModal from "@/components/image-modal";
+import ImageModal from "@/components/images/image-modal";
 import { Photographer } from "@/utils/types";
-import { getAccount, getAssets } from "@/utils/api";
+import { getAssets } from "@/utils/api";
+import {getAccountByPhotographerId} from '@/utils/db'
 import { shuffle } from "lodash";
+import { Avatar } from "@nextui-org/react";
 
 type PhotographerPreviewCardProps = {
   photographer: Photographer;
@@ -18,7 +20,7 @@ export default async function PhotographerPreviewCard({
   photographer,
   pgType,
 }: PhotographerPreviewCardProps) {
-  const account = await getAccount(photographer.accountId);
+  const account = await getAccountByPhotographerId(photographer.accountId);
   const assets = await getAssets(photographer.accountId);
 
   return (
@@ -30,7 +32,7 @@ export default async function PhotographerPreviewCard({
             .map((asset, idx) => (
               <div
                 key={idx}
-                className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 md:w-80 lg:w-[28rem]"
+                className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 md:w-80 lg:w-[28rem]"
                 style={{
                   position: "relative",
                 }}
@@ -80,6 +82,15 @@ export default async function PhotographerPreviewCard({
         <div>
           <div className="flex items-center justify-between">
             <div className="flex w-full items-center gap-2">
+              {/* add pfp here */}
+              <div className="relative w-14 h-14 rounded-full p-[2px] bg-gradient-to-r from-[#ff9993] via-[#fc7674] to-[#fc4d74]">
+                <Avatar
+                  showFallback
+                  name={account.fullName}
+                  src={account.profile_picture_url}
+                  className="w-full h-full rounded-full bg-white"
+                />
+              </div>
               <div>
                 <p className="text-sm font-medium">{account.fullName}</p>
                 <p className="text-xs text-gray-600">{photographer.location}</p>

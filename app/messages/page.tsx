@@ -1,4 +1,4 @@
-import BookingCardDefault from "@/components/booking-card-default";
+import BookingCardDefault from "@/components/booking-cards/default";
 import ChatInbox from "./chat-inbox";
 import { auth, currentUser, clerkClient } from "@clerk/nextjs";
 import {
@@ -11,7 +11,6 @@ import {
 } from "@/utils/db";
 
 export default async function Messages() {
-
   //move to better location
   const { userId } = auth();
   const user = await currentUser();
