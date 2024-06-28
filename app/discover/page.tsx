@@ -1,7 +1,7 @@
 import SearchArea from "./search-area";
 import PhotographerResults from "./photographer-results";
 
-import { getPhotographers } from "@/utils/api";
+import { getAllPhotographers } from "@/utils/db";
 import { auth, currentUser, clerkClient } from "@clerk/nextjs";
 import {
   setPhotographerClerkid,
@@ -19,7 +19,6 @@ type DiscoverPageProps = {
 export default async function DiscoverPage({
   searchParams,
 }: DiscoverPageProps) {
-
   // move this to better location, temp solution
   const { userId } = auth();
   const user = await currentUser();
@@ -54,8 +53,8 @@ export default async function DiscoverPage({
     }
   }
   // move to better location
-  
-  const photographers = await getPhotographers(searchParams.photographyType);
+
+  const photographers = await getAllPhotographers(searchParams.photographyType);
 
   return (
     <div className="bg-[#f4f4f4]">

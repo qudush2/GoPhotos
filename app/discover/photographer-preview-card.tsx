@@ -6,8 +6,7 @@ import { ScrollArea, ScrollBar } from "@/components/scroll-area";
 import Link from "next/link";
 import ImageModal from "@/components/images/image-modal";
 import { Photographer } from "@/utils/types";
-import { getAssets } from "@/utils/api";
-import {getAccountByPhotographerId} from '@/utils/db'
+import { getAccountByPhotographerId, getAssets } from "@/utils/db";
 import { shuffle } from "lodash";
 import { Avatar } from "@nextui-org/react";
 
@@ -21,7 +20,7 @@ export default async function PhotographerPreviewCard({
   pgType,
 }: PhotographerPreviewCardProps) {
   const account = await getAccountByPhotographerId(photographer.accountId);
-  const assets = await getAssets(photographer.accountId);
+  const assets = await getAssets(photographer.id);
 
   return (
     <div className="my-2 grid gap-5 rounded-md bg-white py-5 md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1">
@@ -101,8 +100,8 @@ export default async function PhotographerPreviewCard({
                 <>
                   <p className="text-xs text-gray-600">Est. Hourly Price</p>
                   <p className="text-lg font-semibold">
-                    ${photographer.estimatedHourlyPriceRange[0]} - $
-                    {photographer.estimatedHourlyPriceRange[1]}
+                    ${photographer.hourlyPriceLow} - $
+                    {photographer.hourlyPriceHigh}
                   </p>
                 </>
               )}

@@ -1,11 +1,14 @@
-import { getAssets } from "@/utils/api";
-import { getAccountDetailsByName, getPhotographer } from "@/utils/db";
+import {
+  getAccountDetailsByName,
+  getPhotographer,
+  getAssets,
+} from "@/utils/db";
 
 import ImageModal from "@/components/images/image-modal";
 import ViewAllImages from "@/components/images/view-all-images";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
-import { Account, Photographer2, Asset } from "@/utils/types";
+import { Account, Photographer, Asset } from "@/utils/types";
 
 import Tag from "@/components/tag";
 import { ScrollArea, ScrollBar } from "@/components/scroll-area";
@@ -34,8 +37,8 @@ export default async function PhotographerUniquePage({
 }) {
   const decodedName = decodeURIComponent(params.photographerName);
   const account = (await getAccountDetailsByName(decodedName)) as Account;
-  const photographer = (await getPhotographer(account.id)) as Photographer2;
-  const assets = (await getAssets(photographer.accountId)) as Asset[];
+  const photographer = (await getPhotographer(account.id)) as Photographer;
+  const assets = (await getAssets(photographer.id)) as Asset[];
   const user = await currentUser();
 
   // move this to better location, temp solution

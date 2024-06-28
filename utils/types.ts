@@ -1,5 +1,5 @@
 export type Account = {
-  id: string;
+  id: number;
   email: string;
   fullName: string;
   clerkid: string;
@@ -7,19 +7,7 @@ export type Account = {
 };
 
 export type Photographer = {
-  id: string;
-  accountId: string;
-  location: string;
-  estimatedHourlyPriceRange: [number, number];
-  school: string;
-  skills: string[];
-  about: string;
-  hires: number;
-  visible : boolean;
-};
-
-export type Photographer2 = {
-  id: string;
+  id: number;
   accountId: string;
   location: string;
   hourlyPriceLow: number;
@@ -28,11 +16,11 @@ export type Photographer2 = {
   skills: string[];
   about: string;
   hires: number;
-  visible : boolean;
+  visible: boolean;
 };
 
 export type Asset = {
-  id: string;
+  id: number;
   ownerAccountId: string;
   cdnPath: string;
   placeholderBase64: string;
