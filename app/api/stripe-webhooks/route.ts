@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { updatePaid } from "@/utils/db";
+import { Resend } from "resend";
+import { updatePaid, getJobDetails, getCustomerInfo, getAccountByClerkId } from "@/utils/db";
+import { JobDetails, Customer, Account } from "@/utils/types";
+import PaymentConfirmedCustomer from "@/components/emails/payment-confirmed-customer";
+import PaymentConfirmedPhotographer from "@/components/emails/payment-confirmed-photographer";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 });
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   const payload = await req.text();
@@ -26,6 +31,40 @@ export async function POST(req: NextRequest) {
 
     if (convoID) {
       await updatePaid(convoID);
+
+      const jobDetails = (await getJobDetails(convoID)) as JobDetails;
+      const customer = (await getCustomerInfo(
+        jobDetails.customer_clerk_id
+      )) as Customer;
+      const photographer = (await getAccountByClerkId(
+        jobDetails.photographer_clerk_id
+      )) as Account;
+
+      // Send payment confirmation email to customer
+      console.log(customer)
+      console.log(photographer)
+      await resend.emails.send({
+        from: "gigs@gophotos.us",
+        to: customer.email,
+        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.fullName}`,
+        react: PaymentConfirmedCustomer({
+          customerName: customer.full_name,
+          photographerName: photographer.fullName,
+          event_title: jobDetails.event_title,
+        }),
+      });
+
+      // Send notification email to photographer
+      await resend.emails.send({
+        from: "gigs@gophotos.us",
+        to: photographer.email,
+        subject: `Payment Received for ${jobDetails.event_title} with ${customer.full_name}`,
+        react: PaymentConfirmedPhotographer({
+          photographerName: photographer.fullName,
+          customerName: customer.full_name,
+          event_title: jobDetails.event_title,
+        }),
+      });
     }
   }
 
