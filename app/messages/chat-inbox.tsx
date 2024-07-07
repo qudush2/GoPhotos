@@ -7,9 +7,10 @@ import { Session, Inbox } from "@talkjs/react";
 import { useRouter } from "next/navigation";
 import { JobDetails, Customer } from "@/utils/types";
 
-const talk_id = process.env.NEXT_PUBLIC_TALK_DEV === "true"
-  ? process.env.NEXT_PUBLIC_TALK_DEV_ID 
-  : process.env.NEXT_PUBLIC_TALK_PROD_ID
+const talk_id =
+  process.env.NEXT_PUBLIC_TALK_DEV === "true"
+    ? process.env.NEXT_PUBLIC_TALK_DEV_ID
+    : process.env.NEXT_PUBLIC_TALK_PROD_ID;
 
 export default function ChatInbox({
   jobDetails,
@@ -32,8 +33,6 @@ export default function ChatInbox({
   if (!user) {
     return null;
   }
-
-  console.log('here it is',talk_id)
 
   const id = user.id || "";
 
