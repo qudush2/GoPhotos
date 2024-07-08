@@ -29,6 +29,7 @@ import {
   createCustomer,
   getPGinfo,
 } from "@/utils/db";
+import ShareProfileButton from "@/components/share-profile";
 
 export default async function PhotographerUniquePage({
   params,
@@ -148,7 +149,7 @@ export default async function PhotographerUniquePage({
                                             xl:col-span-5"
             >
               <div className="sm:w-full">
-                <div className="flex w-full items-center">
+                <div className="flex w-full items-center justify-between">
                   <div>
                     <p className="text-base sm:text-lg font-medium">
                       {account.fullName}
@@ -157,6 +158,7 @@ export default async function PhotographerUniquePage({
                       Cambridge, MA
                     </p>
                   </div>
+                  <ShareProfileButton photographerName={decodedName} />
                 </div>
                 <div className="mt-5">
                   <p className="mb-0.5 text-sm sm:text-base font-medium">
