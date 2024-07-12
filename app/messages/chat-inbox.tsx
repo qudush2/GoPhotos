@@ -7,6 +7,11 @@ import { Session, Inbox } from "@talkjs/react";
 import { useRouter } from "next/navigation";
 import { JobDetails, Customer } from "@/utils/types";
 
+const talk_id =
+  process.env.NEXT_PUBLIC_TALK_DEV === "true"
+    ? process.env.NEXT_PUBLIC_TALK_DEV_ID
+    : process.env.NEXT_PUBLIC_TALK_PROD_ID;
+
 export default function ChatInbox({
   jobDetails,
   convoId,
@@ -54,8 +59,7 @@ export default function ChatInbox({
           photoUrl: photoUrl,
           role: role,
         });
-        const session = new Talk.Session({ appId: "xAillrJK", me: me });
-        // const session = new Talk.Session({ appId: "tSzF029K", me: me });
+        const session = new Talk.Session({ appId: talk_id as string, me: me });
         const inbox = session.createInbox();
 
         inbox.mount(document.getElementById("inbox-container"));
@@ -135,8 +139,7 @@ export default function ChatInbox({
 
     return (
       <div className="h-full w-full">
-        <Session syncUser={syncUser} appId="xAillrJK">
-        {/* <Session syncUser={syncUser} appId="tSzF029K"> */}
+        <Session syncUser={syncUser} appId={talk_id as string}>
           <Inbox
             syncConversation={syncConversation}
             className="h-full"

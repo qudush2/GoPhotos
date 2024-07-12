@@ -5,7 +5,7 @@ import {
   getCustomerInfo,
   getAccountByClerkId,
 } from "@/utils/db";
-import PicturesUploadedEmail from "@/components/pictures-uploaded-email";
+import PicturesUploadedEmail from "@/components/emails/pictures-uploaded-email";
 import { JobDetails, Customer, Account } from "@/utils/types";
 
 export async function POST(req: NextRequest) {
