@@ -1,10 +1,10 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
 
-import Tag from "@/components/tag";
-import { ScrollArea, ScrollBar } from "@/components/scroll-area";
+import Tag from "@/components/Tag";
+import { ScrollArea, ScrollBar } from "@/components/ScrollArea";
 
 import Link from "next/link";
-import ImageModal from "@/components/images/image-modal";
+import ImageModal from "@/components/Images/ImageModal";
 import { Photographer } from "@/utils/types";
 import { getAccountByPhotographerId, getAssets } from "@/utils/db";
 import { shuffle } from "lodash";

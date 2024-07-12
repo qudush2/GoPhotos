@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
-import { updatePaid, getJobDetails, getCustomerInfo, getAccountByClerkId } from "@/utils/db";
+import {
+  updatePaid,
+  getJobDetails,
+  getCustomerInfo,
+  getAccountByClerkId,
+} from "@/utils/db";
 import { JobDetails, Customer, Account } from "@/utils/types";
-import PaymentConfirmedCustomer from "@/components/emails/payment-confirmed-customer";
-import PaymentConfirmedPhotographer from "@/components/emails/payment-confirmed-photographer";
+import PaymentConfirmedCustomer from "@/components/Emails/PaymentConfirmedCustomer";
+import PaymentConfirmedPhotographer from "@/components/Emails/PaymentConfirmedPhotographer";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -41,8 +46,8 @@ export async function POST(req: NextRequest) {
       )) as Account;
 
       // Send payment confirmation email to customer
-      console.log(customer)
-      console.log(photographer)
+      console.log(customer);
+      console.log(photographer);
       await resend.emails.send({
         from: "gigs@gophotos.us",
         to: customer.email,

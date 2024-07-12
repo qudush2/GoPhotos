@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/dialog";
+import { Dialog, DialogContent } from "@/components/Dialog";
 import Image from "next/image";
 import { Asset } from "@/utils/types";
 import { XMarkIcon } from "@heroicons/react/20/solid";

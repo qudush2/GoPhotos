@@ -1,4 +1,4 @@
-import BookingCardDefault from "@/components/booking-cards/default";
+import BookingCardDefault from "@/components/BookingCards/Default";
 import ChatInbox from "./chat-inbox";
 import { auth, currentUser, clerkClient } from "@clerk/nextjs";
 import {

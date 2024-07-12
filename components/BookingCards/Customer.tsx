@@ -7,7 +7,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import { JobDetails, Account, Asset } from "@/utils/types";
-import { ScrollArea, ScrollBar } from "@/components/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ScrollArea";
 import { getAccountDetailsByName, getAssets } from "@/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";

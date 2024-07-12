@@ -4,21 +4,21 @@ import {
   getAssets,
 } from "@/utils/db";
 
-import ImageModal from "@/components/images/image-modal";
-import ViewAllImages from "@/components/images/view-all-images";
+import ImageModal from "@/components/Images/ImageModal";
+import ViewAllImages from "@/components/Images/ViewImages";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 import { Account, Photographer, Asset } from "@/utils/types";
 
-import Tag from "@/components/tag";
-import { ScrollArea, ScrollBar } from "@/components/scroll-area";
+import Tag from "@/components/Tag";
+import { ScrollArea, ScrollBar } from "@/components/ScrollArea";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogOverlay,
   DialogTrigger,
-} from "@/components/dialog";
+} from "@/components/Dialog";
 import CreateChatPanel from "../create-chat-panel";
 import { currentUser, SignInButton, auth, clerkClient } from "@clerk/nextjs";
 import {

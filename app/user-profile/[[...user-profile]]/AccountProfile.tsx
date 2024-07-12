@@ -1,6 +1,6 @@
 "use client";
 import { UserProfile, useUser } from "@clerk/nextjs";
-import Tag from "@/components/tag";
+import Tag from "@/components/Tag";
 
 export default function AccountProfile() {
   const { user } = useUser();
