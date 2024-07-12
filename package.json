@@ -31,7 +31,6 @@
 		"@types/react-dom": "18.2.18",
 		"@vercel/analytics": "^1.2.1",
 		"@vercel/speed-insights": "^1.0.10",
-		"autoprefixer": "10.4.15",
 		"class-variance-authority": "^0.7.0",
 		"cloudinary": "^2.2.0",
 		"color-schemes-generator": "^1.0.1",
@@ -44,7 +43,6 @@
 		"next": "^14.1.0",
 		"next-cloudinary": "^6.5.1",
 		"pg": "^8.11.3",
-		"postcss": "^8.4.38",
 		"postgres": "^3.4.4",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
@@ -53,7 +51,6 @@
 		"sonner": "^1.4.0",
 		"stripe": "^14.23.0",
 		"svix": "^1.24.0",
-		"tailwindcss": "3.3.3",
 		"talkjs": "^0.18.0",
 		"typescript": "5.2.2",
 		"uuid": "^9.0.1",
@@ -65,9 +62,12 @@
 		"@types/lodash": "^4.14.202",
 		"@types/pg": "^8.11.4",
 		"@types/uuid": "^9.0.8",
+		"autoprefixer": "^10.4.19",
 		"husky": "^8.0.0",
+		"postcss": "^8.4.39",
 		"prettier": "^3.1.0",
-		"prettier-plugin-tailwindcss": "^0.5.7"
+		"prettier-plugin-tailwindcss": "^0.5.7",
+		"tailwindcss": "^3.4.4"
 	},
 	"lint-staged": {
 		"*.{js,ts}": "eslint --cache --fix",
