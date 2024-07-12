@@ -2,7 +2,7 @@ import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
   publicRoutes: ["/", "(^/discover.*)"],
-  ignoredRoutes: ["/api/clerk-webhooks", "/api/stripe-webhooks"],
+  ignoredRoutes: ["/api/webhooks/(.*)"],
 });
 
 export const config = {

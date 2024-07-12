@@ -14,7 +14,7 @@ export default function PhotographerPriceForm({
     event.preventDefault();
     const job_price = event.currentTarget.price.value;
 
-    await fetch("/api/update-price", {
+    await fetch("/api/database-updates/update-price", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export default function PhotographerPriceForm({
       body: JSON.stringify({ convoID, job_price }),
     });
 
-    await fetch("/api/send-payment-email", {
+    await fetch("/api/emails/send-payment-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

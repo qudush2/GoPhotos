@@ -29,7 +29,7 @@ export default function ImageViewer({ folderId }: ImageViewerProps) {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await fetch(`/api/image-upload?folderId=${folderId}`)
+        const response = await fetch(`/api/images/general-image?folderId=${folderId}`)
         if (!response.ok) {
           throw new Error('Failed to fetch images')
         }
@@ -124,7 +124,7 @@ export default function ImageViewer({ folderId }: ImageViewerProps) {
     }, 0)
 
     try {
-      const response = await fetch('/api/download-images', {
+      const response = await fetch('/api/images/download-images', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageKeys: keys }),
@@ -205,7 +205,7 @@ export default function ImageViewer({ folderId }: ImageViewerProps) {
     setIsDeleting(true)
 
     try {
-      const response = await fetch('/api/image-upload', {
+      const response = await fetch('/api/images/general-image', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keys: Array.from(selectedImages) }),

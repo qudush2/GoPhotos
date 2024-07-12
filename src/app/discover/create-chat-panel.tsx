@@ -28,7 +28,7 @@ export default function CreateChatPanel({ account }: { account: Account }) {
     formData.append("userID", userID);
     formData.append("accountEmail", accountEmail);
 
-    await fetch("/api/create-chat", {
+    await fetch("/api/database-updates/create-chat", {
       method: "POST",
       body: formData,
     });

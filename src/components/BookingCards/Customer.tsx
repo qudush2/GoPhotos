@@ -210,7 +210,7 @@ export function PayNowButton({ jobDetails }: { jobDetails: JobDetails }) {
   return (
     <>
       <form
-        action="/api/create-checkout-session"
+        action="/api/stripe/create-checkout-session"
         method="POST"
         target="_blank"
         className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"

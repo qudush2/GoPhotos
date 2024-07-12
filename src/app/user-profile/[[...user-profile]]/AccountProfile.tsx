@@ -74,7 +74,7 @@ export default function AccountProfile() {
               hi, please complete the setup of your stripe account to begin
               receiving payments and manage your completed jobs
               <form
-                action="/api/stripe-account-setup"
+                action="/api/stripe/stripe-account-setup"
                 className="border-2 border-black p-2 my-5 bg-[#FC7674] flex justify-center text-white"
                 method="POST"
               >
@@ -87,7 +87,7 @@ export default function AccountProfile() {
               hi, you will be able to see your updated expected payout within a
               couple days of completing a job.
               <form
-                action="/api/stripe-account-setup"
+                action="/api/stripe/stripe-account-setup"
                 className="border-2 border-black p-2 my-5 bg-[#FC7674] flex justify-center text-white"
                 method="POST"
                 target="_blank"

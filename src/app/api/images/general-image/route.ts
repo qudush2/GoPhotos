@@ -4,7 +4,10 @@ import { S3Client, CreateMultipartUploadCommand, UploadPartCommand, CompleteMult
 const s3Client = new S3Client({ region: process.env.AWS_REGION })
 const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN
 
-
+/**
+ * Initiates a multipart upload for each file and returns presigned URLs for each part.
+ * This allows the client to upload large files directly to S3 in parts.
+ */
 export async function POST(request: Request) {
   const { files, folderName } = await request.json() //extract convoID from here to use as folderName
 
@@ -36,6 +39,11 @@ export async function POST(request: Request) {
   return Response.json(results)
 }
 
+
+/**
+ * Completes a multipart upload by combining all the uploaded parts.
+ * This is called after the client has uploaded all parts of a file.
+ */
 export async function PUT(request: Request) {
   const {key, uploadId, parts} = await request.json()
 
@@ -54,6 +62,12 @@ export async function PUT(request: Request) {
   }
 }
 
+
+/**
+ * Handles two operations:
+ * 1. Aborting an in-progress multipart upload.
+ * 2. Deleting one or more completed uploads from S3.
+ */
 export async function DELETE(request: Request) {
   const { keys, uploadId } = await request.json()
 
@@ -91,6 +105,11 @@ export async function DELETE(request: Request) {
   }
 }
 
+
+/**
+ * Retrieves a list of images from a specific folder in S3.
+ * Returns the key, CloudFront URL, and size of each image.
+ */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const folderId = searchParams.get('folderId')

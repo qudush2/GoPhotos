@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import ImageViewer from '@/components/image-gallery'
+import ImageViewer from '@/src/components/ImageGallery'
 
 const CHUNK_SIZE = 5 * 1024 * 1024 // 5MB chunks
 
@@ -39,7 +39,7 @@ export default function Page() {
   }, [uploading, progress, files])
 
   const initiateUpload = async (files: File[]) => {
-    const response = await fetch('/api/image-upload', {
+    const response = await fetch('/api/images/general-image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -60,7 +60,7 @@ export default function Page() {
   }
 
   const completeUpload = async (key: string, uploadId: string, parts: { ETag: string, PartNumber: number }[]) => {
-    const response = await fetch('/api/image-upload', {
+    const response = await fetch('/api/images/general-image', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ key, uploadId, parts }),

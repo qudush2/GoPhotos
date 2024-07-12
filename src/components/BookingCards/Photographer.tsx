@@ -36,7 +36,7 @@ export default function BookingCardPhotographer({
     event.preventDefault();
     const picture_url = event.currentTarget.picture_url.value;
 
-    await fetch("/api/picture-uploaded-email", {
+    await fetch("/api/emails/picture-uploaded-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
