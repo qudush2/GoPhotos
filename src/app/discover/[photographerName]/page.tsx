@@ -1,6 +1,6 @@
 import {
   getAccountDetailsByName,
-  getPhotographer,
+  getAccountByPhotographerId,
   getAssets,
 } from "@/src/utils/db";
 
@@ -8,7 +8,7 @@ import ImageModal from "@/src/components/Images/ImageModal";
 import ViewAllImages from "@/src/components/Images/ViewImages";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
-import { Account, Photographer, Asset } from "@/src/utils/types";
+import { Asset } from "@/src/utils/types";
 
 import Tag from "@/src/components/Tag";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
@@ -27,7 +27,7 @@ import {
   isPG_noClerk,
   isCustomer,
   createCustomer,
-  getPGinfo,
+  getAccountByEmail,
 } from "@/src/utils/db";
 
 export default async function PhotographerUniquePage({
@@ -36,8 +36,8 @@ export default async function PhotographerUniquePage({
   params: { photographerName: string };
 }) {
   const decodedName = decodeURIComponent(params.photographerName);
-  const account = (await getAccountDetailsByName(decodedName)) as Account;
-  const photographer = (await getPhotographer(account.id)) as Photographer;
+  const account = await getAccountDetailsByName(decodedName);
+  const photographer = await getAccountByPhotographerId(account.id);
   const assets = (await getAssets(photographer.id)) as Asset[];
   const user = await currentUser();
 
@@ -47,7 +47,7 @@ export default async function PhotographerUniquePage({
   if (userId && user && user.publicMetadata.isPhotographer == null) {
     const email = user.emailAddresses[0].emailAddress;
     const fullName = user.firstName + " " + user.lastName;
-    const info = await getPGinfo(email);
+    const info = await getAccountByEmail(email);
 
     if (await isPG_noClerk(email)) {
       await setPhotographerClerkid(email, userId);
@@ -55,8 +55,8 @@ export default async function PhotographerUniquePage({
         publicMetadata: {
           isPhotographer: true,
           location: info.location,
-          hourlyPriceLow: info.hourlyPriceLow,
-          hourlyPriceHigh: info.hourlyPriceHigh,
+          hourlyPriceLow: info.price_low,
+          hourlyPriceHigh: info.price_high,
           school: info.school,
           skills: info.skills,
           about: info.about,
@@ -151,7 +151,7 @@ export default async function PhotographerUniquePage({
                 <div className="flex w-full items-center">
                   <div>
                     <p className="text-base sm:text-lg font-medium">
-                      {account.fullName}
+                      {account.full_name}
                     </p>
                     <p className="text-xs sm:text-base text-gray-600 ">
                       Cambridge, MA
@@ -175,7 +175,7 @@ export default async function PhotographerUniquePage({
                     Experience
                   </p>
                   <p className="text-sm sm:text-base">
-                    {account.fullName.split(" ")[0]} has been hired{" "}
+                    {account.full_name.split(" ")[0]} has been hired{" "}
                     {photographer.hires} times.
                   </p>
                 </div>
@@ -194,8 +194,8 @@ export default async function PhotographerUniquePage({
                     Reviews and ratings
                   </p>
                   <p className="text-sm sm:text-base italic text-gray-600">
-                    {account.fullName.split(" ")[0]} is new to GoPhotos and does
-                    not yet have reviews or ratings.
+                    {account.full_name.split(" ")[0]} is new to GoPhotos and
+                    does not yet have reviews or ratings.
                   </p>
                 </div>
               </div>
@@ -211,11 +211,11 @@ export default async function PhotographerUniquePage({
                 Estimated price
               </p>
               <p className="mt-0.5 text-sm text-gray-700">
-                This estimate is based on 1 hour of {account.fullName}&apos;s
+                This estimate is based on 1 hour of {account.full_name}&apos;s
                 average hourly price range.
               </p>
               <p className="mt-0.5 text-lg font-semibold">
-                ${photographer.hourlyPriceLow} - ${photographer.hourlyPriceHigh}
+                ${photographer.price_low} - ${photographer.price_high}
               </p>
               {user && (
                 <Dialog>

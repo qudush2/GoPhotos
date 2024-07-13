@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getJobDetails, updateJobPrice } from "@/src/utils/db";
-import { JobDetails } from "@/src/utils/types";
 import setupProductAndPrice from "@/src/actions/setup-product-price";
 
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`, {
@@ -16,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   await updateJobPrice(convoID, job_price);
 
-  const jobDetails = (await getJobDetails(convoID)) as JobDetails;
+  const jobDetails = await getJobDetails(convoID);
   const { event_title, photographer_clerk_id } = jobDetails;
 
   const { price } = await setupProductAndPrice(

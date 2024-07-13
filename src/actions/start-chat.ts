@@ -1,6 +1,6 @@
 "use server";
 
-import { Account } from "@/src/utils/types";
+import { PhotographerAccount } from "@/src/utils/types";
 import { createJob, getPGClerkId, createJobDetails } from "@/src/utils/db";
 
 type State = {
@@ -9,7 +9,7 @@ type State = {
 };
 
 export default async function sendQuoteRequestAction(
-  account: Account,
+  account: PhotographerAccount,
   userID: string,
   convoID: string,
   _state: State,

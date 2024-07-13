@@ -1,7 +1,7 @@
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
 import { Client } from "pg";
-import { Account, Asset, Photographer, JobDetails } from "./types";
+import { Asset, PhotographerAccount, JobDetails, Customer } from "./types";
 
 const client = new Client({
   host: PGHOST,
@@ -20,22 +20,21 @@ export async function setPhotographerClerkid(
   email: string,
   newClerkid: string
 ) {
-  const result = await client.query(
-    "UPDATE account SET clerkid = $1 WHERE email = (SELECT email FROM account WHERE email = $2)",
+  await client.query(
+    "UPDATE photographer_account SET clerk_id = $1 WHERE email = $2",
     [newClerkid, email]
   );
-  return result;
 }
 
-export async function isPG_noClerk(email: string) {
+export async function isPG_noClerk(email: string): Promise<boolean> {
   const result = await client.query(
-    "SELECT email FROM account WHERE email = $1 AND clerkid is NULL",
+    "SELECT email FROM photographer_account WHERE email = $1 AND clerk_id is NULL",
     [email]
   );
   return result.rows.length > 0;
 }
 
-export async function isCustomer(email: string) {
+export async function isCustomer(email: string): Promise<boolean> {
   const result = await client.query(
     "SELECT email FROM customer_account WHERE email = $1",
     [email]
@@ -43,17 +42,17 @@ export async function isCustomer(email: string) {
   return result.rows.length > 0;
 }
 
-export async function isPG(email: string) {
+export async function isPG(email: string): Promise<boolean> {
   const result = await client.query(
-    "SELECT email FROM account WHERE email = $1",
+    "SELECT email FROM photographer_account WHERE email = $1",
     [email]
   );
   return result.rows.length > 0;
 }
 
-export async function isVisible(accountID: string) {
+export async function isVisible(accountID: number): Promise<boolean> {
   const result = await client.query(
-    'SELECT visible FROM photographer WHERE "accountId" = $1',
+    'SELECT visible FROM photographer_account WHERE "id" = $1',
     [accountID]
   );
   return result.rows[0].visible;
@@ -111,47 +110,36 @@ export async function createJobDetails(
   );
 }
 
-export async function getAllAccounts(): Promise<Account[]> {
-  const result = await client.query("SELECT * FROM account");
+export async function getAllAccounts(): Promise<PhotographerAccount[]> {
+  const result = await client.query("SELECT * FROM photographer_account");
   return result.rows;
 }
 
-export async function getPGinfo(email: string) {
+export async function getAccountByEmail(
+  email: string
+): Promise<PhotographerAccount> {
   const result = await client.query(
-    'SELECT p.location, p."hourlyPriceLow", p."hourlyPriceHigh", p.school, p.skills, p.about, p.hires FROM photographer p JOIN account a ON p.id = a.id WHERE a.email = $1',
+    "SELECT * FROM photographer_account WHERE email = $1",
     [email]
   );
-  return result.rows[0];
-}
-
-export async function getPhotographer(id: number): Promise<Photographer> {
-  const result = await client.query(
-    "SELECT * FROM photographer WHERE id = $1",
-    [id]
-  );
-  return result.rows[0];
-}
-
-export async function getAccountByEmail(email: string) {
-  const result = await client.query("SELECT * FROM account WHERE email = $1", [
-    email,
-  ]);
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
-export async function getAccountByClerkId(clerkId: string) {
+export async function getAccountByClerkId(
+  clerkId: string
+): Promise<PhotographerAccount> {
   const result = await client.query(
-    "SELECT * FROM account WHERE clerkid = $1",
+    "SELECT * FROM photographer_account WHERE clerk_id = $1",
     [clerkId]
   );
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
 export async function getAccountByPhotographerId(
-  pgId: string
-): Promise<Account> {
+  pgId: number
+): Promise<PhotographerAccount> {
   const result = await client.query(
-    'SELECT * FROM account a JOIN photographer p ON a.id = p.id WHERE p."accountId" = $1',
+    "SELECT * FROM photographer_account WHERE id = $1",
     [pgId]
   );
   return result.rows.length > 0 ? result.rows[0] : null;
@@ -165,23 +153,25 @@ export async function getAssets(accountId: number): Promise<Asset[]> {
   return result.rows;
 }
 
-export async function getAccountDetailsByName(name: string): Promise<Account> {
+export async function getAccountDetailsByName(
+  name: string
+): Promise<PhotographerAccount> {
   const result = await client.query(
-    'SELECT * FROM account WHERE "fullName" = $1',
+    "SELECT * FROM photographer_account WHERE full_name = $1",
     [name]
   );
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
-export async function getAllJobIDs() {
+export async function getAllJobIDs(): Promise<JobDetails[]> {
   const result = await client.query("SELECT conversation_id FROM jobs");
   return result.rows;
 }
 
 export async function getAllPhotographers(
   searchParam?: string
-): Promise<Photographer[]> {
-  let query = "SELECT * FROM photographer";
+): Promise<PhotographerAccount[]> {
+  let query = "SELECT * FROM photographer_account";
   let values: string[] = [];
 
   if (searchParam) {
@@ -193,17 +183,17 @@ export async function getAllPhotographers(
   return result.rows;
 }
 
-export async function getPGClerkId(email: string) {
+export async function getPGClerkId(email: string): Promise<string> {
   const result = await client.query(
-    "SELECT clerkid FROM account WHERE email = $1",
+    "SELECT clerk_id FROM photographer_account WHERE email = $1",
     [email]
   );
   return result.rows.length > 0 ? result.rows[0].clerkid : null;
 }
 
-export async function getEmailByClerk(clerkID: string) {
+export async function getEmailByClerk(clerkID: string): Promise<string> {
   const result = await client.query(
-    "SELECT email FROM account WHERE clerkid = $1",
+    "SELECT email FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
   return result.rows[0].email;
@@ -217,7 +207,7 @@ export async function getJobDetails(convoID: string): Promise<JobDetails> {
   return result.rows[0];
 }
 
-export async function getCustomerInfo(clerkID: string) {
+export async function getCustomerInfo(clerkID: string): Promise<Customer> {
   const result = await client.query(
     "SELECT * FROM customer_account WHERE clerkid = $1",
     [clerkID]
@@ -227,7 +217,7 @@ export async function getCustomerInfo(clerkID: string) {
 
 export async function updateProfilePicture(clerkID: string, pfpURL: string) {
   await client.query(
-    "UPDATE account SET profile_picture_url = $1 WHERE clerkID = $2",
+    "UPDATE photographer_account SET pfp_url = $1 WHERE clerk_id = $2",
     [pfpURL, clerkID]
   );
 }

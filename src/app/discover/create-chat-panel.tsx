@@ -1,5 +1,5 @@
 "use client";
-import { Account } from "@/src/utils/types";
+import { PhotographerAccount } from "@/src/utils/types";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
@@ -7,7 +7,11 @@ import { cn } from "@/src/utils/cn";
 import { useRouter } from "next/navigation";
 import { useMemo, FormEvent } from "react";
 
-export default function CreateChatPanel({ account }: { account: Account }) {
+export default function CreateChatPanel({
+  account,
+}: {
+  account: PhotographerAccount;
+}) {
   const router = useRouter();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +45,7 @@ export default function CreateChatPanel({ account }: { account: Account }) {
       <p className="text-xl font-medium mb-2">Request a Quote</p>
       <p className="text-sm text-gray-600 pb-3">
         Great! There is some information that we need before you can start
-        chatting with {account.fullName}
+        chatting with {account.full_name}
       </p>
       <form
         className="mt-3 space-y-3"

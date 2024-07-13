@@ -6,7 +6,7 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
-import { JobDetails, Account, Asset } from "@/src/utils/types";
+import { JobDetails, Asset } from "@/src/utils/types";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 import { getAccountDetailsByName, getAssets } from "@/src/utils/db";
 import { shuffle } from "lodash";
@@ -33,7 +33,7 @@ export default async function BookingCardCustomer({
     picture_url,
   } = jobDetails;
 
-  const account = (await getAccountDetailsByName(pgName)) as Account;
+  const account = await getAccountDetailsByName(pgName);
   const assets = (await getAssets(account.id)) as Asset[];
 
   return (
@@ -41,14 +41,14 @@ export default async function BookingCardCustomer({
       <CardHeader className="flex gap-3">
         <div className="flex ml-2">
           <p className="text-xl font-medium">
-            {event_title} with {account.fullName.split(" ")[0]}
+            {event_title} with {account.full_name.split(" ")[0]}
           </p>
         </div>
       </CardHeader>
       <Divider className="h-[1px] bg-black my-2" />
       <CardBody>
         <Link
-          href={`/discover/${encodeURIComponent(account.fullName)}`}
+          href={`/discover/${encodeURIComponent(account.full_name)}`}
           target="_blank"
         >
           <a>

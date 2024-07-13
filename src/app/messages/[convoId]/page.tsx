@@ -11,21 +11,16 @@ import {
   getCustomerInfo,
 } from "../../../utils/db";
 import { currentUser } from "@clerk/nextjs";
-import { JobDetails, Customer, Account } from "@/src/utils/types";
 
 export default async function MessageUniquePage({
   params,
 }: {
   params: { convoId: string };
 }) {
-  const jobDetails = (await getJobDetails(params.convoId)) as JobDetails;
-  const customer = (await getCustomerInfo(
-    jobDetails.customer_clerk_id
-  )) as Customer;
+  const jobDetails = await getJobDetails(params.convoId);
+  const customer = await getCustomerInfo(jobDetails.customer_clerk_id);
   const pgClerkID = jobDetails.photographer_clerk_id;
-  const account = (await getAccountByEmail(
-    await getEmailByClerk(pgClerkID)
-  )) as Account;
+  const account = await getAccountByEmail(await getEmailByClerk(pgClerkID));
 
   const decodedId = decodeURIComponent(params.convoId);
 
@@ -63,7 +58,7 @@ export default async function MessageUniquePage({
               jobDetails={jobDetails}
               convoId={decodedId}
               pgEmail={account.email}
-              pgName={account.fullName}
+              pgName={account.full_name}
               pgClerkID={pgClerkID}
               customer={customer}
             />
@@ -76,7 +71,7 @@ export default async function MessageUniquePage({
             {!isPG && (
               <BookingCardCustomer
                 jobDetails={jobDetails}
-                pgName={account.fullName}
+                pgName={account.full_name}
                 className="h-full"
               />
             )}

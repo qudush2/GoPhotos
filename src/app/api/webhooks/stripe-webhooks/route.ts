@@ -7,7 +7,6 @@ import {
   getCustomerInfo,
   getAccountByClerkId,
 } from "@/src/utils/db";
-import { JobDetails, Customer, Account } from "@/src/utils/types";
 import PaymentConfirmedCustomer from "@/src/components/Emails/PaymentConfirmedCustomer";
 import PaymentConfirmedPhotographer from "@/src/components/Emails/PaymentConfirmedPhotographer";
 
@@ -37,13 +36,11 @@ export async function POST(req: NextRequest) {
     if (convoID) {
       await updatePaid(convoID);
 
-      const jobDetails = (await getJobDetails(convoID)) as JobDetails;
-      const customer = (await getCustomerInfo(
-        jobDetails.customer_clerk_id
-      )) as Customer;
-      const photographer = (await getAccountByClerkId(
+      const jobDetails = await getJobDetails(convoID);
+      const customer = await getCustomerInfo(jobDetails.customer_clerk_id);
+      const photographer = await getAccountByClerkId(
         jobDetails.photographer_clerk_id
-      )) as Account;
+      );
 
       // Send payment confirmation email to customer
       console.log(customer);
@@ -51,10 +48,10 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: "gigs@gophotos.us",
         to: customer.email,
-        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.fullName}`,
+        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.full_name}`,
         react: PaymentConfirmedCustomer({
           customerName: customer.full_name,
-          photographerName: photographer.fullName,
+          photographerName: photographer.full_name,
           event_title: jobDetails.event_title,
         }),
       });
@@ -65,7 +62,7 @@ export async function POST(req: NextRequest) {
         to: photographer.email,
         subject: `Payment Received for ${jobDetails.event_title} with ${customer.full_name}`,
         react: PaymentConfirmedPhotographer({
-          photographerName: photographer.fullName,
+          photographerName: photographer.full_name,
           customerName: customer.full_name,
           event_title: jobDetails.event_title,
         }),

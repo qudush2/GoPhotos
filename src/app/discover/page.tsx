@@ -9,7 +9,7 @@ import {
   isPG_noClerk,
   isCustomer,
   createCustomer,
-  getPGinfo,
+  getAccountByEmail,
 } from "@/src/utils/db";
 
 type DiscoverPageProps = {
@@ -26,7 +26,7 @@ export default async function DiscoverPage({
   if (userId && user && user.publicMetadata.isPhotographer == null) {
     const email = user.emailAddresses[0].emailAddress;
     const fullName = user.firstName + " " + user.lastName;
-    const info = await getPGinfo(email);
+    const info = await getAccountByEmail(email);
 
     if (await isPG_noClerk(email)) {
       await setPhotographerClerkid(email, userId);
@@ -34,8 +34,8 @@ export default async function DiscoverPage({
         publicMetadata: {
           isPhotographer: true,
           location: info.location,
-          hourlyPriceLow: info.hourlyPriceLow,
-          hourlyPriceHigh: info.hourlyPriceHigh,
+          hourlyPriceLow: info.price_low,
+          hourlyPriceHigh: info.price_high,
           school: info.school,
           skills: info.skills,
           about: info.about,

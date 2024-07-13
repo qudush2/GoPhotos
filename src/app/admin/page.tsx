@@ -1,7 +1,7 @@
 import {
   getAllAccounts,
   getJobDetails,
-  getPhotographer,
+  getAccountByPhotographerId,
   getAllJobIDs,
 } from "@/src/utils/db";
 import { currentUser } from "@clerk/nextjs";
@@ -43,8 +43,8 @@ export default async function AdminPage() {
 
   const accountsWithPhotographer = await Promise.all(
     accounts.map(async (account) => {
-      const photographer = await getPhotographer(account.id);
-      const jobCount = jobCountByPhotographerClerkID[account.clerkid] || 0;
+      const photographer = await getAccountByPhotographerId(account.id);
+      const jobCount = jobCountByPhotographerClerkID[account.clerk_id] || 0;
       return { ...account, photographer, jobCount };
     })
   );
@@ -77,10 +77,10 @@ export default async function AdminPage() {
           <tbody>
             {accountsWithPhotographer.map((account, index) => (
               <tr key={index} className="bg-white">
-                <td className="border px-4 py-2">{account.fullName}</td>
+                <td className="border px-4 py-2">{account.full_name}</td>
                 <td className="border px-4 py-2">{account.email}</td>
                 <td className="border px-4 py-2">
-                  {account.clerkid || "No Clerk ID set"}
+                  {account.clerk_id || "No Clerk ID set"}
                 </td>
                 <td className="border px-4 py-2">{account.jobCount}</td>
               </tr>

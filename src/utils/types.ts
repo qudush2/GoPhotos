@@ -1,17 +1,12 @@
-export type Account = {
+export type PhotographerAccount = {
   id: number;
   email: string;
-  fullName: string;
-  clerkid: string;
-  profile_picture_url: string;
-};
-
-export type Photographer = {
-  id: number;
-  accountId: string;
+  full_name: string;
+  clerk_id: string;
+  pfp_url: string;
   location: string;
-  hourlyPriceLow: number;
-  hourlyPriceHigh: number;
+  price_low: number;
+  price_high: number;
   school: string;
   skills: string[];
   about: string;
@@ -20,7 +15,7 @@ export type Photographer = {
 };
 
 export type Asset = {
-  id: number;
+  id: string;
   ownerAccountId: string;
   cdnPath: string;
   placeholderBase64: string;

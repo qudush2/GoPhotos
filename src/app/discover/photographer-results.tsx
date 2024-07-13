@@ -2,12 +2,12 @@ import { cn } from "@/src/utils/cn";
 
 import PhotographerPreviewCard from "./photographer-preview-card";
 import { Fragment } from "react";
-import { Photographer } from "@/src/utils/types";
+import { PhotographerAccount } from "@/src/utils/types";
 import { isVisible } from "@/src/utils/db";
 
 type PhotographerResultsProps = {
   className?: string;
-  photographers: Photographer[];
+  photographers: PhotographerAccount[];
   pgType: string;
   bypassVisibility?: boolean;
 };
@@ -29,8 +29,8 @@ export default async function PhotographerResults({
   const visiblePhotographers = await Promise.all(
     photographers.map(async (photographer) => ({
       visible:
-        (await isVisible(photographer.accountId)) ||
-        (bypassVisibility && photographer.accountId === "prklVeM"),
+        (await isVisible(photographer.id)) ||
+        (bypassVisibility && photographer.id === 31),
       photographer,
     }))
   ).then((results) =>

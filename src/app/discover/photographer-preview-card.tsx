@@ -5,13 +5,13 @@ import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 
 import Link from "next/link";
 import ImageModal from "@/src/components/Images/ImageModal";
-import { Photographer } from "@/src/utils/types";
+import { PhotographerAccount } from "@/src/utils/types";
 import { getAccountByPhotographerId, getAssets } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import { Avatar } from "@nextui-org/react";
 
 type PhotographerPreviewCardProps = {
-  photographer: Photographer;
+  photographer: PhotographerAccount;
   pgType?: string;
 };
 
@@ -19,7 +19,7 @@ export default async function PhotographerPreviewCard({
   photographer,
   pgType,
 }: PhotographerPreviewCardProps) {
-  const account = await getAccountByPhotographerId(photographer.accountId);
+  const account = await getAccountByPhotographerId(photographer.id);
   const assets = await getAssets(photographer.id);
 
   return (
@@ -56,7 +56,7 @@ export default async function PhotographerPreviewCard({
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
               <Link
-                href={`/discover/${encodeURIComponent(account.fullName)}`}
+                href={`/discover/${encodeURIComponent(account.full_name)}`}
                 passHref
                 target="_blank"
                 className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform "
@@ -85,13 +85,13 @@ export default async function PhotographerPreviewCard({
               <div className="relative w-14 h-14 rounded-full p-[2px] bg-gradient-to-r from-[#ff9993] via-[#fc7674] to-[#fc4d74]">
                 <Avatar
                   showFallback
-                  name={account.fullName}
-                  src={account.profile_picture_url}
+                  name={account.full_name}
+                  src={account.pfp_url}
                   className="w-full h-full rounded-full bg-white"
                 />
               </div>
               <div>
-                <p className="text-sm font-medium">{account.fullName}</p>
+                <p className="text-sm font-medium">{account.full_name}</p>
                 <p className="text-xs text-gray-600">{photographer.location}</p>
               </div>
             </div>
@@ -100,8 +100,7 @@ export default async function PhotographerPreviewCard({
                 <>
                   <p className="text-xs text-gray-600">Est. Hourly Price</p>
                   <p className="text-lg font-semibold">
-                    ${photographer.hourlyPriceLow} - $
-                    {photographer.hourlyPriceHigh}
+                    ${photographer.price_low} - ${photographer.price_high}
                   </p>
                 </>
               )}
@@ -147,7 +146,7 @@ export default async function PhotographerPreviewCard({
         {/* Book Now button */}
         <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
           <Link
-            href={`/discover/${encodeURIComponent(account.fullName)}`}
+            href={`/discover/${encodeURIComponent(account.full_name)}`}
             passHref
             target="_blank"
             className="flex justify-center"

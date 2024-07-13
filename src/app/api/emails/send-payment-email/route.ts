@@ -5,7 +5,6 @@ import {
   getJobDetails,
   getAccountByClerkId,
 } from "@/src/utils/db";
-import { Customer, JobDetails, Account } from "@/src/utils/types";
 import PaymentEmailCustomer from "@/src/components/Emails/PaymentReadyCustomer";
 
 export async function POST(req: NextRequest) {
@@ -14,24 +13,22 @@ export async function POST(req: NextRequest) {
   if (req.method === "POST") {
     const body = await req.json();
     const convoID = body.convoID as string;
-    const jobDetails = (await getJobDetails(convoID)) as JobDetails;
+    const jobDetails = await getJobDetails(convoID);
     const { customer_clerk_id, event_title, photographer_clerk_id } =
       jobDetails;
 
-    const customer = (await getCustomerInfo(customer_clerk_id)) as Customer;
+    const customer = await getCustomerInfo(customer_clerk_id);
 
-    const photographer = (await getAccountByClerkId(
-      photographer_clerk_id
-    )) as Account;
+    const photographer = await getAccountByClerkId(photographer_clerk_id);
 
     await resend.emails.send({
       from: "gigs@gophotos.us",
       to: customer.email,
       bcc: "gigs@gophotos.us",
-      subject: `GoPhotos - Pay Now to Confirm Booking with ${photographer.fullName}`,
+      subject: `GoPhotos - Pay Now to Confirm Booking with ${photographer.full_name}`,
       react: PaymentEmailCustomer({
         customerName: customer.full_name,
-        photographerName: photographer.fullName,
+        photographerName: photographer.full_name,
         event_title: event_title,
       }),
     });
