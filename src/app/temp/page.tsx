@@ -191,7 +191,7 @@ export default function Page() {
         </button>
       </div>
       
-      {showImages && <ImageViewer folderId={viewFolderId} />}
+      {showImages && <ImageViewer folderId={`client-galleries/${viewFolderId}`} />}
     </main>
   )
 }

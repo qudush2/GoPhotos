@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
   const headers = new Headers()
   headers.set('Content-Type', 'application/zip')
-  headers.set('Content-Disposition', 'attachment; filename=GoPhotosImages.zip')
+  headers.set('Content-Disposition', 'attachment; filename=GoPhotosImages.zip') // change to the name of the event
 
   const readableStream = new ReadableStream({
     start(controller) {
