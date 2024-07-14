@@ -5,16 +5,12 @@ import { useEffect } from "react";
 interface ImageModalProps {
   src: string;
   alt: string;
-  placeholder?: "blur" | "empty";
-  blurDataURL?: string;
   className?: string;
 }
 
 export default function ImageModal({
   src,
   alt,
-  placeholder,
-  blurDataURL,
   className,
 }: ImageModalProps) {
   useEffect(() => {
@@ -52,8 +48,6 @@ export default function ImageModal({
         <Image
           alt={alt}
           src={src}
-          placeholder={placeholder}
-          blurDataURL={blurDataURL}
           fill
           style={{ objectFit: "contain", zIndex: 1 }}
         />

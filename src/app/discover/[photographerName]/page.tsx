@@ -1,14 +1,12 @@
 import {
   getAccountDetailsByName,
-  getAccountByPhotographerId,
-  getAssets,
+  getPortfolioPictures,
 } from "@/src/utils/db";
 
 import ImageModal from "@/src/components/Images/ImageModal";
 import ViewAllImages from "@/src/components/Images/ViewImages";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
-import { Asset } from "@/src/utils/types";
 
 import Tag from "@/src/components/Tag";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
@@ -37,8 +35,7 @@ export default async function PhotographerUniquePage({
 }) {
   const decodedName = decodeURIComponent(params.photographerName);
   const account = await getAccountDetailsByName(decodedName);
-  const photographer = await getAccountByPhotographerId(account.id);
-  const assets = (await getAssets(photographer.id)) as Asset[];
+  const assets = (await getPortfolioPictures(account.clerk_id));
   const user = await currentUser();
 
   // move this to better location, temp solution
@@ -92,15 +89,13 @@ export default async function PhotographerUniquePage({
                   className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
                   style={{
                     filter: "blur(20px)",
-                    backgroundImage: `url(${asset.cdnPath})`,
+                    backgroundImage: `url(${asset.imagePath})`,
                     zIndex: 0,
                   }}
                 />
                 <ImageModal
                   alt=""
-                  src={asset.cdnPath}
-                  placeholder="blur"
-                  blurDataURL={asset.placeholderBase64}
+                  src={asset.imagePath}
                 />
               </div>
             ))}
@@ -115,15 +110,13 @@ export default async function PhotographerUniquePage({
                   className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
                   style={{
                     filter: "blur(20px)",
-                    backgroundImage: `url(${asset.cdnPath})`,
+                    backgroundImage: `url(${asset.imagePath})`,
                     zIndex: 0,
                   }}
                 />
                 <ImageModal
                   alt=""
-                  src={asset.cdnPath}
-                  placeholder="blur"
-                  blurDataURL={asset.placeholderBase64}
+                  src={asset.imagePath}
                 />
               </div>
             ))}
@@ -162,13 +155,13 @@ export default async function PhotographerUniquePage({
                   <p className="mb-0.5 text-sm sm:text-base font-medium">
                     About
                   </p>
-                  <p className="text-sm sm:text-base">{photographer.about}</p>
+                  <p className="text-sm sm:text-base">{account.about}</p>
                 </div>
                 <div className="mt-5">
                   <p className="mb-0.5 text-sm sm:text-base font-medium">
                     School
                   </p>
-                  <p className="text-sm sm:text-base">{photographer.school}</p>
+                  <p className="text-sm sm:text-base">{account.school}</p>
                 </div>
                 <div className="mt-5">
                   <p className="mb-0.5 text-sm sm:text-base font-medium">
@@ -176,7 +169,7 @@ export default async function PhotographerUniquePage({
                   </p>
                   <p className="text-sm sm:text-base">
                     {account.full_name.split(" ")[0]} has been hired{" "}
-                    {photographer.hires} times.
+                    {account.hires} times.
                   </p>
                 </div>
                 <div className="mt-5">
@@ -184,7 +177,7 @@ export default async function PhotographerUniquePage({
                     Skills
                   </p>
                   <div className="flex flex-wrap gap-1">
-                    {photographer.skills.map((skill) => (
+                    {account.skills.map((skill) => (
                       <Tag key={skill}>{skill}</Tag>
                     ))}
                   </div>
@@ -215,7 +208,7 @@ export default async function PhotographerUniquePage({
                 average hourly price range.
               </p>
               <p className="mt-0.5 text-lg font-semibold">
-                ${photographer.price_low} - ${photographer.price_high}
+                ${account.price_low} - ${account.price_high}
               </p>
               {user && (
                 <Dialog>

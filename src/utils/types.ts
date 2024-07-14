@@ -14,13 +14,9 @@ export type PhotographerAccount = {
   visible: boolean;
 };
 
-export type Asset = {
-  id: string;
-  ownerAccountId: string;
-  cdnPath: string;
-  placeholderBase64: string;
-  dateUploaded: string;
-};
+export type PortfolioPictures = {
+  imagePath: string;
+}
 
 export type JobDetails = {
   job_id: string;

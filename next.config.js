@@ -25,6 +25,7 @@ const nextConfig = {
 				hostname: 'loremflickr.com',
 			},
 		],
+		domains: ['d3irve2062s8z7.cloudfront.net'],
 	},
 }
 

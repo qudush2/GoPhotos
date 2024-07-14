@@ -1,7 +1,13 @@
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
 import { Client } from "pg";
-import { Asset, PhotographerAccount, JobDetails, Customer } from "./types";
+import {
+  PhotographerAccount,
+  JobDetails,
+  Customer,
+  PortfolioPictures,
+} from "./types";
+import { getPortfolioPics } from "./s3";
 
 const client = new Client({
   host: PGHOST,
@@ -145,12 +151,10 @@ export async function getAccountByPhotographerId(
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
-export async function getAssets(accountId: number): Promise<Asset[]> {
-  const result = await client.query(
-    'SELECT * FROM "assetMetadata" WHERE "ownerAccountId" = $1',
-    [accountId]
-  );
-  return result.rows;
+export async function getPortfolioPictures(
+  clerkId: string
+): Promise<PortfolioPictures[]> {
+  return getPortfolioPics(clerkId);
 }
 
 export async function getAccountDetailsByName(

@@ -6,9 +6,9 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
-import { JobDetails, Asset } from "@/src/utils/types";
+import { JobDetails } from "@/src/utils/types";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
-import { getAccountDetailsByName, getAssets } from "@/src/utils/db";
+import { getAccountDetailsByName, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
 import { format, subDays } from "date-fns";
@@ -34,7 +34,7 @@ export default async function BookingCardCustomer({
   } = jobDetails;
 
   const account = await getAccountDetailsByName(pgName);
-  const assets = (await getAssets(account.id)) as Asset[];
+  const assets = (await getPortfolioPictures(account.clerk_id));
 
   return (
     <Card className="px-2">
@@ -65,7 +65,7 @@ export default async function BookingCardCustomer({
                     <div
                       className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                       style={{
-                        backgroundImage: `url(${asset.cdnPath})`,
+                        backgroundImage: `url(${asset.imagePath})`,
                         filter: "blur(20px)",
                         zIndex: 0,
                         opacity: 0.5,
@@ -73,9 +73,7 @@ export default async function BookingCardCustomer({
                     />
                     <Image
                       alt=""
-                      src={asset.cdnPath}
-                      placeholder="blur"
-                      blurDataURL={asset.placeholderBase64}
+                      src={asset.imagePath}
                       fill
                       className="object-contain z-10"
                     />

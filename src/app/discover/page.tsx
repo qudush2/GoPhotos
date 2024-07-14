@@ -1,7 +1,6 @@
 import SearchArea from "./search-area";
 import PhotographerResults from "./photographer-results";
 
-import { getAllPhotographers } from "@/src/utils/db";
 import { auth, currentUser, clerkClient } from "@clerk/nextjs";
 import {
   setPhotographerClerkid,
@@ -10,6 +9,7 @@ import {
   isCustomer,
   createCustomer,
   getAccountByEmail,
+  getAllPhotographers,
 } from "@/src/utils/db";
 
 type DiscoverPageProps = {

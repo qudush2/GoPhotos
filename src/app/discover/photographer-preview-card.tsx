@@ -6,7 +6,7 @@ import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 import Link from "next/link";
 import ImageModal from "@/src/components/Images/ImageModal";
 import { PhotographerAccount } from "@/src/utils/types";
-import { getAccountByPhotographerId, getAssets } from "@/src/utils/db";
+import { getAccountByPhotographerId, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import { Avatar } from "@nextui-org/react";
 
@@ -20,7 +20,7 @@ export default async function PhotographerPreviewCard({
   pgType,
 }: PhotographerPreviewCardProps) {
   const account = await getAccountByPhotographerId(photographer.id);
-  const assets = await getAssets(photographer.id);
+  const assets = await getPortfolioPictures(photographer.clerk_id);
 
   return (
     <div className="my-2 grid gap-5 rounded-md bg-white py-5 md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1">
@@ -39,7 +39,7 @@ export default async function PhotographerPreviewCard({
                 <div
                   className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${asset.cdnPath})`,
+                    backgroundImage: `url(${asset.imagePath})`,
                     filter: "blur(20px)",
                     zIndex: 0,
                     opacity: 0.5,
@@ -47,9 +47,7 @@ export default async function PhotographerPreviewCard({
                 />
                 <ImageModal
                   alt=""
-                  src={asset.cdnPath}
-                  placeholder="blur"
-                  blurDataURL={asset.placeholderBase64}
+                  src={asset.imagePath}
                 />
               </div>
             ))}
@@ -66,7 +64,7 @@ export default async function PhotographerPreviewCard({
               <div
                 className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                 style={{
-                  backgroundImage: `url(${assets[7].cdnPath})`,
+                  backgroundImage: `url(${assets[7].imagePath})`,
                   filter: "blur(5px)",
                 }}
               />
