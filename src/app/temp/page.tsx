@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import ImageViewer from '@/src/components/ImageGallery'
+import ImageViewer from '@/src/components/temp-ImageGallery'
 
 const CHUNK_SIZE = 5 * 1024 * 1024 // 5MB chunks
 
