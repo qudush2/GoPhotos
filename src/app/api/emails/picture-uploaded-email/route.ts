@@ -5,16 +5,17 @@ import {
   getCustomerInfo,
   getAccountByClerkId,
 } from "@/src/utils/db";
+import {JobDetails} from '@/src/utils/types'
 import PicturesUploadedEmail from "@/src/components/Emails/PicturesUploadedEmail";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const convoID = body.conversation_id as string;
-  const picture_url = body.picture_url as string;
-  const jobDetails = body.jobDetails;
+  const jobDetails = body.jobDetails as JobDetails;
+  const convoID = jobDetails.conversation_id
   const currentDate = new Date();
+  const picture_url = `https://www.gophotos.us/gallery/${encodeURIComponent(convoID)}`
 
-  await updateJobPictures(convoID, picture_url, currentDate);
+  await updateJobPictures(convoID, currentDate);
 
   const resend = new Resend(process.env.RESEND_API_KEY);
   const { customer_clerk_id, event_title, photographer_clerk_id } = jobDetails;

@@ -1,13 +1,8 @@
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
 import { Client } from "pg";
-import {
-  PhotographerAccount,
-  JobDetails,
-  Customer,
-  PortfolioPictures,
-} from "./types";
-import { getPortfolioPics } from "./s3";
+import { PhotographerAccount, JobDetails, Customer, s3Images } from "./types";
+import { getImages } from "./fetchImages";
 
 const client = new Client({
   host: PGHOST,
@@ -52,6 +47,14 @@ export async function isPG(email: string): Promise<boolean> {
   const result = await client.query(
     "SELECT email FROM photographer_account WHERE email = $1",
     [email]
+  );
+  return result.rows.length > 0;
+}
+
+export async function isPGClerk(clerkid: string): Promise<boolean> {
+  const result = await client.query(
+    "SELECT clerk_id FROM photographer_account where clerk_id = $1",
+    [clerkid]
   );
   return result.rows.length > 0;
 }
@@ -153,8 +156,8 @@ export async function getAccountByPhotographerId(
 
 export async function getPortfolioPictures(
   clerkId: string
-): Promise<PortfolioPictures[]> {
-  return getPortfolioPics(clerkId);
+): Promise<s3Images[]> {
+  return getImages(`portfolio-pictures/${clerkId}/`);
 }
 
 export async function getAccountDetailsByName(
@@ -195,6 +198,14 @@ export async function getPGClerkId(email: string): Promise<string> {
   return result.rows.length > 0 ? result.rows[0].clerkid : null;
 }
 
+export async function getPGGalleries(clerkID: string): Promise<string[]> {
+  const result = await client.query(
+    "SELECT jobs FROM photographer_account WHERE clerk_id = $1",
+    [clerkID]
+  );
+  return result.rows[0].jobs;
+}
+
 export async function getEmailByClerk(clerkID: string): Promise<string> {
   const result = await client.query(
     "SELECT email FROM photographer_account WHERE clerk_id = $1",
@@ -217,6 +228,14 @@ export async function getCustomerInfo(clerkID: string): Promise<Customer> {
     [clerkID]
   );
   return result.rows[0];
+}
+
+export async function getCustomerGalleries(clerkID: string): Promise<string[]> {
+  const result = await client.query(
+    "SELECT jobs FROM customer_account WHERE clerkid = $1",
+    [clerkID]
+  );
+  return result.rows[0].jobs;
 }
 
 export async function updateProfilePicture(clerkID: string, pfpURL: string) {
@@ -252,12 +271,11 @@ export async function updatePaid(convoID: string) {
 
 export async function updateJobPictures(
   convoID: string,
-  pictureURL: string,
   currentDate: Date
 ) {
   const isoDate = currentDate.toISOString();
   await client.query(
-    "UPDATE jobs SET picture_url = $1, pictures_uploaded = true, picture_upload_time = $2 WHERE conversation_id = $3",
-    [pictureURL, isoDate, convoID]
+    "UPDATE jobs SET pictures_uploaded = true, picture_upload_time = $1 WHERE conversation_id = $2",
+    [isoDate, convoID]
   );
 }

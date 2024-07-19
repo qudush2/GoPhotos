@@ -1,10 +1,7 @@
-import {
-  getAccountDetailsByName,
-  getPortfolioPictures,
-} from "@/src/utils/db";
+import { getAccountDetailsByName, getPortfolioPictures } from "@/src/utils/db";
 
-import ImageModal from "@/src/components/Images/ImageModal";
-import ViewAllImages from "@/src/components/Images/ViewImages";
+import ImageModal from "@/src/components/ImageManagement/ImageModal";
+import ViewAllImages from "@/src/components/ImageManagement/ViewAllImages";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 
@@ -35,7 +32,7 @@ export default async function PhotographerUniquePage({
 }) {
   const decodedName = decodeURIComponent(params.photographerName);
   const account = await getAccountDetailsByName(decodedName);
-  const assets = (await getPortfolioPictures(account.clerk_id));
+  const assets = await getPortfolioPictures(account.clerk_id);
   const user = await currentUser();
 
   // move this to better location, temp solution
@@ -89,14 +86,11 @@ export default async function PhotographerUniquePage({
                   className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
                   style={{
                     filter: "blur(20px)",
-                    backgroundImage: `url(${asset.imagePath})`,
+                    backgroundImage: `url(${asset.url})`,
                     zIndex: 0,
                   }}
                 />
-                <ImageModal
-                  alt=""
-                  src={asset.imagePath}
-                />
+                <ImageModal alt="" src={asset.url} />
               </div>
             ))}
           </div>
@@ -110,14 +104,11 @@ export default async function PhotographerUniquePage({
                   className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
                   style={{
                     filter: "blur(20px)",
-                    backgroundImage: `url(${asset.imagePath})`,
+                    backgroundImage: `url(${asset.url})`,
                     zIndex: 0,
                   }}
                 />
-                <ImageModal
-                  alt=""
-                  src={asset.imagePath}
-                />
+                <ImageModal alt="" src={asset.url} />
               </div>
             ))}
           </div>

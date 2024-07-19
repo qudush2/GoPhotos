@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Dialog, DialogContent } from "@/src/components/Dialog";
 import Image from "next/image";
-import { PortfolioPictures } from "@/src/utils/types";
+import { s3Images } from "@/src/utils/types";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
 interface ViewAllImagesProps {
-  assets: PortfolioPictures[];
+  assets: s3Images[];
 }
 
 export default function ViewAllImages({ assets }: ViewAllImagesProps) {
@@ -45,14 +45,14 @@ export default function ViewAllImages({ assets }: ViewAllImagesProps) {
                     className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
                     style={{
                       filter: "blur(20px)",
-                      backgroundImage: `url(${asset.imagePath})`,
+                      backgroundImage: `url(${asset.url})`,
                       zIndex: 0,
                     }}
                   />
                   <div className="relative w-full h-full flex items-center justify-center">
                     <Image
                       alt=""
-                      src={asset.imagePath}
+                      src={asset.url}
                       fill
                       style={{ objectFit: "contain", zIndex: 1 }}
                     />

@@ -14,9 +14,12 @@ export type PhotographerAccount = {
   visible: boolean;
 };
 
-export type PortfolioPictures = {
-  imagePath: string;
-}
+export type s3Images = {
+  key: string;
+  url: string;
+  size: number;
+  skills: string[];
+};
 
 export type JobDetails = {
   job_id: string;

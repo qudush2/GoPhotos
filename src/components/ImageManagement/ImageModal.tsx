@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { useEffect } from "react";
 
@@ -6,13 +7,10 @@ interface ImageModalProps {
   src: string;
   alt: string;
   className?: string;
+  selectMode?: boolean;
 }
 
-export default function ImageModal({
-  src,
-  alt,
-  className,
-}: ImageModalProps) {
+export default function ImageModal({ src, alt, className, selectMode }: ImageModalProps) {
   useEffect(() => {
     const handleChange = (e: Event) => {
       const target = e.target as HTMLInputElement;
@@ -36,13 +34,15 @@ export default function ImageModal({
 
   return (
     <>
-      <input
-        type="checkbox"
-        id={`image-modal-${src}`}
-        className="hidden peer"
-      />
+      {!selectMode && (
+        <input
+          type="checkbox"
+          id={`image-modal-${src}`}
+          className="hidden peer"
+        />
+      )}
       <label
-        htmlFor={`image-modal-${src}`}
+        htmlFor={selectMode ? undefined : `image-modal-${src}`}
         className="cursor-pointer relative w-full h-full block"
       >
         <Image
@@ -52,19 +52,21 @@ export default function ImageModal({
           style={{ objectFit: "contain", zIndex: 1 }}
         />
       </label>
-      <label
-        htmlFor={`image-modal-${src}`}
-        className="fixed inset-0 bg-black bg-opacity-80 hidden peer-checked:flex items-center justify-center cursor-pointer z-50 backdrop-blur-sm"
-      >
-        <div className="relative w-[90vw] h-[90vh]">
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            className="rounded-md object-contain"
-          />
-        </div>
-      </label>
+      {!selectMode && (
+        <label
+          htmlFor={`image-modal-${src}`}
+          className="fixed inset-0 bg-black bg-opacity-80 hidden peer-checked:flex items-center justify-center cursor-pointer z-50 backdrop-blur-sm"
+        >
+          <div className="relative w-[90vw] h-[90vh]">
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              className="rounded-md object-contain"
+            />
+          </div>
+        </label>
+      )}
     </>
   );
 }

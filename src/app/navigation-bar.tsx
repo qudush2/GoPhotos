@@ -37,6 +37,15 @@ export default function NavigationBar() {
             Discover
           </NavigationLink>
         </NavbarItem>
+        <NavbarItem>
+          <NavigationLink
+            href={`/gallery`}
+            linkPath="/gallery"
+            className="hover-gradient text-lg sm:text-base font-medium"
+          >
+            Gallery
+          </NavigationLink>
+        </NavbarItem>
         {userId && (
           <NavbarItem>
             <NavigationLink
@@ -58,6 +67,15 @@ export default function NavigationBar() {
             className="hover-gradient sm:text-base font-medium"
           >
             Discover
+          </NavigationLink>
+        </NavbarItem>
+        <NavbarItem className="flex md:hidden">
+          <NavigationLink
+            href={`/gallery`}
+            linkPath="/gallery"
+            className="hover-gradient sm:text-base font-medium"
+          >
+            Gallery
           </NavigationLink>
         </NavbarItem>
         {userId && (

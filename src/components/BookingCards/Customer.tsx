@@ -30,11 +30,10 @@ export default async function BookingCardCustomer({
     job_price,
     paid,
     pictures_uploaded,
-    picture_url,
   } = jobDetails;
 
   const account = await getAccountDetailsByName(pgName);
-  const assets = (await getPortfolioPictures(account.clerk_id));
+  const assets = await getPortfolioPictures(account.clerk_id);
 
   return (
     <Card className="px-2">
@@ -65,7 +64,7 @@ export default async function BookingCardCustomer({
                     <div
                       className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                       style={{
-                        backgroundImage: `url(${asset.imagePath})`,
+                        backgroundImage: `url(${asset.url})`,
                         filter: "blur(20px)",
                         zIndex: 0,
                         opacity: 0.5,
@@ -73,7 +72,7 @@ export default async function BookingCardCustomer({
                     />
                     <Image
                       alt=""
-                      src={asset.imagePath}
+                      src={asset.url}
                       fill
                       className="object-contain z-10"
                     />
@@ -146,6 +145,26 @@ export default async function BookingCardCustomer({
           </>
         )}
 
+        {paid && pictures_uploaded && (
+          <div className="mt-10">
+            <p className="flex flex-col items-center text-lg">
+              Your pictures are ready to be viewed!
+            </p>
+            <div className="flex justify-center mt-4">
+              <Link
+                href={`/gallery/${jobDetails.conversation_id}`}
+                className="px-4 py-2 bg-black text-white font-bold rounded inline-block"
+              >
+                View Images
+              </Link>
+            </div>
+            <p className="text-center mt-4 text-sm italic">
+              Please review your images and confirm receipt. If we don't hear from you within 3 days,
+              we'll assume you're satisfied with the images.
+            </p>
+          </div>
+        )}
+
         {!paid && !pictures_uploaded && (
           <p className="text-base mt-10">
             How it works:
@@ -172,19 +191,6 @@ export default async function BookingCardCustomer({
               </li>
             </ul>
           </p>
-        )}
-
-        {paid && pictures_uploaded && (
-          <div className="mt-10">
-            <p className="flex flex-col items-center text-lg">
-              Your pictures are ready to be viewed!
-            </p>
-            <a href={picture_url} className="underline" target="_blank">
-              <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
-                Click to view your pictures
-              </p>
-            </a>
-          </div>
         )}
 
         <br />

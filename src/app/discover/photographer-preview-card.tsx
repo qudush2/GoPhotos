@@ -4,9 +4,12 @@ import Tag from "@/src/components/Tag";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 
 import Link from "next/link";
-import ImageModal from "@/src/components/Images/ImageModal";
+import ImageModal from "@/src/components/ImageManagement/ImageModal";
 import { PhotographerAccount } from "@/src/utils/types";
-import { getAccountByPhotographerId, getPortfolioPictures } from "@/src/utils/db";
+import {
+  getAccountByPhotographerId,
+  getPortfolioPictures,
+} from "@/src/utils/db";
 import { shuffle } from "lodash";
 import { Avatar } from "@nextui-org/react";
 
@@ -39,16 +42,13 @@ export default async function PhotographerPreviewCard({
                 <div
                   className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${asset.imagePath})`,
+                    backgroundImage: `url(${asset.url})`,
                     filter: "blur(20px)",
                     zIndex: 0,
                     opacity: 0.5,
                   }}
                 />
-                <ImageModal
-                  alt=""
-                  src={asset.imagePath}
-                />
+                <ImageModal alt="" src={asset.url} />
               </div>
             ))}
           {assets.length > 7 && (
@@ -64,7 +64,7 @@ export default async function PhotographerPreviewCard({
               <div
                 className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                 style={{
-                  backgroundImage: `url(${assets[7].imagePath})`,
+                  backgroundImage: `url(${assets[7].url})`,
                   filter: "blur(5px)",
                 }}
               />
