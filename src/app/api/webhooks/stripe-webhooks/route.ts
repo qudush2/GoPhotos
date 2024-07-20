@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: "gigs@gophotos.us",
         to: customer.email,
-        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.full_name}`,
+        bcc: "gigs@gophotos.us",
+        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.fullName}`,
         react: PaymentConfirmedCustomer({
           customerName: customer.full_name,
           photographerName: photographer.full_name,
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: "gigs@gophotos.us",
         to: photographer.email,
+        bcc: "gigs@gophotos.us",
         subject: `Payment Received for ${jobDetails.event_title} with ${customer.full_name}`,
         react: PaymentConfirmedPhotographer({
           photographerName: photographer.full_name,
