@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         from: "gigs@gophotos.us",
         to: customer.email,
         bcc: "gigs@gophotos.us",
-        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.fullName}`,
+        subject: `Payment Confirmed for ${jobDetails.event_title} with ${photographer.full_name}`,
         react: PaymentConfirmedCustomer({
           customerName: customer.full_name,
           photographerName: photographer.full_name,
