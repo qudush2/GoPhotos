@@ -269,13 +269,17 @@ export async function updatePaid(convoID: string) {
   ]);
 }
 
-export async function updateJobPictures(
-  convoID: string,
-  currentDate: Date
-) {
+export async function updateJobPictures(convoID: string, currentDate: Date) {
   const isoDate = currentDate.toISOString();
   await client.query(
     "UPDATE jobs SET pictures_uploaded = true, picture_upload_time = $1 WHERE conversation_id = $2",
     [isoDate, convoID]
+  );
+}
+
+export async function updateHires(clerkID: string) {
+  await client.query(
+    "UPDATE photographer_account SET hires = hires + 1 WHERE clerk_id = $1",
+    [clerkID]
   );
 }
