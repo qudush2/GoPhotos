@@ -15,15 +15,8 @@ import {
   DialogTrigger,
 } from "@/src/components/Dialog";
 import CreateChatPanel from "../create-chat-panel";
-import { currentUser, SignInButton, auth, clerkClient } from "@clerk/nextjs";
-import {
-  setPhotographerClerkid,
-  isPG,
-  isPG_noClerk,
-  isCustomer,
-  createCustomer,
-  getAccountByEmail,
-} from "@/src/utils/db";
+import { SignInButton } from "@clerk/nextjs";
+import {currentUser} from "@clerk/nextjs/server"
 
 export default async function PhotographerUniquePage({
   params,
@@ -34,40 +27,6 @@ export default async function PhotographerUniquePage({
   const account = await getAccountDetailsByName(decodedName);
   const assets = await getPortfolioPictures(account.clerk_id);
   const user = await currentUser();
-
-  // move this to better location, temp solution
-  const { userId } = auth();
-
-  if (userId && user && user.publicMetadata.isPhotographer == null) {
-    const email = user.emailAddresses[0].emailAddress;
-    const fullName = user.firstName + " " + user.lastName;
-    const info = await getAccountByEmail(email);
-
-    if (await isPG_noClerk(email)) {
-      await setPhotographerClerkid(email, userId);
-      await clerkClient.users.updateUserMetadata(userId, {
-        publicMetadata: {
-          isPhotographer: true,
-          location: info.location,
-          hourlyPriceLow: info.price_low,
-          hourlyPriceHigh: info.price_high,
-          school: info.school,
-          skills: info.skills,
-          about: info.about,
-          hires: info.hires,
-          hasStripeID: false,
-        },
-      });
-    } else if (!(await isCustomer(email)) && !(await isPG(email))) {
-      await createCustomer(email, fullName, userId);
-      await clerkClient.users.updateUserMetadata(userId, {
-        publicMetadata: {
-          isPhotographer: false,
-        },
-      });
-    }
-  }
-  // move to better location
 
   return (
     <div className="grid gap-1 rounded-md py-1 px-8 sm:px-20 pt-7 pb-10">

@@ -1,8 +1,8 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { WebhookEvent, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { updateProfilePicture } from "@/src/utils/db";
+import { updateProfilePicture, createCustomer } from "@/src/utils/db";
 
 export async function POST(req: Request) {
   // Get the headers
@@ -57,6 +57,29 @@ export async function POST(req: Request) {
         );
       }
     }
+  } else if (eventType === "user.created") {
+    const { id, email_addresses, first_name, last_name } = evt.data;
+    const primaryEmail = email_addresses.find(
+      (email) => email.id === evt.data.primary_email_address_id
+    );
+
+    if (primaryEmail) {
+      const fullName = `${first_name || ""} ${last_name || ""}`.trim();
+      try {
+        await createCustomer(primaryEmail.email_address, fullName, id);
+      } catch (error) {
+        console.error("Error creating customer:", error);
+        return NextResponse.json(
+          { error: "Failed to create customer" },
+          { status: 500 }
+        );
+      }
+    }
+    await clerkClient.users.updateUserMetadata(id, {
+      publicMetadata: {
+        isPhotographer: false,
+      },
+    });
   }
 
   return NextResponse.json(

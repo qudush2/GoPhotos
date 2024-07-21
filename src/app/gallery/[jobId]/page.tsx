@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { getJobDetails, getCustomerInfo } from "@/src/utils/db";
 import ImageManager from "@/src/components/ImageManagement/ImageManager";
 import NotifyCustomerButton from "@/src/components/NotifyCustomerButton";

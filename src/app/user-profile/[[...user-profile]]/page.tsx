@@ -1,15 +1,11 @@
 import AccountProfile from "./AccountProfile";
-import { currentUser } from "@clerk/nextjs";
-import {
-  isPG,
-  getAccountByClerkId,
-} from "@/src/utils/db";
+import { currentUser } from "@clerk/nextjs/server";
+import { isPGClerk, getAccountByClerkId } from "@/src/utils/db";
 import { PhotographerAccount } from "@/src/utils/types";
 
 export default async function Page() {
   const user = await currentUser();
-  const email = user?.emailAddresses[0].emailAddress!;
-  const isPhotographer = await isPG(email);
+  const isPhotographer = await isPGClerk(user!.id);
   let photographerAccount: PhotographerAccount | null = null;
 
   if (isPhotographer) {

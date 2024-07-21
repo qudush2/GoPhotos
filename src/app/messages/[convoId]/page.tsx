@@ -3,6 +3,7 @@ import BookingCardCustomer from "../../../components/BookingCards/Customer";
 import BookingCardPhotographer from "../../../components/BookingCards/Photographer";
 import { Banner, BannerCollapseButton } from "flowbite-react";
 import { HiX } from "react-icons/hi";
+import { isPGClerk } from "@/src/utils/db";
 
 import {
   getJobDetails,
@@ -10,7 +11,7 @@ import {
   getEmailByClerk,
   getCustomerInfo,
 } from "../../../utils/db";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function MessageUniquePage({
   params,
@@ -31,7 +32,7 @@ export default async function MessageUniquePage({
   }
 
   if (user) {
-    const isPG = user.publicMetadata.isPhotographer as boolean;
+    const isPG = await isPGClerk(user.id);
 
     return (
       <div className="flex h-[80vh] w-full overflow-auto px-7 sm:px-20 sm:mb-10">

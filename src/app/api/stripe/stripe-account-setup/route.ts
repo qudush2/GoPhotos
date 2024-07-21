@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { currentUser, clerkClient } from "@clerk/nextjs";
+import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import { isPGClerk } from "@/src/utils/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -10,11 +11,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST() {
   const user = await currentUser();
 
-  if (
-    user &&
-    !user.publicMetadata.hasStripeID &&
-    user.publicMetadata.isPhotographer
-  ) {
+  if (!user) {
+    return;
+  }
+
+  if (!user.publicMetadata.hasStripeID && (await isPGClerk(user!.id))) {
     const account = await stripe.accounts.create({
       type: "express",
       country: "US",
@@ -57,7 +58,7 @@ export async function POST() {
   } else if (
     user &&
     user.publicMetadata.hasStripeID &&
-    user.publicMetadata.isPhotographer
+    (await isPGClerk(user!.id))
   ) {
     const user_diff = await clerkClient.users.getUser(user.id);
     const account = user_diff.privateMetadata.StripeId as string;

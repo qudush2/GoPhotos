@@ -5,8 +5,9 @@ import { Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Suspense} from 'react'
-import Loading from './loading'
+import { Suspense } from "react";
+import Loading from "./loading";
+import AdminShortcut from "@/src/components/AdminShortcut";
 
 import { cn } from "@/src/utils/cn";
 
@@ -44,11 +45,12 @@ export default function RootLayout({
             spaceGrotesk.className
           )}
         >
-          <Suspense fallback={<Loading/>} >
-          <NavigationBar />
-          {children}
-          <Footer />
+          <Suspense fallback={<Loading />}>
+            <NavigationBar />
+            {children}
+            <Footer />
           </Suspense>
+          <AdminShortcut />
           <Analytics />
           <SpeedInsights />
           <Toaster />

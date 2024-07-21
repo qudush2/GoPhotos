@@ -49,3 +49,17 @@ export type Customer = {
   email: string;
   clerkid: string;
 };
+
+export type Application = {
+  email: string;
+  full_name: string;
+  clerk_id: string;
+  location: string;
+  price_low: number;
+  price_high: number;
+  school: string;
+  skills: string[];
+  about: string;
+  hires: number;
+  other: string;
+};

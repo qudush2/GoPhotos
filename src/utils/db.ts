@@ -1,7 +1,13 @@
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
 import { Client } from "pg";
-import { PhotographerAccount, JobDetails, Customer, s3Images } from "./types";
+import {
+  PhotographerAccount,
+  JobDetails,
+  Customer,
+  s3Images,
+  Application,
+} from "./types";
 import { getImages } from "./fetchImages";
 
 const client = new Client({
@@ -17,40 +23,6 @@ const client = new Client({
 
 client.connect();
 
-export async function setPhotographerClerkid(
-  email: string,
-  newClerkid: string
-) {
-  await client.query(
-    "UPDATE photographer_account SET clerk_id = $1 WHERE email = $2",
-    [newClerkid, email]
-  );
-}
-
-export async function isPG_noClerk(email: string): Promise<boolean> {
-  const result = await client.query(
-    "SELECT email FROM photographer_account WHERE email = $1 AND clerk_id is NULL",
-    [email]
-  );
-  return result.rows.length > 0;
-}
-
-export async function isCustomer(email: string): Promise<boolean> {
-  const result = await client.query(
-    "SELECT email FROM customer_account WHERE email = $1",
-    [email]
-  );
-  return result.rows.length > 0;
-}
-
-export async function isPG(email: string): Promise<boolean> {
-  const result = await client.query(
-    "SELECT email FROM photographer_account WHERE email = $1",
-    [email]
-  );
-  return result.rows.length > 0;
-}
-
 export async function isPGClerk(clerkid: string): Promise<boolean> {
   const result = await client.query(
     "SELECT clerk_id FROM photographer_account where clerk_id = $1",
@@ -65,6 +37,15 @@ export async function isVisible(accountID: number): Promise<boolean> {
     [accountID]
   );
   return result.rows[0].visible;
+}
+
+export async function applicationSubmitted(clerkID: string): Promise<boolean> {
+  const result = await client.query(
+    "SELECT * FROM applications WHERE clerk_id= $1",
+    [clerkID]
+  );
+
+  return result.rows.length > 0;
 }
 
 export async function createCustomer(
@@ -116,6 +97,37 @@ export async function createJobDetails(
       organization,
       description,
     ]
+  );
+}
+
+export async function createApplication(
+  email: string,
+  full_name: string,
+  clerk_id: string,
+  location: string,
+  price_low: number,
+  price_high: number,
+  school: string,
+  skills: string[],
+  about: string,
+  hires: number,
+  other: string | null
+) {
+  await client.query(
+    "INSERT INTO applications (email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, other) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+    [
+      email,
+      full_name,
+      clerk_id,
+      location,
+      price_low,
+      price_high,
+      school,
+      skills,
+      about,
+      hires,
+      other,
+    ] as any[]
   );
 }
 
@@ -238,6 +250,21 @@ export async function getCustomerGalleries(clerkID: string): Promise<string[]> {
   return result.rows[0].jobs;
 }
 
+export async function getAllApplications(): Promise<Application[] | null> {
+  const result = await client.query("SELECT * FROM applications");
+
+  return result.rows;
+}
+
+export async function getApplication(clerkID: string): Promise<Application> {
+  const result = await client.query(
+    "SELECT * FROM applications WHERE clerk_id = $1",
+    [clerkID]
+  );
+
+  return result.rows[0];
+}
+
 export async function updateProfilePicture(clerkID: string, pfpURL: string) {
   await client.query(
     "UPDATE photographer_account SET pfp_url = $1 WHERE clerk_id = $2",
@@ -282,4 +309,33 @@ export async function updateHires(clerkID: string) {
     "UPDATE photographer_account SET hires = hires + 1 WHERE clerk_id = $1",
     [clerkID]
   );
+}
+
+export async function moveApplication(clerkID: string) {
+  await client.query("BEGIN");
+
+  try {
+    await client.query(
+      `
+      INSERT INTO photographer_account (
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires
+      )
+      SELECT 
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires
+      FROM applications
+      WHERE clerk_id = $1
+    `,
+      [clerkID]
+    );
+
+    await client.query("DELETE FROM applications WHERE clerk_id = $1", [
+      clerkID,
+    ]);
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error moving application:", error);
+    throw error;
+  }
 }

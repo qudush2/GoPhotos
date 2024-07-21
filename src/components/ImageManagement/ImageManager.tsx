@@ -12,12 +12,14 @@ interface ImageManagerProps {
   folderId: string;
   isPhotographer: boolean;
   metadataEditable: boolean;
+  isAdminPage?: boolean;
 }
 
 export default function ImageManager({
   folderId,
   isPhotographer,
   metadataEditable,
+  isAdminPage = false,
 }: ImageManagerProps) {
   const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set());
   const [isEditingMetadata, setIsEditingMetadata] = useState(false);
@@ -119,7 +121,7 @@ export default function ImageManager({
 
   return (
     <div className="space-y-4">
-      {isPhotographer && (
+      {!isAdminPage && isPhotographer && (
         <>
           <ImageUploader
             folderId={folderId}
@@ -148,7 +150,9 @@ export default function ImageManager({
           )}
         </>
       )}
-      <ImageDownloader selectedImages={selectedImages} images={images} />
+      {!isAdminPage && (
+        <ImageDownloader selectedImages={selectedImages} images={images} />
+      )}
       <ImageGallery
         images={images}
         onImageSelect={handleImageSelect}
@@ -157,6 +161,7 @@ export default function ImageManager({
         onToggleImageSkill={handleToggleImageSkill}
         isLoading={isLoading}
         error={error}
+        isAdminPage={isAdminPage}
       />
     </div>
   );
