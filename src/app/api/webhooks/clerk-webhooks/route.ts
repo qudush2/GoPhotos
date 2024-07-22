@@ -1,6 +1,6 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { WebhookEvent, clerkClient } from "@clerk/nextjs/server";
+import { WebhookEvent, UserJSON, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { updateProfilePicture, createCustomer } from "@/src/utils/db";
 
@@ -58,9 +58,9 @@ export async function POST(req: Request) {
       }
     }
   } else if (eventType === "user.created") {
-    const { id, email_addresses, first_name, last_name } = evt.data;
+    const { id, email_addresses, first_name, last_name } = evt.data as UserJSON;
     const primaryEmail = email_addresses.find(
-      (email) => email.id === evt.data.primary_email_address_id
+      (email) => email.id === (evt.data as UserJSON).primary_email_address_id
     );
 
     if (primaryEmail) {
