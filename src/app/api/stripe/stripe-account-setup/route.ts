@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { currentUser, clerkClient } from "@clerk/nextjs/server";
-import { isPGClerk } from "@/src/utils/db";
+import { isPGClerk, updateStripeID } from "@/src/utils/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
@@ -44,10 +44,8 @@ export async function POST() {
     const accountInfoComplete = (await stripe.accounts.retrieve(account.id))
       .payouts_enabled;
     if (accountInfoComplete) {
+      await updateStripeID(account.id, user.id);
       await clerkClient.users.updateUserMetadata(user.id, {
-        privateMetadata: {
-          StripeId: account.id,
-        },
         publicMetadata: {
           hasStripeID: true,
         },

@@ -311,6 +311,13 @@ export async function updateHires(clerkID: string) {
   );
 }
 
+export async function updateStripeID(stripeID: string, clerkID: string) {
+  await client.query(
+    "UPDATE photographer_account SET stripe_id = $1 WHERE clerk_id = $2",
+    [stripeID, clerkID]
+  );
+}
+
 export async function moveApplication(clerkID: string) {
   await client.query("BEGIN");
 
