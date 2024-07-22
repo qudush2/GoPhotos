@@ -93,7 +93,7 @@ export default function ChatInbox({
       const conversation = session.getOrCreateConversation(convoId);
 
       let other;
-      if (jobDetails.customer_clerk_id === id) {
+      if (jobDetails.customer_clerk_id === id && id != jobDetails.photographer_clerk_id ) {
         other = new Talk.User({
           id: pgClerkID,
           name: pgName,
