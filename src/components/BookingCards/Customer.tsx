@@ -7,7 +7,10 @@ import {
   Button,
 } from "@nextui-org/react";
 import { JobDetails } from "@/src/utils/types";
-import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
+import {
+  ScrollArea,
+  ScrollBar,
+} from "@/src/components/ScrollingFeatures/ScrollArea";
 import { getAccountDetailsByName, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
@@ -159,8 +162,9 @@ export default async function BookingCardCustomer({
               </Link>
             </div>
             <p className="text-center mt-4 text-sm italic">
-              Please review your images and confirm receipt. If we don't hear from you within 3 days,
-              we'll assume you're satisfied with the images.
+              Please review your images and confirm receipt. If we don't hear
+              from you within 3 days, we'll assume you're satisfied with the
+              images.
             </p>
           </div>
         )}

@@ -29,7 +29,7 @@ export default async function PhotographerResults({
   const visiblePhotographers = await Promise.all(
     photographers.map(async (photographer) => ({
       visible:
-        (await isVisible(photographer.id)) ||
+        (await isVisible(photographer.clerk_id)) ||
         (bypassVisibility && photographer.id === 31),
       photographer,
     }))
@@ -42,7 +42,7 @@ export default async function PhotographerResults({
   return (
     <div className={cn("space-y-5", className)}>
       {visiblePhotographers.map((photographer, idx) => (
-        <Fragment key={photographer.id}>
+        <Fragment key={photographer.clerk_id}>
           <PhotographerPreviewCard
             photographer={photographer}
             pgType={pgType}
