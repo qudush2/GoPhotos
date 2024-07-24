@@ -5,11 +5,13 @@ import { useState } from "react";
 interface ImageDeleterProps {
   selectedImages: Set<string>;
   onDeleteComplete: () => void;
+  selectMode: boolean;
 }
 
-export default function ImageDeleter({
+export default function Delete({
   selectedImages,
   onDeleteComplete,
+  selectMode,
 }: ImageDeleterProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -37,12 +39,14 @@ export default function ImageDeleter({
   };
 
   return (
-    <button
-      onClick={deleteSelectedImages}
-      disabled={isDeleting || selectedImages.size === 0}
-      className="bg-red-500 text-white px-4 py-2 rounded mr-2 disabled:opacity-50"
-    >
-      {isDeleting ? "Deleting..." : "Delete Selected"}
-    </button>
+    <div>
+      <button
+        onClick={deleteSelectedImages}
+        disabled={isDeleting || !selectMode || selectedImages.size === 0}
+        className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+      >
+        {isDeleting ? "Deleting..." : "Delete Selected"}
+      </button>
+    </div>
   );
 }

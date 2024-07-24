@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { getJobDetails, getCustomerInfo } from "@/src/utils/db";
-import ImageManager from "@/src/components/ImageManagement/ImageManager";
+import Manager from "@/src/components/Images/Gallery/Manager"
 import NotifyCustomerButton from "@/src/components/NotifyCustomerButton";
 import Link from "next/link";
 
@@ -37,7 +37,7 @@ export default async function GalleryPage({
           </Link>
         )}
       </div>
-      <ImageManager folderId={folderId} isPhotographer={isPhotographer} metadataEditable={false}/>
+      <Manager folderId={folderId} isPhotographer={isPhotographer}/>
     </div>
   );
 }

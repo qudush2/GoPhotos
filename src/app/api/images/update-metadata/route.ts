@@ -5,18 +5,17 @@ const s3Client = new S3Client({ region: process.env.AWS_REGION });
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
-    console.log("Received request body:", body);
 
-    const { imageKeys, skills } = body;
+    const { imageKeys, skill } = body;
 
     if (!Array.isArray(imageKeys) || imageKeys.length === 0) {
       console.error("Missing or invalid 'imageKeys' in request");
       return Response.json({ error: "Missing or invalid 'imageKeys' in request" }, { status: 400 });
     }
 
-    if (!Array.isArray(skills)) {
-      console.error("Invalid 'skills' in request:", skills);
-      return Response.json({ error: "Invalid 'skills' in request" }, { status: 400 });
+    if (typeof skill !== 'string' || skill.trim() === '') {
+      console.error("Invalid 'skill' in request:", skill);
+      return Response.json({ error: "Invalid 'skill' in request" }, { status: 400 });
     }
 
     const updatePromises = imageKeys.map(async (key) => {
@@ -28,10 +27,21 @@ export async function PUT(request: Request) {
         });
         const headResponse = await s3Client.send(headCommand);
 
+        // Parse current skills
+        const currentSkills = JSON.parse(headResponse.Metadata?.skills || '[]');
+
+        // Update skills
+        let newSkills;
+        if (currentSkills.includes(skill)) {
+          newSkills = currentSkills.filter((s: string) => s !== skill);
+        } else {
+          newSkills = [...currentSkills, skill];
+        }
+
         // Prepare the new metadata
         const newMetadata = {
           ...headResponse.Metadata,
-          skills: JSON.stringify(skills), 
+          skills: JSON.stringify(newSkills),
         };
 
         // Use CopyObject to update the metadata

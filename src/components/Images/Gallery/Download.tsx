@@ -7,7 +7,7 @@ interface ImageDownloaderProps {
   images: { key: string; size: number }[];
 }
 
-export default function ImageDownloader({
+export default function Download({
   selectedImages,
   images,
 }: ImageDownloaderProps) {
@@ -97,18 +97,18 @@ export default function ImageDownloader({
   };
 
   return (
-    <div className="mb-4">
+    <div>
       <button
         onClick={downloadSelected}
         disabled={isDownloading || selectedImages.size === 0}
-        className="bg-green-500 text-white px-4 py-2 rounded mr-2 disabled:opacity-50"
+        className="bg-green-500 text-white px-4 py-2 rounded mr-3 disabled:opacity-50"
       >
         {isDownloading ? "Downloading..." : "Download Selected"}
       </button>
       <button
         onClick={downloadAll}
         disabled={isDownloading || images.length === 0}
-        className="bg-green-500 text-white px-4 py-2 rounded mr-2 disabled:opacity-50"
+        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
       >
         {isDownloading ? "Downloading..." : "Download All"}
       </button>

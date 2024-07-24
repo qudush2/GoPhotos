@@ -7,7 +7,7 @@ interface ImageUploaderProps {
   onUploadComplete: () => void;
 }
 
-export default function ImageUploader({
+export default function Upload({
   folderId,
   onUploadComplete,
 }: ImageUploaderProps) {
@@ -109,25 +109,27 @@ export default function ImageUploader({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        id="file"
-        type="file"
-        multiple
-        onChange={(e) => {
-          const fileList = e.target.files;
-          if (fileList) setFiles(Array.from(fileList));
-        }}
-        accept="image/*,.raw,.nef,.cr2,.arw,.orf,.rw2,.dng,.heic"
-        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-      />
-      <button
-        type="submit"
-        disabled={uploading}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-      >
-        {uploading ? "Uploading..." : "Upload"}
-      </button>
+    <div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          id="file"
+          type="file"
+          multiple
+          onChange={(e) => {
+            const fileList = e.target.files;
+            if (fileList) setFiles(Array.from(fileList));
+          }}
+          accept="image/*,.raw,.nef,.cr2,.arw,.orf,.rw2,.dng,.heic"
+          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+        />
+        <button
+          type="submit"
+          disabled={uploading}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+        >
+          {uploading ? "Uploading..." : "Upload"}
+        </button>
+      </form>
       {uploading && (
         <div className="mt-4">
           <p className="mb-2">{currentFile}</p>
@@ -148,6 +150,6 @@ export default function ImageUploader({
           {uploadStatus}
         </p>
       )}
-    </form>
+    </div>
   );
 }

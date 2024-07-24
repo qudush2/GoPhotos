@@ -3,7 +3,7 @@ import { UserProfile, useUser } from "@clerk/nextjs";
 import Tag from "@/src/components/Tag";
 import { Edit2, DollarSquare, Image } from "iconic-react";
 import { PhotographerAccount } from "@/src/utils/types";
-import ImageManager from "@/src/components/ImageManagement/ImageManager";
+import Manage from '@/src/components/Images/AccountProfile/Manager'
 
 interface AccountProfileProps {
   photographerAccount: PhotographerAccount | null;
@@ -119,10 +119,9 @@ export default function AccountProfile({
           labelIcon={<Image variant="Bulk" />}
           url="portfolio-pics"
         >
-          <ImageManager
+          <Manage
             folderId={`portfolio-pictures/${user.id}`}
             isPhotographer={isPhotographer}
-            metadataEditable={true}
           />
         </UserProfile.Page>
       </UserProfile>
