@@ -3,7 +3,7 @@
 import { useState } from "react";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { s3Images } from "@/src/utils/types";
-import ImageModal from "./ImageModal";
+import ImageModal from '@/src/components/Images/Modal'
 
 interface ImageGalleryProps {
   images: s3Images[];

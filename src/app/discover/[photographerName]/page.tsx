@@ -1,7 +1,7 @@
 import { getAccountDetailsByName, getPortfolioPictures } from "@/src/utils/db";
 
-import ImageModal from "@/src/components/ImageManagement/ImageModal";
-import ViewAllImages from "@/src/components/ImageManagement/ViewAllImages";
+import ImageModal from "@/src/components/Images/Modal";
+import ViewAllImages from "@/src/components/Images/ViewAll";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 
@@ -16,7 +16,7 @@ import {
 } from "@/src/components/Dialog";
 import CreateChatPanel from "../create-chat-panel";
 import { SignInButton } from "@clerk/nextjs";
-import {currentUser} from "@clerk/nextjs/server"
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function PhotographerUniquePage({
   params,

@@ -4,7 +4,7 @@ import Tag from "@/src/components/Tag";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 
 import Link from "next/link";
-import ImageModal from "@/src/components/ImageManagement/ImageModal";
+import ImageModal from "@/src/components/Images/Modal";
 import { PhotographerAccount } from "@/src/utils/types";
 import {
   getAccountByPhotographerId,

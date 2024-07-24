@@ -10,7 +10,12 @@ interface ImageModalProps {
   selectMode?: boolean;
 }
 
-export default function ImageModal({ src, alt, className, selectMode }: ImageModalProps) {
+export default function ImageModal({
+  src,
+  alt,
+  className,
+  selectMode,
+}: ImageModalProps) {
   useEffect(() => {
     const handleChange = (e: Event) => {
       const target = e.target as HTMLInputElement;

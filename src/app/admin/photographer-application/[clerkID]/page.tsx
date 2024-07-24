@@ -1,7 +1,7 @@
 import { getApplication } from "@/src/utils/db";
 import Link from "next/link";
 import ApproveButton from "../approve-button";
-import ImageManager from "@/src/components/ImageManagement/ImageManager";
+import Display from "@/src/components/Images/Apply/Display"
 
 export default async function ApplicationDetails({
   params,
@@ -84,11 +84,8 @@ export default async function ApplicationDetails({
       </div>
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Portfolio Images</h2>
-        <ImageManager
-          folderId={`photographer-application/${params.clerkID}`}
-          isPhotographer={false}
-          metadataEditable={false}
-          isAdminPage={true}
+        <Display
+          folderID={`photographer-application/${params.clerkID}`}
         />
       </div>
     </div>

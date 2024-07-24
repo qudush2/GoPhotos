@@ -28,11 +28,15 @@ export default function MetadataEditor({
   }, [currentSkills]);
 
   const toggleSkill = (skill: string) => {
-    if (selectedSkill === skill) {
-      setSelectedSkill(null);
-    } else {
-      setSelectedSkill(skill);
-    }
+    setSelectedSkills((prevSkills) => {
+      const newSkills = new Set(prevSkills);
+      if (newSkills.has(skill)) {
+        newSkills.delete(skill);
+      } else {
+        newSkills.add(skill);
+      }
+      return newSkills;
+    });
   };
 
   const updateMetadata = async () => {
@@ -40,12 +44,13 @@ export default function MetadataEditor({
 
     setIsUpdating(true);
     try {
+      const skillsArray = Array.from(selectedSkills);
       const response = await fetch("/api/images/update-metadata", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           imageKeys: Array.from(selectedImages),
-          skills: Array.from(selectedSkills),
+          skills: skillsArray,
         }),
       });
 
@@ -70,7 +75,7 @@ export default function MetadataEditor({
             key={skill}
             onClick={() => toggleSkill(skill)}
             className={`px-2 py-1 rounded ${
-              selectedSkill === skill ? "bg-blue-500 text-white" : "bg-gray-200"
+              selectedSkills.has(skill) ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
           >
             {skill}

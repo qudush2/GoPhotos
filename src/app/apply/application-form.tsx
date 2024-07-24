@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
-import ImageUploader from "@/src/components/ImageManagement/ImageUploader";
+import Upload from '@/src/components/Images/Apply/Upload'
 
 interface ApplicationFormProps {
   firstName: string;
@@ -200,7 +200,7 @@ export default function ApplicationForm({
           Upload up to 15 images that showcase your work with the skills you
           have selected.
         </label>
-        <ImageUploader
+        <Upload
           folderId={`photographer-application/${clerkID}`}
           onUploadComplete={() => setUploadComplete(true)}
         />
