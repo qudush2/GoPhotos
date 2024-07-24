@@ -1,7 +1,7 @@
 import {
   getAllAccounts,
   getJobDetails,
-  getAccountByPhotographerId,
+  getAccountByClerkId,
   getAllJobIDs,
 } from "@/src/utils/db";
 import { CopyEmailsButton } from "./copy-email";
@@ -27,7 +27,7 @@ export default async function AdminPage() {
 
   const accountsWithPhotographer = await Promise.all(
     accounts.map(async (account) => {
-      const photographer = await getAccountByPhotographerId(account.id);
+      const photographer = await getAccountByClerkId(account.clerk_id);
       const jobCount = jobCountByPhotographerClerkID[account.clerk_id] || 0;
       return { ...account, photographer, jobCount };
     })

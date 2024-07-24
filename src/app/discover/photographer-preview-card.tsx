@@ -7,7 +7,7 @@ import Link from "next/link";
 import ImageModal from "@/src/components/Images/Modal";
 import { PhotographerAccount } from "@/src/utils/types";
 import {
-  getAccountByPhotographerId,
+  getAccountByClerkId,
   getPortfolioPictures,
 } from "@/src/utils/db";
 import { shuffle } from "lodash";
@@ -22,7 +22,7 @@ export default async function PhotographerPreviewCard({
   photographer,
   pgType,
 }: PhotographerPreviewCardProps) {
-  const account = await getAccountByPhotographerId(photographer.id);
+  const account = await getAccountByClerkId(photographer.clerk_id);
   const assets = await getPortfolioPictures(photographer.clerk_id);
 
   return (

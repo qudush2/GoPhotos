@@ -31,10 +31,10 @@ export async function isPGClerk(clerkid: string): Promise<boolean> {
   return result.rows.length > 0;
 }
 
-export async function isVisible(accountID: number): Promise<boolean> {
+export async function isVisible(clerkID: string): Promise<boolean> {
   const result = await client.query(
-    'SELECT visible FROM photographer_account WHERE "id" = $1',
-    [accountID]
+    'SELECT visible FROM photographer_account WHERE clerk_id = $1',
+    [clerkID]
   );
   return result.rows[0].visible;
 }
