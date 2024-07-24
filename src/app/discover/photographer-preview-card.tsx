@@ -6,11 +6,7 @@ import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 import Link from "next/link";
 import ImageModal from "@/src/components/Images/Modal";
 import { PhotographerAccount } from "@/src/utils/types";
-import {
-  getAccountByClerkId,
-  getPortfolioPictures,
-} from "@/src/utils/db";
-import { shuffle } from "lodash";
+import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
 import { Avatar } from "@nextui-org/react";
 
 type PhotographerPreviewCardProps = {
@@ -23,34 +19,32 @@ export default async function PhotographerPreviewCard({
   pgType,
 }: PhotographerPreviewCardProps) {
   const account = await getAccountByClerkId(photographer.clerk_id);
-  const assets = await getPortfolioPictures(photographer.clerk_id);
+  const assets = await getPortfolioPictures(photographer.clerk_id, pgType);
 
   return (
     <div className="my-2 grid gap-5 rounded-md bg-white py-5 md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1">
       <ScrollArea className="h-full w-full rounded-md md:col-start-2">
         <div className="flex w-max gap-1">
-          {shuffle(assets)
-            .slice(0, 7)
-            .map((asset, idx) => (
+          {assets.slice(0, 7).map((asset, idx) => (
+            <div
+              key={idx}
+              className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 md:w-80 lg:w-[28rem]"
+              style={{
+                position: "relative",
+              }}
+            >
               <div
-                key={idx}
-                className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 md:w-80 lg:w-[28rem]"
+                className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                 style={{
-                  position: "relative",
+                  backgroundImage: `url(${asset.url})`,
+                  filter: "blur(20px)",
+                  zIndex: 0,
+                  opacity: 0.5,
                 }}
-              >
-                <div
-                  className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${asset.url})`,
-                    filter: "blur(20px)",
-                    zIndex: 0,
-                    opacity: 0.5,
-                  }}
-                />
-                <ImageModal alt="" src={asset.url} />
-              </div>
-            ))}
+              />
+              <ImageModal alt="" src={asset.url} />
+            </div>
+          ))}
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
               <Link

@@ -167,9 +167,10 @@ export async function getAccountByPhotographerId(
 }
 
 export async function getPortfolioPictures(
-  clerkId: string
+  clerkId: string,
+  photographyType?: string
 ): Promise<s3Images[]> {
-  return getImages(`portfolio-pictures/${clerkId}/`);
+  return getImages(`portfolio-pictures/${clerkId}/`, photographyType);
 }
 
 export async function getAccountDetailsByName(

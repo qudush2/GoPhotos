@@ -10,7 +10,7 @@ const s3Client = new S3Client({
 });
 const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
 
-export async function getImages(folderId: string): Promise<s3Images[]> {
+export async function getImages(folderId: string, photographyType?: string): Promise<s3Images[]> {
   try {
     const command = new ListObjectsV2Command({
       Bucket: process.env.AWS_BUCKET_NAME!,
@@ -57,10 +57,35 @@ export async function getImages(folderId: string): Promise<s3Images[]> {
       })
     );
 
-    return images;
+    let matchingImages: s3Images[] = [];
+    let nonMatchingImages: s3Images[] = [];
+
+    images.forEach(image => {
+      if (photographyType && image.skills.includes(photographyType)) {
+        matchingImages.push(image);
+      } else {
+        nonMatchingImages.push(image);
+      }
+    });
+
+    // Shuffle matching images
+    shuffleArray(matchingImages);
+
+    // Shuffle non-matching images
+    shuffleArray(nonMatchingImages);
+
+    // Combine the arrays
+    return [...matchingImages, ...nonMatchingImages];
   } catch (error) {
     console.error("Error fetching images:", error);
     return [];
+  }
+}
+
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
 }
 

@@ -28,9 +28,7 @@ export default async function PhotographerResults({
 
   const visiblePhotographers = await Promise.all(
     photographers.map(async (photographer) => ({
-      visible:
-        (await isVisible(photographer.clerk_id)) ||
-        bypassVisibility,
+      visible: (await isVisible(photographer.clerk_id)) || bypassVisibility,
       photographer,
     }))
   ).then((results) =>
@@ -47,7 +45,7 @@ export default async function PhotographerResults({
             photographer={photographer}
             pgType={pgType}
           />
-          {idx !== photographers.length - 1}
+          {idx !== visiblePhotographers.length - 1}
         </Fragment>
       ))}
     </div>
