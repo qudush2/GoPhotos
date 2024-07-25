@@ -2,19 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateMessageSent } from "@/src/utils/db";
 
 export async function POST(req: NextRequest) {
-  if (req.method === "POST") {
+  try {
     const body = await req.json();
     const convoId = body.convoId as string;
 
     await updateMessageSent(convoId);
 
-    if (req.method === "POST") {
-      return NextResponse.redirect(
-        `https://www.gophotos.us/messages/${encodeURIComponent(convoId)}`,
-        302
-      );
-    } else {
-      return new Response("not working :(", { status: 405 });
-    }
+    // Return a redirect response
+    return NextResponse.redirect(
+      // CHANGE BEFORE PUSH TO MAIN
+      `https://www.gophotos.us/messages/${encodeURIComponent(convoId)}`,
+      303
+    );
+  } catch (error) {
+    console.error("Error updating message sent status:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

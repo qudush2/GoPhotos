@@ -50,38 +50,36 @@ export default async function BookingCardCustomer({
           href={`/discover/${encodeURIComponent(account.full_name)}`}
           target="_blank"
         >
-          <a>
-            <ScrollArea className="h-full w-full rounded-md md:col-start-2">
-              <div className="flex w-max gap-1">
-                {shuffle(assets).map((asset, idx) => (
+          <ScrollArea className="h-full w-full rounded-md md:col-start-2">
+            <div className="flex w-max gap-1">
+              {shuffle(assets).map((asset, idx) => (
+                <div
+                  key={idx}
+                  className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 md:w-80 lg:w-[28rem]"
+                  style={{
+                    position: "relative",
+                  }}
+                >
                   <div
-                    key={idx}
-                    className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 md:w-80 lg:w-[28rem]"
+                    className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                     style={{
-                      position: "relative",
+                      backgroundImage: `url(${asset.url})`,
+                      filter: "blur(20px)",
+                      zIndex: 0,
+                      opacity: 0.5,
                     }}
-                  >
-                    <div
-                      className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url(${asset.url})`,
-                        filter: "blur(20px)",
-                        zIndex: 0,
-                        opacity: 0.5,
-                      }}
-                    />
-                    <Image
-                      alt=""
-                      src={asset.url}
-                      fill
-                      className="object-contain z-10"
-                    />
-                  </div>
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </a>
+                  />
+                  <Image
+                    alt=""
+                    src={asset.url}
+                    fill
+                    className="object-contain z-10"
+                  />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </Link>
         <p className="text-base italic">
           Scroll to view more or click on the image to return the photographer's
@@ -159,14 +157,16 @@ export default async function BookingCardCustomer({
               </Link>
             </div>
             <p className="text-center mt-4 text-sm italic">
-              Please review your images and confirm receipt. If we don't hear from you within 3 days,
-              we'll assume you're satisfied with the images.
+              Please review your images and confirm receipt. If we don't hear
+              from you within 3 days, we'll assume you're satisfied with the
+              images.
             </p>
           </div>
         )}
 
         {!paid && !pictures_uploaded && (
-          <p className="text-base mt-10">
+          <>
+            <p className="text-base mt-10"></p>
             How it works:
             <ul className="list-disc">
               <li className="mt-2">
@@ -174,7 +174,7 @@ export default async function BookingCardCustomer({
                 given payment instructions.
               </li>
               <li className="mt-2">
-                The photographer will not recieve this payment until after they
+                The photographer will not receive this payment until after they
                 return your pictures from "{event_title}".
               </li>
               <li className="mt-2">
@@ -190,7 +190,7 @@ export default async function BookingCardCustomer({
                 {format(subDays(new Date(event_date), 7), "PPP")}
               </li>
             </ul>
-          </p>
+          </>
         )}
 
         <br />

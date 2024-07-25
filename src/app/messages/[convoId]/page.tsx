@@ -3,7 +3,6 @@ import BookingCardCustomer from "../../../components/BookingCards/Customer";
 import BookingCardPhotographer from "../../../components/BookingCards/Photographer";
 import { Banner, BannerCollapseButton } from "flowbite-react";
 import { HiX } from "react-icons/hi";
-import { isPGClerk } from "@/src/utils/db";
 
 import {
   getJobDetails,
@@ -32,7 +31,7 @@ export default async function MessageUniquePage({
   }
 
   if (user) {
-    const isPG = await isPGClerk(user.id);
+    const isPG = user!.id === pgClerkID;
 
     return (
       <div className="flex h-[80vh] w-full overflow-auto px-7 sm:px-20 sm:mb-10">
