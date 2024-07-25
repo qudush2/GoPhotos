@@ -33,7 +33,7 @@ export async function isPGClerk(clerkid: string): Promise<boolean> {
 
 export async function isVisible(clerkID: string): Promise<boolean> {
   const result = await client.query(
-    'SELECT visible FROM photographer_account WHERE clerk_id = $1',
+    "SELECT visible FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
   return result.rows[0].visible;
@@ -185,6 +185,19 @@ export async function getAccountDetailsByName(
 
 export async function getAllJobIDs(): Promise<JobDetails[]> {
   const result = await client.query("SELECT conversation_id FROM jobs");
+  return result.rows;
+}
+
+export async function getAllPhotographerJobs(
+  clerkID: string
+): Promise<JobDetails[]> {
+  const result = await client.query(
+    `SELECT * FROM jobs j 
+    JOIN job_detail jd on j.conversation_id = jd.conversation_id
+    WHERE j.photographer_clerk_id = $1`,
+    [clerkID]
+  );
+
   return result.rows;
 }
 
