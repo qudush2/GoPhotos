@@ -22,7 +22,6 @@ export default function CreateChatPanel({
 
   const userID = user.id;
   const convoID = useMemo(() => uuidv4(), []);
-  const accountEmail = account.email;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,7 +29,7 @@ export default function CreateChatPanel({
     const formData = new FormData(event.currentTarget);
     formData.append("convoID", convoID);
     formData.append("userID", userID);
-    formData.append("accountEmail", accountEmail);
+    formData.append("accountID", account.clerk_id);
 
     await fetch("/api/database-updates/create-chat", {
       method: "POST",

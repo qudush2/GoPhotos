@@ -6,9 +6,8 @@ import { HiX } from "react-icons/hi";
 
 import {
   getJobDetails,
-  getAccountByEmail,
-  getEmailByClerk,
   getCustomerInfo,
+  getAccountByClerkId,
 } from "../../../utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -20,7 +19,7 @@ export default async function MessageUniquePage({
   const jobDetails = await getJobDetails(params.convoId);
   const customer = await getCustomerInfo(jobDetails.customer_clerk_id);
   const pgClerkID = jobDetails.photographer_clerk_id;
-  const account = await getAccountByEmail(await getEmailByClerk(pgClerkID));
+  const account = await getAccountByClerkId(pgClerkID);
 
   const decodedId = decodeURIComponent(params.convoId);
 
@@ -69,11 +68,7 @@ export default async function MessageUniquePage({
           lg:block lg:col-span-2"
           >
             {!isPG && (
-              <BookingCardCustomer
-                jobDetails={jobDetails}
-                pgName={account.full_name}
-                className="h-full"
-              />
+              <BookingCardCustomer jobDetails={jobDetails} className="h-full" />
             )}
             {isPG && (
               <BookingCardPhotographer

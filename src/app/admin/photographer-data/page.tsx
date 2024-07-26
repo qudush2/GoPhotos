@@ -1,5 +1,5 @@
 import {
-  getAllAccounts,
+  getAllPhotographers,
   getJobDetails,
   getAccountByClerkId,
   getAllJobIDs,
@@ -8,7 +8,7 @@ import { CopyEmailsButton } from "./copy-email";
 
 export default async function AdminPage() {
 
-  const accounts = await getAllAccounts();
+  const accounts = await getAllPhotographers();
   const jobIDs = await getAllJobIDs();
   const jobDetails = await Promise.all(
     jobIDs.map((conversation_id) =>
