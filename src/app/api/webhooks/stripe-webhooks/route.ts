@@ -34,11 +34,15 @@ export async function POST(req: NextRequest) {
     const convoID = session.metadata?.convoID;
 
     if (convoID) {
-      await updatePaid(convoID);
-
       const jobDetails = await getJobDetails(convoID);
       const customer = await getCustomerInfo(jobDetails.customer_clerk_id);
       const photographer = await getAccountByClerkId(
+        jobDetails.photographer_clerk_id
+      );
+
+      await updatePaid(
+        convoID,
+        jobDetails.customer_clerk_id,
         jobDetails.photographer_clerk_id
       );
 

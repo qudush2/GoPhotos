@@ -14,7 +14,7 @@ import React, { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/utils/cn";
 
-export default function NavigationBar() {
+export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
   const { userId } = useAuth();
 
   return (
@@ -37,25 +37,38 @@ export default function NavigationBar() {
             Discover
           </NavigationLink>
         </NavbarItem>
-        <NavbarItem>
-          <NavigationLink
-            href={`/gallery`}
-            linkPath="/gallery"
-            className="hover-gradient text-lg sm:text-base font-medium"
-          >
-            Gallery
-          </NavigationLink>
-        </NavbarItem>
         {userId && (
-          <NavbarItem>
-            <NavigationLink
-              href={`/messages`}
-              linkPath="/messages"
-              className="hover-gradient text-lg sm:text-base font-medium"
-            >
-              Messages
-            </NavigationLink>
-          </NavbarItem>
+          <>
+            <NavbarItem>
+              <NavigationLink
+                href={`/gallery`}
+                linkPath="/gallery"
+                className="hover-gradient text-lg sm:text-base font-medium"
+              >
+                Gallery
+              </NavigationLink>
+            </NavbarItem>
+            {isPG && (
+              <NavbarItem>
+                <NavigationLink
+                  href={`/jobs`}
+                  linkPath="/jobs"
+                  className="hover-gradient text-lg sm:text-base font-medium"
+                >
+                  Jobs
+                </NavigationLink>
+              </NavbarItem>
+            )}
+            <NavbarItem>
+              <NavigationLink
+                href={`/messages`}
+                linkPath="/messages"
+                className="hover-gradient text-lg sm:text-base font-medium"
+              >
+                Messages
+              </NavigationLink>
+            </NavbarItem>
+          </>
         )}
       </NavbarContent>
 
