@@ -257,7 +257,6 @@ export async function getPGGalleries(clerkID: string): Promise<string[]> {
     "SELECT paid_jobs FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
-  console.log(result.rows[0]);
   return result.rows[0].paid_jobs;
 }
 
@@ -376,6 +375,13 @@ export async function updateJobPictures(convoID: string, currentDate: Date) {
   await client.query(
     "UPDATE jobs SET pictures_uploaded = true, closed = true, picture_upload_time = $1 WHERE conversation_id = $2",
     [isoDate, convoID]
+  );
+}
+
+export async function updateCoverImage(convoID: string, coverImageURL: string) {
+  await client.query(
+    "UPDATE jobs SET cover_image = $1 WHERE conversation_id = $2",
+    [coverImageURL, convoID]
   );
 }
 

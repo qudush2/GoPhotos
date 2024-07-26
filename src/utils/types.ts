@@ -42,6 +42,7 @@ export type JobDetails = {
   organization: string;
   description: string;
   message_sent: boolean;
+  cover_image: string;
 };
 
 export type Customer = {

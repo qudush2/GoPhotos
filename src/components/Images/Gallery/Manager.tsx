@@ -6,16 +6,19 @@ import Delete from "@/src/components/Images/Gallery/Delete";
 import Download from "@/src/components/Images/Gallery/Download";
 import Display from "@/src/components/Images/Gallery/Display";
 import Select from "@/src/components/Images/Gallery/Select";
+import SetCoverImage from "@/src/components/Images/Gallery/SetCoverImage";
 import { s3Images } from "@/src/utils/types";
 
 interface ImageManagerProps {
   folderId: string;
   isPhotographer: boolean;
+  convoID: string;
 }
 
 export default function ImageManager({
   folderId,
   isPhotographer,
+  convoID,
 }: ImageManagerProps) {
   const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set());
   const [images, setImages] = useState<s3Images[]>([]);
@@ -71,7 +74,7 @@ export default function ImageManager({
   };
 
   const selectAll = () => {
-    setSelectedImages(new Set(images.map(image => image.key)));
+    setSelectedImages(new Set(images.map((image) => image.key)));
   };
 
   return (
@@ -79,11 +82,20 @@ export default function ImageManager({
       <div className="flex flex-wrap items-end gap-3">
         {isPhotographer && (
           <>
-            <Upload folderId={folderId} onUploadComplete={handleUploadComplete} />
+            <Upload
+              folderId={folderId}
+              onUploadComplete={handleUploadComplete}
+            />
             <Delete
               selectedImages={selectedImages}
               onDeleteComplete={handleDeleteComplete}
               selectMode={selectMode}
+            />
+            <SetCoverImage
+              selectedImages={selectedImages}
+              selectMode={selectMode}
+              images={images}
+              convoID={convoID}
             />
           </>
         )}
