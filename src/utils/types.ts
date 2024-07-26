@@ -13,6 +13,7 @@ export type PhotographerAccount = {
   hires: number;
   visible: boolean;
   paid_jobs: string[];
+  custom_url: string;
 };
 
 export type s3Images = {

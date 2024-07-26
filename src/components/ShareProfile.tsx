@@ -12,8 +12,10 @@ import {
 
 export default function ShareProfileButton({
   photographerName,
+  photographerURL
 }: {
   photographerName: string;
+  photographerURL : string
 }) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,7 @@ export default function ShareProfileButton({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, photographerName }),
+        body: JSON.stringify({ email, photographerName, photographerURL }),
       });
 
       if (response.ok) {

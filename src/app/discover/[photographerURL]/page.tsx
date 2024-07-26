@@ -1,4 +1,4 @@
-import { getAccountDetailsByName, getPortfolioPictures } from "@/src/utils/db";
+import { getAccountByCustomURL, getPortfolioPictures } from "@/src/utils/db";
 
 import ImageModal from "@/src/components/Images/Modal";
 import ViewAllImages from "@/src/components/Images/ViewAll";
@@ -21,10 +21,10 @@ import { currentUser } from "@clerk/nextjs/server";
 export default async function PhotographerUniquePage({
   params,
 }: {
-  params: { photographerName: string };
+  params: { photographerURL: string };
 }) {
-  const decodedName = decodeURIComponent(params.photographerName);
-  const account = await getAccountDetailsByName(decodedName);
+  const decodedURL = decodeURIComponent(params.photographerURL);
+  const account = await getAccountByCustomURL(decodedURL);
   const assets = await getPortfolioPictures(account.clerk_id);
   const user = await currentUser();
 

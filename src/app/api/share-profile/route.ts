@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
-  const { email, photographerName } = await request.json();
+  const { email, photographerName, photographerURL } = await request.json();
 
   try {
     const { data, error } = await resend.emails.send({
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         <h1>Hello!</h1>
         <p>Someone has shared a photographer's profile with you on GoPhotos.</p>
         <p>Click the link below to view ${photographerName}'s profile:</p>
-        <a href="${process.env.NEXT_PUBLIC_BASE_URL}/discover/${encodeURIComponent(photographerName)}">
+        <a href="https://www.gophotos.us/discover/${encodeURIComponent(photographerURL)}">
           View ${photographerName}'s Profile
         </a>
       `,

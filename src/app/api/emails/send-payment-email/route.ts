@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
       react: PaymentEmailCustomer({
         customerName: customer.full_name,
         photographerName: photographer.full_name,
+        photographerURL: photographer.custom_url,
         event_title: event_title,
       }),
     });

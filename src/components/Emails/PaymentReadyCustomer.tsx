@@ -1,10 +1,12 @@
 export default function PaymentEmailCustomer({
   customerName,
   photographerName,
+  photographerURL,
   event_title,
 }: {
   customerName: string;
   photographerName: string;
+  photographerURL: string
   event_title: string;
 }) {
 
@@ -18,7 +20,7 @@ export default function PaymentEmailCustomer({
         Congrats, you are almost done booking {photographerName} for {event_title}. To confirm the booking, please log onto <a href='https://www.gophotos.us'>GoPhotos</a> and complete the payment process.
       </p>
 
-      <p>Visit <a href={`https://www.gophotos.us/discover/${encodeURIComponent(photographerName)}`}>{photographerName}'s profile</a></p>
+      <p>Visit <a href={`https://www.gophotos.us/discover/${encodeURIComponent(photographerURL)}`}>{photographerName}'s profile</a></p>
 
       <p className="font-bold"> Please note that the photographer will not receive thier payment until after your pictures have been returned. </p>
       

@@ -6,6 +6,7 @@ type SessionClaims = {
   };
 };
 
+// if gophotos.us/qudus --> change the public route to include /.*
 const publicRoutes = createRouteMatcher([
   '/',
   '(^/discover.*)',

@@ -131,37 +131,12 @@ export async function createApplication(
   );
 }
 
-export async function getAllAccounts(): Promise<PhotographerAccount[]> {
-  const result = await client.query("SELECT * FROM photographer_account");
-  return result.rows;
-}
-
-export async function getAccountByEmail(
-  email: string
-): Promise<PhotographerAccount> {
-  const result = await client.query(
-    "SELECT * FROM photographer_account WHERE email = $1",
-    [email]
-  );
-  return result.rows.length > 0 ? result.rows[0] : null;
-}
-
 export async function getAccountByClerkId(
   clerkId: string
 ): Promise<PhotographerAccount> {
   const result = await client.query(
     "SELECT * FROM photographer_account WHERE clerk_id = $1",
     [clerkId]
-  );
-  return result.rows.length > 0 ? result.rows[0] : null;
-}
-
-export async function getAccountByPhotographerId(
-  pgId: number
-): Promise<PhotographerAccount> {
-  const result = await client.query(
-    "SELECT * FROM photographer_account WHERE id = $1",
-    [pgId]
   );
   return result.rows.length > 0 ? result.rows[0] : null;
 }
@@ -173,12 +148,12 @@ export async function getPortfolioPictures(
   return getImages(`portfolio-pictures/${clerkId}/`, photographyType);
 }
 
-export async function getAccountDetailsByName(
-  name: string
+export async function getAccountByCustomURL(
+  custom_url: string
 ): Promise<PhotographerAccount> {
   const result = await client.query(
-    "SELECT * FROM photographer_account WHERE full_name = $1",
-    [name]
+    "SELECT * FROM photographer_account WHERE custom_url = $1",
+    [custom_url]
   );
   return result.rows.length > 0 ? result.rows[0] : null;
 }
@@ -244,28 +219,12 @@ export async function getAllPhotographers(
   return result.rows;
 }
 
-export async function getPGClerkId(email: string): Promise<string> {
-  const result = await client.query(
-    "SELECT clerk_id FROM photographer_account WHERE email = $1",
-    [email]
-  );
-  return result.rows.length > 0 ? result.rows[0].clerkid : null;
-}
-
 export async function getPGGalleries(clerkID: string): Promise<string[]> {
   const result = await client.query(
     "SELECT paid_jobs FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
   return result.rows[0].paid_jobs;
-}
-
-export async function getEmailByClerk(clerkID: string): Promise<string> {
-  const result = await client.query(
-    "SELECT email FROM photographer_account WHERE clerk_id = $1",
-    [clerkID]
-  );
-  return result.rows[0].email;
 }
 
 export async function getJobDetails(convoID: string): Promise<JobDetails> {
@@ -412,14 +371,28 @@ export async function moveApplication(clerkID: string) {
   try {
     await client.query(
       `
+      WITH ranked_applications AS (
+        SELECT 
+          email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires,
+          REGEXP_REPLACE(full_name, '\s+', '', 'g') AS base_url,
+          ROW_NUMBER() OVER (PARTITION BY REGEXP_REPLACE(full_name, '\s+', '', 'g') ORDER BY clerk_id) AS rn
+        FROM applications
+        WHERE clerk_id = $1
+      ),
+      custom_url_generated AS (
+        SELECT *,
+          CASE 
+            WHEN rn = 1 THEN base_url
+            ELSE base_url || rn::text
+          END AS custom_url
+        FROM ranked_applications
+      )
       INSERT INTO photographer_account (
-        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url
       )
       SELECT 
-        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires
-      FROM applications
-      WHERE clerk_id = $1
-    `,
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url
+      FROM custom_url_generated`,
       [clerkID]
     );
 

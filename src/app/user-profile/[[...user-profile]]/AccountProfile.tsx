@@ -3,7 +3,7 @@ import { UserProfile, useUser } from "@clerk/nextjs";
 import Tag from "@/src/components/Tag";
 import { Edit2, DollarSquare, Image } from "iconic-react";
 import { PhotographerAccount } from "@/src/utils/types";
-import Manage from '@/src/components/Images/AccountProfile/Manager'
+import Manage from "@/src/components/Images/AccountProfile/Manager";
 
 interface AccountProfileProps {
   photographerAccount: PhotographerAccount | null;
@@ -29,6 +29,8 @@ export default function AccountProfile({
       school,
       skills,
       hires,
+      visible,
+      custom_url,
     } = photographerAccount;
 
     return (
@@ -42,6 +44,11 @@ export default function AccountProfile({
             <p className="text-xl">About</p>
             <hr className="my-2 border-gray-300" />
             <p className="text-sm">{about}</p>
+          </div>
+          <div>
+            <p className="text-xl mt-10">Custom URL</p>
+            <hr className="my-2 border-gray-300" />
+            <p className="text-sm">https://www.gophotos.us/{custom_url}</p>
           </div>
           <div>
             <p className="text-xl mt-10">Location</p>
@@ -64,6 +71,17 @@ export default function AccountProfile({
             <p className="text-xl mt-10">Hires</p>
             <hr className="my-2 border-gray-300" />
             <p className="text-sm">{hires}</p>
+          </div>
+          <div>
+            <p className="text-xl mt-10">Profile Visible</p>
+            <hr className="my-2 border-gray-300" />
+            <p className="text-sm">
+              {visible ? (
+                <div>you're profile is visible</div>
+              ) : (
+                <div>you're profile is not visible</div>
+              )}
+            </p>
           </div>
           <div>
             <p className="text-xl mt-10">Skills</p>

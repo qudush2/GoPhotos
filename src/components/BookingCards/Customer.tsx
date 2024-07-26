@@ -8,18 +8,16 @@ import {
 } from "@nextui-org/react";
 import { JobDetails } from "@/src/utils/types";
 import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
-import { getAccountDetailsByName, getPortfolioPictures } from "@/src/utils/db";
+import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
 import { format, subDays } from "date-fns";
 
 export default async function BookingCardCustomer({
   jobDetails,
-  pgName,
   className,
 }: {
   jobDetails: JobDetails;
-  pgName: string;
   className?: string;
 }) {
   const {
@@ -32,7 +30,7 @@ export default async function BookingCardCustomer({
     pictures_uploaded,
   } = jobDetails;
 
-  const account = await getAccountDetailsByName(pgName);
+  const account = await getAccountByClerkId(jobDetails.photographer_clerk_id)
   const assets = await getPortfolioPictures(account.clerk_id);
 
   return (
@@ -47,7 +45,7 @@ export default async function BookingCardCustomer({
       <Divider className="h-[1px] bg-black my-2" />
       <CardBody>
         <Link
-          href={`/discover/${encodeURIComponent(account.full_name)}`}
+          href={`/discover/${encodeURIComponent(account.custom_url)}`}
           target="_blank"
         >
           <ScrollArea className="h-full w-full rounded-md md:col-start-2">

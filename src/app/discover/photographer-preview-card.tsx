@@ -48,7 +48,7 @@ export default async function PhotographerPreviewCard({
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
               <Link
-                href={`/discover/${encodeURIComponent(account.full_name)}`}
+                href={`/discover/${encodeURIComponent(account.custom_url)}`}
                 passHref
                 target="_blank"
                 className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform "
@@ -138,7 +138,7 @@ export default async function PhotographerPreviewCard({
         {/* Book Now button */}
         <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
           <Link
-            href={`/discover/${encodeURIComponent(account.full_name)}`}
+            href={`/discover/${encodeURIComponent(account.custom_url)}`}
             passHref
             target="_blank"
             className="flex justify-center"
