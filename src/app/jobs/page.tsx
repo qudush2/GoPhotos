@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import {
   getAllPhotographerJobsFiltered,
   getCustomerInfo,
+  isPGClerk,
 } from "@/src/utils/db";
 import JobsTable from "@/src/components/JobsTable";
 
@@ -11,6 +12,13 @@ export default async function Jobs({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const user = await currentUser();
+
+  if (!(await isPGClerk(user!.id))) {
+    return (
+      <div className="px-20 py-7">you do not have access to this page</div>
+    );
+  }
+
   const searchTerm =
     typeof searchParams.search === "string" ? searchParams.search : "";
   const sortBy = searchParams.sort === "title" ? "title" : "date";
