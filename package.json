@@ -10,9 +10,9 @@
     "prepare": "if [ -z \"$VERCEL\" ]; then npx husky install; fi"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.606.0",
+    "@aws-sdk/client-s3": "^3.617.0",
     "@aws-sdk/s3-presigned-post": "^3.606.0",
-    "@clerk/nextjs": "^5.2.4",
+    "@clerk/nextjs": "^5.2.6",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@nextui-org/react": "^2.2.9",

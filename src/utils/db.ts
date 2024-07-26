@@ -33,7 +33,7 @@ export async function isPGClerk(clerkid: string): Promise<boolean> {
 
 export async function isVisible(clerkID: string): Promise<boolean> {
   const result = await client.query(
-    'SELECT visible FROM photographer_account WHERE clerk_id = $1',
+    "SELECT visible FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
   return result.rows[0].visible;
@@ -188,6 +188,47 @@ export async function getAllJobIDs(): Promise<JobDetails[]> {
   return result.rows;
 }
 
+export async function getAllPhotographerJobsFiltered(
+  clerkID: string,
+  searchTerm: string = "",
+  sortBy: "date" | "title" = "date",
+  filterStatus: string = "all"
+): Promise<JobDetails[]> {
+  let query = `
+    SELECT j.*, jd.*, c.full_name as customer_name
+    FROM jobs j 
+    JOIN job_detail jd ON j.conversation_id = jd.conversation_id
+    JOIN customer_account c ON j.customer_clerk_id = c.clerkid
+    WHERE j.photographer_clerk_id = $1
+  `;
+
+  const queryParams: any[] = [clerkID];
+  let paramCount = 1;
+
+  if (searchTerm) {
+    paramCount++;
+    query += ` AND (jd.event_title ILIKE $${paramCount} OR jd.loc ILIKE $${paramCount})`;
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (filterStatus !== "all") {
+    paramCount++;
+    query += ` AND (
+      ($${paramCount} = 'awaiting price' AND NOT j.price_finalized) OR
+      ($${paramCount} = 'awaiting payment' AND j.price_finalized AND NOT j.paid) OR
+      ($${paramCount} = 'awaiting upload' AND j.paid AND NOT j.pictures_uploaded) OR
+      ($${paramCount} = 'completed' AND j.pictures_uploaded AND j.closed) OR
+      ($${paramCount} = 'closed' AND j.closed AND NOT j.pictures_uploaded)
+    )`;
+    queryParams.push(filterStatus);
+  }
+
+  query += ` ORDER BY ${sortBy === "date" ? "jd.event_date" : "jd.event_title"}`;
+
+  const result = await client.query(query, queryParams);
+  return result.rows;
+}
+
 export async function getAllPhotographers(
   searchParam?: string
 ): Promise<PhotographerAccount[]> {
@@ -213,10 +254,11 @@ export async function getPGClerkId(email: string): Promise<string> {
 
 export async function getPGGalleries(clerkID: string): Promise<string[]> {
   const result = await client.query(
-    "SELECT jobs FROM photographer_account WHERE clerk_id = $1",
+    "SELECT paid_jobs FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
-  return result.rows[0].jobs;
+  console.log(result.rows[0]);
+  return result.rows[0].paid_jobs;
 }
 
 export async function getEmailByClerk(clerkID: string): Promise<string> {
@@ -245,10 +287,10 @@ export async function getCustomerInfo(clerkID: string): Promise<Customer> {
 
 export async function getCustomerGalleries(clerkID: string): Promise<string[]> {
   const result = await client.query(
-    "SELECT jobs FROM customer_account WHERE clerkid = $1",
+    "SELECT paid_jobs FROM customer_account WHERE clerkid = $1",
     [clerkID]
   );
-  return result.rows[0].jobs;
+  return result.rows[0].paid_jobs;
 }
 
 export async function getAllApplications(): Promise<Application[] | null> {
@@ -291,17 +333,56 @@ export async function updateMessageSent(convoID: string) {
   );
 }
 
-export async function updatePaid(convoID: string) {
-  await client.query("UPDATE jobs set paid = true WHERE conversation_id = $1", [
-    convoID,
-  ]);
+export async function updatePaid(
+  convoID: string,
+  customer_clerkID: string,
+  pg_clerkID: string
+) {
+  await client.query("BEGIN");
+  try {
+    await client.query(
+      "UPDATE jobs SET paid = true WHERE conversation_id = $1",
+      [convoID]
+    );
+
+    await client.query(
+      `
+      UPDATE customer_account 
+      SET paid_jobs = ARRAY_APPEND(paid_jobs, $1) 
+      WHERE clerkid = $2
+    `,
+      [convoID, customer_clerkID]
+    );
+
+    await client.query(
+      `
+      UPDATE photographer_account 
+      SET paid_jobs = ARRAY_APPEND(paid_jobs, $1) 
+      WHERE clerk_id = $2
+    `,
+      [convoID, pg_clerkID]
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error updating paid status:", error);
+    throw error;
+  }
 }
 
 export async function updateJobPictures(convoID: string, currentDate: Date) {
   const isoDate = currentDate.toISOString();
   await client.query(
-    "UPDATE jobs SET pictures_uploaded = true, picture_upload_time = $1 WHERE conversation_id = $2",
+    "UPDATE jobs SET pictures_uploaded = true, closed = true, picture_upload_time = $1 WHERE conversation_id = $2",
     [isoDate, convoID]
+  );
+}
+
+export async function closeJob(convoID: string) {
+  await client.query(
+    "UPDATE jobs SET closed = true WHERE conversation_id = $1",
+    [convoID]
   );
 }
 

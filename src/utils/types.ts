@@ -12,6 +12,7 @@ export type PhotographerAccount = {
   about: string;
   hires: number;
   visible: boolean;
+  paid_jobs: string[];
 };
 
 export type s3Images = {
@@ -32,7 +33,6 @@ export type JobDetails = {
   paid: boolean;
   pictures_uploaded: boolean;
   picture_url: string;
-  job_complete_customer: boolean;
   closed: boolean;
   event_title: string;
   loc: string;
@@ -48,6 +48,8 @@ export type Customer = {
   full_name: string;
   email: string;
   clerkid: string;
+  pfp_url: string;
+  paid_jobs: string[];
 };
 
 export type Application = {
