@@ -93,7 +93,10 @@ export default function ChatInbox({
       const conversation = session.getOrCreateConversation(convoId);
 
       let other;
-      if (jobDetails.customer_clerk_id === id) {
+      if (
+        jobDetails.customer_clerk_id === id &&
+        id != jobDetails.photographer_clerk_id
+      ) {
         other = new Talk.User({
           id: pgClerkID,
           name: pgName,
@@ -125,16 +128,28 @@ export default function ChatInbox({
     if (!message_sent) {
       useEffect(() => {
         const updateMessageSent = async () => {
-          await fetch("/api/update-message-sent", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ convoId }),
-          });
+          try {
+            const response = await fetch("/api/update-message-sent", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ convoId }),
+              redirect: "manual", // This tells fetch to not follow redirects automatically
+            });
+
+            if (response.type === "opaqueredirect") {
+              // The response is a redirect, so we manually redirect here
+              window.location.href = `/messages/${encodeURIComponent(convoId)}`;
+            } else if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+          } catch (error) {
+            console.error("Failed to update message sent status:", error);
+          }
         };
         updateMessageSent();
-      });
+      }, [convoId]);
     }
 
     return (

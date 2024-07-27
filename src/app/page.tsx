@@ -3,15 +3,6 @@ import { cn } from "@/src/utils/cn";
 import { Playfair_Display as PlayfairDisplay } from "next/font/google";
 import SearchArea from "@/src/app/discover/search-area";
 import Image from "next/image";
-import { auth, currentUser, clerkClient } from "@clerk/nextjs";
-import {
-  setPhotographerClerkid,
-  isPG,
-  isPG_noClerk,
-  isCustomer,
-  createCustomer,
-  getPGinfo,
-} from "../utils/db";
 
 const playfairDisplay = PlayfairDisplay({
   subsets: ["latin"],
@@ -20,39 +11,6 @@ const playfairDisplay = PlayfairDisplay({
 });
 
 export default async function LandingPage() {
-  const { userId } = auth();
-  const user = await currentUser();
-
-  if (userId && user && user.publicMetadata.isPhotographer == null) {
-    const email = user.emailAddresses[0].emailAddress;
-    const fullName = user.firstName + " " + user.lastName;
-    const info = await getPGinfo(email);
-
-    if (await isPG_noClerk(email)) {
-      await setPhotographerClerkid(email, userId);
-      await clerkClient.users.updateUserMetadata(userId, {
-        publicMetadata: {
-          isPhotographer: true,
-          location: info.location,
-          hourlyPriceLow: info.hourlyPriceLow,
-          hourlyPriceHigh: info.hourlyPriceHigh,
-          school: info.school,
-          skills: info.skills,
-          about: info.about,
-          hires: info.hires,
-          hasStripeID: false,
-        },
-      });
-    } else if (!(await isCustomer(email)) && !(await isPG(email))) {
-      await createCustomer(email, fullName, userId);
-      await clerkClient.users.updateUserMetadata(userId, {
-        publicMetadata: {
-          isPhotographer: false,
-        },
-      });
-    }
-  }
-
   return (
     <div className="relative h-auto bg-[#f4f4f4] py-20 sm:pb-7 sm:pt-5">
       <div className="justify-right flex items-center space-x-7">
