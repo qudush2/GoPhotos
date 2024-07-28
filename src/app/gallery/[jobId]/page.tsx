@@ -1,8 +1,14 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { getJobDetails, getCustomerInfo } from "@/src/utils/db";
+import {
+  getJobDetails,
+  getCustomerInfo,
+  hasRating,
+  getJobRating,
+} from "@/src/utils/db";
 import Manager from "@/src/components/Images/Gallery/Manager";
 import NotifyCustomerButton from "@/src/components/NotifyCustomerButton";
 import Link from "next/link";
+import RatingSection from "@/src/components/RatingSection";
 
 export default async function GalleryPage({
   params,
@@ -15,6 +21,11 @@ export default async function GalleryPage({
   const isPhotographer = user!.id === jobDetails.photographer_clerk_id;
   const customerInfo = await getCustomerInfo(jobDetails.customer_clerk_id);
   const isCustomer = user!.id === customerInfo.clerkid;
+
+  const rated = await hasRating(jobDetails.conversation_id);
+  const ratingInfo = rated
+    ? await getJobRating(jobDetails.conversation_id)
+    : null;
 
   if (!jobDetails) {
     return <div>Job not found</div>;
@@ -35,12 +46,21 @@ export default async function GalleryPage({
           />
         )}
         {(isPhotographer || isCustomer) && (
-          <Link
-            href={`/messages/${jobDetails.conversation_id}`}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Jump to Messages
-          </Link>
+          <>
+            <Link
+              href={`/messages/${jobDetails.conversation_id}`}
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-2"
+            >
+              Jump to Messages
+            </Link>
+            <RatingSection
+              conversationId={jobDetails.conversation_id}
+              photographerId={jobDetails.photographer_clerk_id}
+              customerId={jobDetails.customer_clerk_id}
+              existingRating={ratingInfo}
+              isCustomer={isCustomer}
+            />
+          </>
         )}
       </div>
       <Manager

@@ -7,6 +7,8 @@ import {
   Customer,
   s3Images,
   Application,
+  Ratings,
+  Rating,
 } from "./types";
 import { getImages } from "./fetchImages";
 
@@ -37,6 +39,15 @@ export async function isVisible(clerkID: string): Promise<boolean> {
     [clerkID]
   );
   return result.rows[0].visible;
+}
+
+export async function hasRating(convoID: string): Promise<boolean> {
+  const result = await client.query(
+    "SELECT * FROM ratings where conversation_id = $1",
+    [convoID]
+  );
+
+  return result.rows.length > 0;
 }
 
 export async function applicationSubmitted(clerkID: string): Promise<boolean> {
@@ -129,6 +140,39 @@ export async function createApplication(
       other,
     ] as any[]
   );
+}
+
+export async function createRating(
+  convoID: string,
+  pg_clerk: string,
+  customer_clerk: string,
+  rating: number,
+  comment?: string
+) {
+  const query = comment
+    ? "INSERT INTO ratings (conversation_id, photographer_clerk_id, customer_clerk_id, rating, comment) VALUES ($1, $2, $3, $4, $5)"
+    : "INSERT INTO ratings (conversation_id, photographer_clerk_id, customer_clerk_id, rating) VALUES ($1, $2, $3, $4)";
+
+  const values = comment
+    ? [convoID, pg_clerk, customer_clerk, rating, comment]
+    : [convoID, pg_clerk, customer_clerk, rating];
+
+  await client.query(query, values);
+}
+
+export async function getAllAccounts(): Promise<PhotographerAccount[]> {
+  const result = await client.query("SELECT * FROM photographer_account");
+  return result.rows;
+}
+
+export async function getAccountByEmail(
+  email: string
+): Promise<PhotographerAccount> {
+  const result = await client.query(
+    "SELECT * FROM photographer_account WHERE email = $1",
+    [email]
+  );
+  return result.rows.length > 0 ? result.rows[0] : null;
 }
 
 export async function getAccountByClerkId(
@@ -261,6 +305,33 @@ export async function getApplication(clerkID: string): Promise<Application> {
   const result = await client.query(
     "SELECT * FROM applications WHERE clerk_id = $1",
     [clerkID]
+  );
+
+  return result.rows[0];
+}
+
+export async function getPhotographerRatings(
+  clerkID: string
+): Promise<Ratings> {
+  const result = await client.query(
+    `
+    SELECT 
+      AVG(rating) as "avgRating",
+      COUNT(*) as "totalRatings"
+    FROM ratings 
+    WHERE photographer_clerk_id = $1
+  `,
+    [clerkID]
+  );
+
+  const { avgRating, totalRatings } = result.rows[0];
+  return { avgRating: Number(avgRating), totalRatings: Number(totalRatings) };
+}
+
+export async function getJobRating(convoID: string): Promise<Rating> {
+  const result = await client.query(
+    "SELECT rating, comment FROM ratings WHERE conversation_id = $1",
+    [convoID]
   );
 
   return result.rows[0];

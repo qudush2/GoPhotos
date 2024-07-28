@@ -1,12 +1,16 @@
-import { getAccountByCustomURL, getPortfolioPictures } from "@/src/utils/db";
+import {
+  getAccountByCustomURL,
+  getPortfolioPictures,
+  getPhotographerRatings,
+} from "@/src/utils/db";
 
 import ImageModal from "@/src/components/Images/Modal";
 import ViewAllImages from "@/src/components/Images/ViewAll";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
+import { StarIcon } from "@heroicons/react/24/solid";
 
 import Tag from "@/src/components/Tag";
-import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
 import {
   Dialog,
   DialogClose,
@@ -17,6 +21,7 @@ import {
 import CreateChatPanel from "../create-chat-panel";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import ScrollableAssets from "@/src/components/ScrollingFeatures/ScrollableAssets";
 
 export default async function PhotographerUniquePage({
   params,
@@ -27,53 +32,28 @@ export default async function PhotographerUniquePage({
   const account = await getAccountByCustomURL(decodedURL);
   const assets = await getPortfolioPictures(account.clerk_id);
   const user = await currentUser();
+  const { avgRating, totalRatings } = await getPhotographerRatings(
+    account.clerk_id
+  );
+
+  const renderStars = (rating: number) => {
+    return (
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <StarIcon
+            key={star}
+            className={`h-5 w-5 ${
+              star <= rating ? "text-yellow-400" : "text-gray-300"
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="grid gap-1 rounded-md py-1 px-8 sm:px-20 pt-7 pb-10">
-      <ScrollArea className="w-full">
-        <div className="flex flex-col gap-1">
-          <div className="flex w-max gap-1">
-            {assets.slice(0, Math.ceil(assets.length / 2)).map((asset, idx) => (
-              <div
-                key={idx}
-                className="relative aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 lg:w-[28rem]"
-                style={{
-                  position: "relative",
-                }}
-              >
-                <div
-                  className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
-                  style={{
-                    filter: "blur(20px)",
-                    backgroundImage: `url(${asset.url})`,
-                    zIndex: 0,
-                  }}
-                />
-                <ImageModal alt="" src={asset.url} />
-              </div>
-            ))}
-          </div>
-          <div className="flex w-max gap-1">
-            {assets.slice(Math.ceil(assets.length / 2)).map((asset, idx) => (
-              <div
-                key={idx}
-                className="relative aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 lg:w-[28rem]"
-              >
-                <div
-                  className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
-                  style={{
-                    filter: "blur(20px)",
-                    backgroundImage: `url(${asset.url})`,
-                    zIndex: 0,
-                  }}
-                />
-                <ImageModal alt="" src={asset.url} />
-              </div>
-            ))}
-          </div>
-        </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      <ScrollableAssets assets={assets} />
       <ViewAllImages assets={assets} />
 
       <div className="mt-2">
@@ -91,7 +71,7 @@ export default async function PhotographerUniquePage({
                                             xl:col-span-5"
             >
               <div className="sm:w-full">
-                <div className="flex w-full items-center">
+                <div className="flex w-full items-center justify-between">
                   <div>
                     <p className="text-base sm:text-lg font-medium">
                       {account.full_name}
@@ -99,6 +79,19 @@ export default async function PhotographerUniquePage({
                     <p className="text-xs sm:text-base text-gray-600 ">
                       Cambridge, MA
                     </p>
+                  </div>
+                  <div className="text-right">
+                    {totalRatings > 0 ? (
+                      <div className="flex flex-col items-end">
+                        {renderStars(avgRating)}
+                        <span className="text-sm text-gray-600">
+                          ({totalRatings}{" "}
+                          {totalRatings === 1 ? "rating" : "ratings"})
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-600">No ratings yet</p>
+                    )}
                   </div>
                 </div>
                 <div className="mt-5">

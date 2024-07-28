@@ -16,7 +16,7 @@ export default async function PhotographerResults({
   className,
   photographers,
   pgType,
-  bypassVisibility = true, // change to true to display test account, SET TO FALSE BEFORE PUSH
+  bypassVisibility = process.env.bypass_vis === "true", // change to true to display test account, SET TO FALSE BEFORE PUSH
 }: PhotographerResultsProps) {
   shuffleArray(photographers);
 

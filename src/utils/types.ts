@@ -66,3 +66,13 @@ export type Application = {
   hires: number;
   other: string;
 };
+
+export type Ratings = {
+  avgRating: number;
+  totalRatings: number;
+};
+
+export type Rating = {
+  rating: number;
+  comment: string;
+};

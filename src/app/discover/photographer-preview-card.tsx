@@ -1,12 +1,21 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
+import { StarIcon } from "@heroicons/react/24/solid";
 
 import Tag from "@/src/components/Tag";
-import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
+import {
+  ScrollArea,
+  ScrollBar,
+} from "@/src/components/ScrollingFeatures/ScrollArea";
 
 import Link from "next/link";
 import ImageModal from "@/src/components/Images/Modal";
 import { PhotographerAccount } from "@/src/utils/types";
-import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
+import {
+  getAccountByClerkId,
+  getPortfolioPictures,
+  getPhotographerRatings,
+} from "@/src/utils/db";
+import { shuffle } from "lodash";
 import { Avatar } from "@nextui-org/react";
 
 type PhotographerPreviewCardProps = {
@@ -20,6 +29,24 @@ export default async function PhotographerPreviewCard({
 }: PhotographerPreviewCardProps) {
   const account = await getAccountByClerkId(photographer.clerk_id);
   const assets = await getPortfolioPictures(photographer.clerk_id, pgType);
+  const { avgRating, totalRatings } = await getPhotographerRatings(
+    photographer.clerk_id
+  );
+
+  const renderStars = (rating: number) => {
+    return (
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <StarIcon
+            key={star}
+            className={`h-4 w-4 ${
+              star <= rating ? "text-yellow-400" : "text-gray-300"
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="my-2 grid gap-5 rounded-md bg-white py-5 md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1">
@@ -131,6 +158,21 @@ export default async function PhotographerPreviewCard({
                   </Tag>
                 )}
               </div>
+            </div>
+
+            {/* New Rating Section */}
+            <div className="md:row-start-4">
+              <p className="mt-2 text-xs uppercase text-gray-600">Rating</p>
+              {totalRatings > 0 ? (
+                <div className="flex items-center gap-1">
+                  {renderStars(avgRating)}
+                  <span className="text-sm text-gray-600">
+                    ({totalRatings})
+                  </span>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600">No rating available</p>
+              )}
             </div>
           </div>
         </div>

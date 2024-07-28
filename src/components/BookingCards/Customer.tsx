@@ -7,7 +7,10 @@ import {
   Button,
 } from "@nextui-org/react";
 import { JobDetails } from "@/src/utils/types";
-import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
+import {
+  ScrollArea,
+  ScrollBar,
+} from "@/src/components/ScrollingFeatures/ScrollArea";
 import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
@@ -30,7 +33,7 @@ export default async function BookingCardCustomer({
     pictures_uploaded,
   } = jobDetails;
 
-  const account = await getAccountByClerkId(jobDetails.photographer_clerk_id)
+  const account = await getAccountByClerkId(jobDetails.photographer_clerk_id);
   const assets = await getPortfolioPictures(account.clerk_id);
 
   return (
