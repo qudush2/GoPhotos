@@ -365,6 +365,42 @@ export async function updateStripeID(stripeID: string, clerkID: string) {
   );
 }
 
+export async function updatePhotographerAccount(
+  clerkID: string,
+  about: string,
+  location: string,
+  price_low: number,
+  price_high: number,
+  school: string,
+  skills: string[],
+  visible: boolean,
+  custom_url: string
+) {
+  await client.query(
+    `UPDATE photographer_account 
+     SET about = $2, 
+         location = $3, 
+         price_low = $4, 
+         price_high = $5, 
+         school = $6, 
+         skills = $7, 
+         visible = $8, 
+         custom_url = $9 
+     WHERE clerk_id = $1`,
+    [
+      clerkID,
+      about,
+      location,
+      price_low,
+      price_high,
+      school,
+      skills,
+      visible,
+      custom_url,
+    ]
+  );
+}
+
 export async function moveApplication(clerkID: string) {
   await client.query("BEGIN");
 
