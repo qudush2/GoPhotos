@@ -4,11 +4,11 @@ import {
   getPhotographerRatings,
 } from "@/src/utils/db";
 
-import ImageModal from "@/src/components/Images/Modal";
 import ViewAllImages from "@/src/components/Images/ViewAll";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 import { StarIcon } from "@heroicons/react/24/solid";
+import ShareProfile from "@/src/components/ShareProfile";
 
 import Tag from "@/src/components/Tag";
 import {
@@ -71,6 +71,12 @@ export default async function PhotographerUniquePage({
                                             xl:col-span-5"
             >
               <div className="sm:w-full">
+                <div className="flex w-full items-center justify-between mb-2">
+                  <ShareProfile
+                    photographerName={account.full_name}
+                    photographerURL={decodedURL}
+                  />
+                </div>
                 <div className="flex w-full items-center justify-between">
                   <div>
                     <p className="text-base sm:text-lg font-medium">
