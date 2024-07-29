@@ -79,15 +79,15 @@ export type Rating = {
 
 export function getJobStatus(job: JobDetails) {
   if (job.closed && !job.pictures_uploaded) {
-    return { text: "Job Closed", color: "bg-gray-200 text-gray-800" };
+    return { text: "Job Closed", color: "#E5E7EB" };
   } else if (!job.price_finalized) {
-    return { text: "Awaiting Price", color: "bg-yellow-200 text-yellow-800" };
+    return { text: "Awaiting Price", color: "#FEF08A" };
   } else if (!job.paid) {
-    return { text: "Awaiting Payment", color: "bg-orange-200 text-orange-800" };
+    return { text: "Awaiting Payment", color: "#FED7AA" };
   } else if (!job.pictures_uploaded) {
-    return { text: "Awaiting Upload", color: "bg-blue-200 text-blue-800" };
+    return { text: "Awaiting Upload", color: "#BFDBFE" };
   } else if (job.pictures_uploaded && job.closed) {
-    return { text: "Completed", color: "bg-green-200 text-green-800" };
+    return { text: "Completed", color: "#BBF7D0" };
   }
-  return { text: "Unknown", color: "bg-gray-200 text-gray-800" };
+  return { text: "Unknown", color: "#E5E7EB" };
 }

@@ -15,6 +15,7 @@ import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
 import { format, subDays } from "date-fns";
+import { getJobStatus } from "@/src/utils/types";
 
 export default async function BookingCardCustomer({
   jobDetails,
@@ -23,6 +24,8 @@ export default async function BookingCardCustomer({
   jobDetails: JobDetails;
   className?: string;
 }) {
+  const { text: statusText, color: statusColor } = getJobStatus(jobDetails);
+
   const {
     event_title,
     loc,
@@ -37,12 +40,22 @@ export default async function BookingCardCustomer({
   const assets = await getPortfolioPictures(account.clerk_id);
 
   return (
-    <Card className="px-2">
+    <Card className={`px-2 relative overflow-hidden ${className}`}>
+      <div 
+        className="absolute top-0 left-0 w-full h-1" 
+        style={{ backgroundColor: statusColor }}
+      />
       <CardHeader className="flex gap-3">
-        <div className="flex ml-2">
+        <div className="flex ml-2 justify-between w-full items-center">
           <p className="text-xl font-medium">
             {event_title} with {account.full_name.split(" ")[0]}
           </p>
+          <span 
+            className="text-sm font-medium px-2 py-1 rounded"
+            style={{ backgroundColor: statusColor, color: '#000' }}
+          >
+            {statusText}
+          </span>
         </div>
       </CardHeader>
       <Divider className="h-[1px] bg-black my-2" />

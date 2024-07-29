@@ -68,6 +68,17 @@ export default function JobsTable({
     return format(date, "MMM. d, yyyy");
   };
 
+  const getStatusStyle = (color: string) => {
+    switch (color) {
+      case "#E5E7EB": return "bg-gray-200 text-gray-800";
+      case "#FEF08A": return "bg-yellow-200 text-yellow-800";
+      case "#FED7AA": return "bg-orange-200 text-orange-800";
+      case "#BFDBFE": return "bg-blue-200 text-blue-800";
+      case "#BBF7D0": return "bg-green-200 text-green-800";
+      default: return "bg-gray-200 text-gray-800";
+    }
+  };
+
   return (
     <>
       <div className="mb-4 flex justify-between items-center">
@@ -118,6 +129,7 @@ export default function JobsTable({
           <tbody>
             {jobs.map((job) => {
               const status = getJobStatus(job);
+              const statusStyle = getStatusStyle(status.color);
               return (
                 <tr
                   key={job.conversation_id}
@@ -141,7 +153,7 @@ export default function JobsTable({
                   </td>
                   <td className="p-2">
                     <span
-                      className={`px-2 py-1 rounded-full text-sm font-semibold ${status.color}`}
+                      className={`px-2 py-1 rounded-full text-sm font-semibold ${statusStyle}`}
                     >
                       {status.text}
                     </span>
