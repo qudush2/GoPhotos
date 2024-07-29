@@ -105,7 +105,6 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
         <NavbarItem>
           {userId ? (
             <UserButton
-              afterSignOutUrl="/"
               appearance={{
                 elements: {
                   userButtonAvatarBox: "h-9 w-9",

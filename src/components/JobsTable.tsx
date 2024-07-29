@@ -113,106 +113,113 @@ export default function JobsTable({
         </div>
       </div>
 
-      <div className="border border-black rounded-lg overflow-hidden">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 text-left border-b">Event Title</th>
-              <th className="p-2 text-left border-b">Date</th>
-              <th className="p-2 text-left border-b">Location</th>
-              <th className="p-2 text-left border-b">Customer</th>
-              <th className="p-2 text-left border-b">Price</th>
-              <th className="p-2 text-left border-b">Status</th>
-              <th className="p-2 text-left border-b">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.map((job) => {
-              const status = getJobStatus(job);
-              const statusStyle = getStatusStyle(status.color);
-              return (
-                <tr
-                  key={job.conversation_id}
-                  className="border-b last:border-b-0"
-                >
-                  <td className="p-2">
-                    <Link
-                      href={`/messages/${encodeURIComponent(job.conversation_id)}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {job.event_title}
-                    </Link>
-                  </td>
-                  <td className="p-2">{formatDate(job.event_date)}</td>
-                  <td className="p-2">{job.loc}</td>
-                  <td className="p-2">{job.customer.full_name}</td>
-                  <td className="p-2">
-                    {job.job_price != null && job.job_price !== undefined
-                      ? `$${job.job_price}`
-                      : "N/A"}
-                  </td>
-                  <td className="p-2">
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm font-semibold ${statusStyle}`}
-                    >
-                      {status.text}
-                    </span>
-                  </td>
-                  <td className="p-2">
-                    {status.text === "Awaiting Upload" ? (
+      {jobs.length > 0 ? (
+        <div className="border border-black rounded-lg overflow-hidden">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="p-2 text-left border-b">Event Title</th>
+                <th className="p-2 text-left border-b">Date</th>
+                <th className="p-2 text-left border-b">Location</th>
+                <th className="p-2 text-left border-b">Customer</th>
+                <th className="p-2 text-left border-b">Price</th>
+                <th className="p-2 text-left border-b">Status</th>
+                <th className="p-2 text-left border-b">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jobs.map((job) => {
+                const status = getJobStatus(job);
+                return (
+                  <tr
+                    key={job.conversation_id}
+                    className="border-b last:border-b-0"
+                  >
+                    <td className="p-2">
                       <Link
-                        href={`/gallery/${encodeURIComponent(job.conversation_id)}`}
+                        href={`/messages/${encodeURIComponent(job.conversation_id)}`}
+                        className="text-blue-600 hover:underline"
                       >
-                        <button className="bg-blue-500 text-white px-2 py-1 rounded text-sm">
-                          Upload Gallery
-                        </button>
+                        {job.event_title}
                       </Link>
-                    ) : status.text === "Completed" ? (
-                      <Link
-                        href={`/gallery/${encodeURIComponent(job.conversation_id)}`}
+                    </td>
+                    <td className="p-2">{formatDate(job.event_date)}</td>
+                    <td className="p-2">{job.loc}</td>
+                    <td className="p-2">{job.customer.full_name}</td>
+                    <td className="p-2">
+                      {job.job_price != null && job.job_price !== undefined
+                        ? `$${job.job_price}`
+                        : "N/A"}
+                    </td>
+                    <td className="p-2">
+                      <span
+                        className={`px-2 py-1 rounded-full text-sm font-semibold ${status.color}`}
                       >
-                        <button className="bg-green-500 text-white px-2 py-1 rounded text-sm">
-                          View Gallery
+                        {status.text}
+                      </span>
+                    </td>
+                    <td className="p-2">
+                      {status.text === "Awaiting Upload" ? (
+                        <Link
+                          href={`/gallery/${encodeURIComponent(job.conversation_id)}`}
+                        >
+                          <button className="bg-blue-500 text-white px-2 py-1 rounded text-sm">
+                            Upload Gallery
+                          </button>
+                        </Link>
+                      ) : status.text === "Completed" ? (
+                        <Link
+                          href={`/gallery/${encodeURIComponent(job.conversation_id)}`}
+                        >
+                          <button className="bg-green-500 text-white px-2 py-1 rounded text-sm">
+                            View Gallery
+                          </button>
+                        </Link>
+                      ) : job.closed &&
+                        (!job.pictures_uploaded ||
+                          job.pictures_uploaded === null) ? (
+                        <button
+                          disabled
+                          className="bg-gray-500 text-white px-2 py-1 rounded text-sm opacity-50 cursor-not-allowed"
+                        >
+                          Job Closed
                         </button>
-                      </Link>
-                    ) : job.closed &&
-                      (!job.pictures_uploaded ||
-                        job.pictures_uploaded === null) ? (
-                      <button
-                        disabled
-                        className="bg-gray-500 text-white px-2 py-1 rounded text-sm opacity-50 cursor-not-allowed"
-                      >
-                        Job Closed
-                      </button>
-                    ) : !job.price_finalized ? (
-                      <button
-                        onClick={() => handleCloseJob(job.conversation_id)}
-                        disabled={closingJobs.has(job.conversation_id)}
-                        className={`bg-red-500 text-white px-2 py-1 rounded text-sm ${
-                          closingJobs.has(job.conversation_id)
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:bg-red-600"
-                        }`}
-                      >
-                        {closingJobs.has(job.conversation_id)
-                          ? "Closing..."
-                          : "Close Job"}
-                      </button>
-                    ) : (
-                      <button
-                        disabled
-                        className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-sm cursor-not-allowed"
-                      >
-                        No Actions
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                      ) : !job.price_finalized ? (
+                        <button
+                          onClick={() => handleCloseJob(job.conversation_id)}
+                          disabled={closingJobs.has(job.conversation_id)}
+                          className={`bg-red-500 text-white px-2 py-1 rounded text-sm ${
+                            closingJobs.has(job.conversation_id)
+                              ? "opacity-50 cursor-not-allowed"
+                              : "hover:bg-red-600"
+                          }`}
+                        >
+                          {closingJobs.has(job.conversation_id)
+                            ? "Closing..."
+                            : "Close Job"}
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          className="bg-gray-300 text-gray-600 px-2 py-1 rounded text-sm cursor-not-allowed"
+                        >
+                          No Actions
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          <p className="text-gray-600">
+            No jobs found. Create a new job to get started!
+          </p>
+        </div>
+      )}
     </>
   );
 }
