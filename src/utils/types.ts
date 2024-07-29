@@ -76,3 +76,18 @@ export type Rating = {
   rating: number;
   comment: string;
 };
+
+export function getJobStatus(job: JobDetails) {
+  if (job.closed && !job.pictures_uploaded) {
+    return { text: "Job Closed", color: "bg-gray-200 text-gray-800" };
+  } else if (!job.price_finalized) {
+    return { text: "Awaiting Price", color: "bg-yellow-200 text-yellow-800" };
+  } else if (!job.paid) {
+    return { text: "Awaiting Payment", color: "bg-orange-200 text-orange-800" };
+  } else if (!job.pictures_uploaded) {
+    return { text: "Awaiting Upload", color: "bg-blue-200 text-blue-800" };
+  } else if (job.pictures_uploaded && job.closed) {
+    return { text: "Completed", color: "bg-green-200 text-green-800" };
+  }
+  return { text: "Unknown", color: "bg-gray-200 text-gray-800" };
+}
