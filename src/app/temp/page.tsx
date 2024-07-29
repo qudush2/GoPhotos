@@ -9,23 +9,17 @@ import {
 
 import Link from "next/link";
 import ImageModal from "@/src/components/Images/Modal";
-import { PhotographerAccount } from "@/src/utils/types";
 import {
+  getAccountByEmail,
   getPortfolioPictures,
   getPhotographerRatings,
 } from "@/src/utils/db";
 import { Avatar } from "@nextui-org/react";
 
-type PhotographerPreviewCardProps = {
-  photographer: PhotographerAccount;
-  pgType?: string;
-};
+export default async function Temp() {
+  const photographer = await getAccountByEmail("qudus@gophotos.us");
 
-export default async function PhotographerPreviewCard({
-  photographer,
-  pgType,
-}: PhotographerPreviewCardProps) {
-  const assets = await getPortfolioPictures(photographer.clerk_id, pgType);
+  const assets = await getPortfolioPictures(photographer.clerk_id);
   const { avgRating, totalRatings } = await getPhotographerRatings(
     photographer.clerk_id
   );
@@ -47,10 +41,12 @@ export default async function PhotographerPreviewCard({
 
   return (
     <div
-      className="my-2 grid gap-5 rounded-md bg-white md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1"
+      className="my-2 grid gap-5 rounded-md bg-white md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1 
+    border-2 border-red-500"
     >
       <ScrollArea
-        className="h-full w-full rounded-md md:col-start-2"
+        className="h-full w-full rounded-md md:col-start-2
+      border-2 border-green-500"
       >
         <div className="flex w-max gap-1">
           {assets.slice(0, 7).map((asset, idx) => (
@@ -95,7 +91,8 @@ export default async function PhotographerPreviewCard({
 
       {/* brief pg info section */}
       <div
-        className="flex flex-col justify-between gap-2 rounded-md p-2 shadow-lg md:row-start-1 pl-3"
+        className="flex flex-col justify-between gap-2 rounded-md p-2 shadow-lg md:row-start-1 pl-3
+      border-2 border-purple-500"
       >
         <div>
           <div className="flex items-center justify-between">
