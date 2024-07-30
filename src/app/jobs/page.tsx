@@ -5,7 +5,7 @@ import {
   isPGClerk,
 } from "@/src/utils/db";
 import JobsTable from "@/src/components/JobsTable";
-import { UnauthorizedError} from '@/src/utils/errors'
+import { UnauthorizedError } from "@/src/utils/errors";
 
 export default async function Jobs({
   searchParams,
@@ -15,7 +15,7 @@ export default async function Jobs({
   const user = await currentUser();
 
   if (!(await isPGClerk(user!.id))) {
-    throw new UnauthorizedError()
+    throw new UnauthorizedError();
   }
 
   const searchTerm =
@@ -31,32 +31,35 @@ export default async function Jobs({
     filterStatus
   );
 
-  const jobsWithCustomers = jobs && jobs.length > 0
-    ? await Promise.all(
-        jobs.map(async (job) => {
-          const customer = await getCustomerInfo(job.customer_clerk_id);
-          return { ...job, customer };
-        })
-      )
-    : [];
+  if (!jobs) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-600">
+          You don't have any jobs yet. Create a new job to get started!
+        </p>
+      </div>
+    );
+  }
+
+  const jobsWithCustomers =
+    jobs && jobs.length > 0
+      ? await Promise.all(
+          jobs.map(async (job) => {
+            const customer = await getCustomerInfo(job.customer_clerk_id);
+            return { ...job, customer };
+          })
+        )
+      : [];
 
   return (
     <div className="px-20 py-7">
       <h1 className="text-2xl font-bold mb-4">Your Jobs</h1>
-      {jobsWithCustomers.length > 0 ? (
-        <JobsTable
-          jobs={jobsWithCustomers}
-          initialSearchTerm={searchTerm}
-          initialSortBy={sortBy}
-          initialFilterStatus={filterStatus}
-        />
-      ) : (
-        <div className="text-center py-8">
-          <p className="text-gray-600">
-            You don't have any jobs yet. Create a new job to get started!
-          </p>
-        </div>
-      )}
+      <JobsTable
+        jobs={jobsWithCustomers}
+        initialSearchTerm={searchTerm}
+        initialSortBy={sortBy}
+        initialFilterStatus={filterStatus}
+      />
     </div>
   );
 }
