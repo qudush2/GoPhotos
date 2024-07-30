@@ -35,7 +35,7 @@ export default async function Gallery() {
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {jobDetails.map((job, index) => (
           <li
-            key={jobIDs[index]}
+            key={jobIDs![index]}
             className="bg-white rounded-lg shadow-md overflow-hidden"
           >
             <Link
