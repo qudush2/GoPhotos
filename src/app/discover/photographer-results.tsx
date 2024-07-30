@@ -28,7 +28,7 @@ export default async function PhotographerResults({
 
   const visiblePhotographers = await Promise.all(
     photographers.map(async (photographer) => ({
-      visible: (await isVisible(photographer.clerk_id)) || bypassVisibility,
+      visible: (await isVisible(photographer.clerk_id)) || (bypassVisibility && photographer.clerk_id === 'user_2f7VEMmcqr2ihVrGyLo1AlmlhtC'),
       photographer,
     }))
   ).then((results) =>
