@@ -31,23 +31,32 @@ export default async function Jobs({
     filterStatus
   );
 
-  // Fetch customer information for each job
-  const jobsWithCustomers = await Promise.all(
-    jobs.map(async (job) => {
-      const customer = await getCustomerInfo(job.customer_clerk_id);
-      return { ...job, customer };
-    })
-  );
+  const jobsWithCustomers = jobs.length > 0
+    ? await Promise.all(
+        jobs.map(async (job) => {
+          const customer = await getCustomerInfo(job.customer_clerk_id);
+          return { ...job, customer };
+        })
+      )
+    : [];
 
   return (
     <div className="px-20 py-7">
       <h1 className="text-2xl font-bold mb-4">Your Jobs</h1>
-      <JobsTable
-        jobs={jobsWithCustomers}
-        initialSearchTerm={searchTerm}
-        initialSortBy={sortBy}
-        initialFilterStatus={filterStatus}
-      />
+      {jobsWithCustomers.length > 0 ? (
+        <JobsTable
+          jobs={jobsWithCustomers}
+          initialSearchTerm={searchTerm}
+          initialSortBy={sortBy}
+          initialFilterStatus={filterStatus}
+        />
+      ) : (
+        <div className="text-center py-8">
+          <p className="text-gray-600">
+            You don't have any jobs yet. Create a new job to get started!
+          </p>
+        </div>
+      )}
     </div>
   );
 }
