@@ -37,7 +37,7 @@ export default function JobsTable({
   const handleCloseJob = async (convoID: string) => {
     setClosingJobs((prev) => new Set(prev).add(convoID));
     try {
-      const response = await fetch("/api/jobs/close", {
+      const response = await fetch("/api/database-updates/close-job", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,12 +70,18 @@ export default function JobsTable({
 
   const getStatusStyle = (color: string) => {
     switch (color) {
-      case "#E5E7EB": return "bg-gray-200 text-gray-800";
-      case "#FEF08A": return "bg-yellow-200 text-yellow-800";
-      case "#FED7AA": return "bg-orange-200 text-orange-800";
-      case "#BFDBFE": return "bg-blue-200 text-blue-800";
-      case "#BBF7D0": return "bg-green-200 text-green-800";
-      default: return "bg-gray-200 text-gray-800";
+      case "#E5E7EB":
+        return "bg-gray-200 text-gray-800";
+      case "#FEF08A":
+        return "bg-yellow-200 text-yellow-800";
+      case "#FED7AA":
+        return "bg-orange-200 text-orange-800";
+      case "#BFDBFE":
+        return "bg-blue-200 text-blue-800";
+      case "#BBF7D0":
+        return "bg-green-200 text-green-800";
+      default:
+        return "bg-gray-200 text-gray-800";
     }
   };
 
@@ -168,13 +174,26 @@ export default function JobsTable({
                           </button>
                         </Link>
                       ) : status.text === "Completed" ? (
-                        <Link
-                          href={`/gallery/${encodeURIComponent(job.conversation_id)}`}
-                        >
-                          <button className="bg-green-500 text-white px-2 py-1 rounded text-sm">
-                            View Gallery
-                          </button>
-                        </Link>
+                        job.picture_url ? (
+                          <Link
+                            href={job.picture_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block"
+                          >
+                            <button className="bg-green-500 text-white px-2 py-1 rounded text-sm">
+                              View Images
+                            </button>
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/gallery/${encodeURIComponent(job.conversation_id)}`}
+                          >
+                            <button className="bg-green-500 text-white px-2 py-1 rounded text-sm">
+                              View Gallery
+                            </button>
+                          </Link>
+                        )
                       ) : job.closed &&
                         (!job.pictures_uploaded ||
                           job.pictures_uploaded === null) ? (
