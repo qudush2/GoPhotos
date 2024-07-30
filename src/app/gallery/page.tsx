@@ -27,10 +27,7 @@ export default async function Gallery() {
     );
   }
 
-  const jobDetails =
-    jobIDs && jobIDs.length > 0
-      ? await Promise.all(jobIDs.map((id) => getJobDetails(id)))
-      : [];
+  const jobDetails = await Promise.all(jobIDs.map((id) => getJobDetails(id)));
 
   return (
     <div className="px-8 md:px-20 md:py-7">

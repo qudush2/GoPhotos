@@ -41,15 +41,12 @@ export default async function Jobs({
     );
   }
 
-  const jobsWithCustomers =
-    jobs && jobs.length > 0
-      ? await Promise.all(
-          jobs.map(async (job) => {
-            const customer = await getCustomerInfo(job.customer_clerk_id);
-            return { ...job, customer };
-          })
-        )
-      : [];
+  const jobsWithCustomers = await Promise.all(
+    jobs.map(async (job) => {
+      const customer = await getCustomerInfo(job.customer_clerk_id);
+      return { ...job, customer };
+    })
+  );
 
   return (
     <div className="px-20 py-7">
