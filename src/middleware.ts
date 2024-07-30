@@ -10,10 +10,7 @@ type SessionClaims = {
 const publicRoutes = createRouteMatcher([
   '/',
   '(^/discover.*)',
-]);
-
-const ignoredRoutes = createRouteMatcher([
-  '/api/webhooks/(.*)',
+  '/api/webhooks/(.*)'
 ]);
 
 const adminRoutes = createRouteMatcher([
@@ -28,7 +25,7 @@ export default clerkMiddleware((auth, req) => {
     if (!(sessionClaims as SessionClaims)?.metadata?.admin) {
       return new Response("Access denied", { status: 403 });
     }
-  } else if (!publicRoutes(req) && !ignoredRoutes(req)) {
+  } else if (!publicRoutes(req)) {
     // Protect all other routes except public and ignored ones
     auth().protect();
   }

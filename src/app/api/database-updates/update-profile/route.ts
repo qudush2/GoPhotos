@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updatePhotographerAccount } from "@/src/utils/db";
-import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = auth();
-
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     const body = await req.json();
     const {
       about,
@@ -20,10 +13,11 @@ export async function POST(req: NextRequest) {
       skills,
       visible,
       custom_url,
+      clerk_id
     } = body;
 
     await updatePhotographerAccount(
-      userId,
+      clerk_id,
       about,
       location,
       price_low,
