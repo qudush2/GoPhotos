@@ -29,6 +29,7 @@ export default function BookingCardPhotographer({
     conversation_id,
     pictures_uploaded,
     picture_upload_time,
+    picture_url
   } = jobDetails;
 
   return (
@@ -153,7 +154,7 @@ export default function BookingCardPhotographer({
               You have uploaded images for this event. You can view them here:
             </p>
             <Link
-              href={`/gallery/${conversation_id}`}
+              href={picture_url || `/gallery/${conversation_id}`}
               className="mt-4 px-4 py-2 bg-black text-white font-bold rounded inline-flex items-center justify-center"
             >
               View Images

@@ -34,6 +34,7 @@ export default async function BookingCardCustomer({
     job_price,
     paid,
     pictures_uploaded,
+    picture_url
   } = jobDetails;
 
   const account = await getAccountByClerkId(jobDetails.photographer_clerk_id);
@@ -164,8 +165,8 @@ export default async function BookingCardCustomer({
             </p>
             <div className="flex justify-center mt-4">
               <Link
-                href={`/gallery/${jobDetails.conversation_id}`}
-                className="px-4 py-2 bg-black text-white font-bold rounded inline-block"
+                href={picture_url || `/gallery/${jobDetails.conversation_id}`}
+                className="px-4 py-2 bg-black text-white font-bold rounded hover:bg-gray-800 transition-colors"
               >
                 View Images
               </Link>
