@@ -31,7 +31,7 @@ export default async function Jobs({
     filterStatus
   );
 
-  const jobsWithCustomers = jobs.length > 0
+  const jobsWithCustomers = jobs && jobs.length > 0
     ? await Promise.all(
         jobs.map(async (job) => {
           const customer = await getCustomerInfo(job.customer_clerk_id);

@@ -11,7 +11,7 @@ import Image from "next/image";
 export default async function Gallery() {
   const user = await currentUser();
   const isPhotographer = await isPGClerk(user!.id);
-  let jobIDs: string[] = [];
+  let jobIDs: string[] | null = null;
 
   if (isPhotographer) {
     jobIDs = await getPGGalleries(user!.id);
@@ -19,7 +19,9 @@ export default async function Gallery() {
     jobIDs = await getCustomerGalleries(user!.id);
   }
 
-  const jobDetails = jobIDs.length > 0 ? await Promise.all(jobIDs.map((id) => getJobDetails(id))) : [];
+  const jobDetails = jobIDs && jobIDs.length > 0 
+    ? await Promise.all(jobIDs.map((id) => getJobDetails(id))) 
+    : [];
 
   return (
     <div className="px-8 md:px-20 md:py-7">
