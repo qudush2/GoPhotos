@@ -5,7 +5,7 @@ import {
   isPGClerk,
 } from "@/src/utils/db";
 import JobsTable from "@/src/components/JobsTable";
-import { UnauthorizedError } from "@/src/utils/errors";
+import { notFound } from "next/navigation";
 
 export default async function Jobs({
   searchParams,
@@ -15,7 +15,7 @@ export default async function Jobs({
   const user = await currentUser();
 
   if (!(await isPGClerk(user!.id))) {
-    throw new UnauthorizedError();
+    notFound();
   }
 
   const searchTerm =

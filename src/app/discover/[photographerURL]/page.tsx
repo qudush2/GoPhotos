@@ -22,7 +22,7 @@ import CreateChatPanel from "../create-chat-panel";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import ScrollableAssets from "@/src/components/ScrollingFeatures/ScrollableAssets";
-import { PhotographerDoesNotExist } from "@/src/utils/errors";
+import { notFound } from "next/navigation";
 
 export default async function PhotographerUniquePage({
   params,
@@ -32,8 +32,8 @@ export default async function PhotographerUniquePage({
   const decodedURL = decodeURIComponent(params.photographerURL);
   const account = await getAccountByCustomURL(decodedURL);
 
-  if (!account){
-    throw new PhotographerDoesNotExist();
+  if (!account) {
+    notFound();
   }
 
   const assets = await getPortfolioPictures(account.clerk_id);
