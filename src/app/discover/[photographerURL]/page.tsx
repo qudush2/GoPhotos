@@ -83,7 +83,7 @@ export default async function PhotographerUniquePage({
                       {account.full_name}
                     </p>
                     <p className="text-xs sm:text-base text-gray-600 ">
-                      Cambridge, MA
+                      {account.location}
                     </p>
                   </div>
                   <div className="text-right">

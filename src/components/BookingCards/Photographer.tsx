@@ -2,6 +2,7 @@
 import { Card, CardHeader, CardBody, Divider, Link } from "@nextui-org/react";
 import { JobDetails, Customer } from "@/src/utils/types";
 import PhotographerPriceForm from "../PhotographerPriceForm";
+import { getJobStatus } from "@/src/utils/types";
 
 export default function BookingCardPhotographer({
   jobDetails,
@@ -12,6 +13,8 @@ export default function BookingCardPhotographer({
   customer: Customer;
   className?: string;
 }) {
+  const { text: statusText, color: statusColor } = getJobStatus(jobDetails);
+
   const {
     event_title,
     loc,
@@ -29,10 +32,20 @@ export default function BookingCardPhotographer({
   } = jobDetails;
 
   return (
-    <Card className="px-2">
+    <Card className={`px-2 relative overflow-hidden ${className}`}>
+      <div 
+        className="absolute top-0 left-0 w-full h-1" 
+        style={{ backgroundColor: statusColor }}
+      />
       <CardHeader className="flex gap-3">
-        <div className="flex ml-2">
+        <div className="flex ml-2 justify-between w-full items-center">
           <p className="text-lg">Photographer Panel</p>
+          <span 
+            className="text-sm font-medium px-2 py-1 rounded"
+            style={{ backgroundColor: statusColor, color: '#000' }}
+          >
+            {statusText}
+          </span>
         </div>
       </CardHeader>
       <Divider className="h-[1px] bg-black my-2" />

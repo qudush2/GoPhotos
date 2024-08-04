@@ -1,31 +1,18 @@
-import { PlusIcon } from "@heroicons/react/20/solid";
 import { StarIcon } from "@heroicons/react/24/solid";
-
-import Tag from "@/src/components/Tag";
-import {
-  ScrollArea,
-  ScrollBar,
-} from "@/src/components/ScrollingFeatures/ScrollArea";
 
 import Link from "next/link";
 import ImageModal from "@/src/components/Images/Modal";
-import { PhotographerAccount } from "@/src/utils/types";
 import {
+  getAccountByEmail,
   getPortfolioPictures,
   getPhotographerRatings,
 } from "@/src/utils/db";
 import { Avatar } from "@nextui-org/react";
 
-type PhotographerPreviewCardProps = {
-  photographer: PhotographerAccount;
-  pgType?: string;
-};
+export default async function Temp() {
+  const photographer = await getAccountByEmail("qudus@gophotos.us");
 
-export default async function PhotographerPreviewCard({
-  photographer,
-  pgType,
-}: PhotographerPreviewCardProps) {
-  const assets = await getPortfolioPictures(photographer.clerk_id, pgType);
+  const assets = await getPortfolioPictures(photographer.clerk_id);
   const { avgRating, totalRatings } = await getPhotographerRatings(
     photographer.clerk_id
   );
@@ -46,7 +33,7 @@ export default async function PhotographerPreviewCard({
   };
 
   return (
-    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg">
+    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg pr-1">
       {/* Scroll Area */}
       <div className="h-full w-full rounded-md md:col-start-2 overflow-x-auto flex items-center">
         <div className="flex w-max gap-1">

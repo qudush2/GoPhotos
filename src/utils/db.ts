@@ -1,6 +1,4 @@
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
-
-import { Client } from "pg";
+import { Pool } from "pg";
 import {
   PhotographerAccount,
   JobDetails,
@@ -12,7 +10,9 @@ import {
 } from "./types";
 import { getImages } from "./fetchImages";
 
-const client = new Client({
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
+
+const pool = new Pool({
   host: PGHOST,
   database: PGDATABASE,
   user: PGUSER,
@@ -21,12 +21,23 @@ const client = new Client({
   ssl: {
     rejectUnauthorized: false,
   },
+  max: 20, // maximum number of clients in the pool
+  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 });
 
-client.connect();
+// Helper function to execute queries
+async function query(text: string, params?: any[]) {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(text, params);
+    return result;
+  } finally {
+    client.release();
+  }
+}
 
 export async function isPGClerk(clerkid: string): Promise<boolean> {
-  const result = await client.query(
+  const result = await query(
     "SELECT clerk_id FROM photographer_account where clerk_id = $1",
     [clerkid]
   );
@@ -34,7 +45,7 @@ export async function isPGClerk(clerkid: string): Promise<boolean> {
 }
 
 export async function isVisible(clerkID: string): Promise<boolean> {
-  const result = await client.query(
+  const result = await query(
     "SELECT visible FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
@@ -42,7 +53,7 @@ export async function isVisible(clerkID: string): Promise<boolean> {
 }
 
 export async function hasRating(convoID: string): Promise<boolean> {
-  const result = await client.query(
+  const result = await query(
     "SELECT * FROM ratings where conversation_id = $1",
     [convoID]
   );
@@ -51,10 +62,9 @@ export async function hasRating(convoID: string): Promise<boolean> {
 }
 
 export async function applicationSubmitted(clerkID: string): Promise<boolean> {
-  const result = await client.query(
-    "SELECT * FROM applications WHERE clerk_id= $1",
-    [clerkID]
-  );
+  const result = await query("SELECT * FROM applications WHERE clerk_id= $1", [
+    clerkID,
+  ]);
 
   return result.rows.length > 0;
 }
@@ -64,7 +74,7 @@ export async function createCustomer(
   fullName: string,
   clerkid: string
 ) {
-  await client.query(
+  await query(
     "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
     [email, fullName, clerkid]
   );
@@ -75,7 +85,7 @@ export async function createJob(
   customerClerkID: string,
   convoID: string
 ) {
-  await client.query(
+  await query(
     "INSERT INTO jobs (photographer_clerk_id, customer_clerk_id, conversation_id) VALUES ($1, $2, $3)",
     [photographerClerkID, customerClerkID, convoID]
   );
@@ -96,7 +106,7 @@ export async function createJobDetails(
   organization: string,
   description: string
 ) {
-  await client.query(
+  await query(
     "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
     [
       convoID,
@@ -124,7 +134,7 @@ export async function createApplication(
   hires: number,
   other: string | null
 ) {
-  await client.query(
+  await query(
     "INSERT INTO applications (email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, other) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
     [
       email,
@@ -149,7 +159,7 @@ export async function createRating(
   rating: number,
   comment?: string
 ) {
-  const query = comment
+  const queryText = comment
     ? "INSERT INTO ratings (conversation_id, photographer_clerk_id, customer_clerk_id, rating, comment) VALUES ($1, $2, $3, $4, $5)"
     : "INSERT INTO ratings (conversation_id, photographer_clerk_id, customer_clerk_id, rating) VALUES ($1, $2, $3, $4)";
 
@@ -157,18 +167,18 @@ export async function createRating(
     ? [convoID, pg_clerk, customer_clerk, rating, comment]
     : [convoID, pg_clerk, customer_clerk, rating];
 
-  await client.query(query, values);
+  await query(queryText, values);
 }
 
 export async function getAllAccounts(): Promise<PhotographerAccount[]> {
-  const result = await client.query("SELECT * FROM photographer_account");
+  const result = await query("SELECT * FROM photographer_account");
   return result.rows;
 }
 
 export async function getAccountByEmail(
   email: string
 ): Promise<PhotographerAccount> {
-  const result = await client.query(
+  const result = await query(
     "SELECT * FROM photographer_account WHERE email = $1",
     [email]
   );
@@ -178,7 +188,7 @@ export async function getAccountByEmail(
 export async function getAccountByClerkId(
   clerkId: string
 ): Promise<PhotographerAccount> {
-  const result = await client.query(
+  const result = await query(
     "SELECT * FROM photographer_account WHERE clerk_id = $1",
     [clerkId]
   );
@@ -195,7 +205,7 @@ export async function getPortfolioPictures(
 export async function getAccountByCustomURL(
   custom_url: string
 ): Promise<PhotographerAccount> {
-  const result = await client.query(
+  const result = await query(
     "SELECT * FROM photographer_account WHERE custom_url = $1",
     [custom_url]
   );
@@ -203,7 +213,7 @@ export async function getAccountByCustomURL(
 }
 
 export async function getAllJobIDs(): Promise<JobDetails[]> {
-  const result = await client.query("SELECT conversation_id FROM jobs");
+  const result = await query("SELECT conversation_id FROM jobs");
   return result.rows;
 }
 
@@ -213,7 +223,7 @@ export async function getAllPhotographerJobsFiltered(
   sortBy: "date" | "title" = "date",
   filterStatus: string = "all"
 ): Promise<JobDetails[]> {
-  let query = `
+  let queryText = `
     SELECT j.*, jd.*, c.full_name as customer_name
     FROM jobs j 
     JOIN job_detail jd ON j.conversation_id = jd.conversation_id
@@ -226,13 +236,13 @@ export async function getAllPhotographerJobsFiltered(
 
   if (searchTerm) {
     paramCount++;
-    query += ` AND (jd.event_title ILIKE $${paramCount} OR jd.loc ILIKE $${paramCount})`;
+    queryText += ` AND (jd.event_title ILIKE $${paramCount} OR jd.loc ILIKE $${paramCount})`;
     queryParams.push(`%${searchTerm}%`);
   }
 
   if (filterStatus !== "all") {
     paramCount++;
-    query += ` AND (
+    queryText += ` AND (
       ($${paramCount} = 'awaiting price' AND NOT j.price_finalized) OR
       ($${paramCount} = 'awaiting payment' AND j.price_finalized AND NOT j.paid) OR
       ($${paramCount} = 'awaiting upload' AND j.paid AND NOT j.pictures_uploaded) OR
@@ -242,29 +252,29 @@ export async function getAllPhotographerJobsFiltered(
     queryParams.push(filterStatus);
   }
 
-  query += ` ORDER BY ${sortBy === "date" ? "jd.event_date" : "jd.event_title"}`;
+  queryText += ` ORDER BY ${sortBy === "date" ? "jd.event_date" : "jd.event_title"}`;
 
-  const result = await client.query(query, queryParams);
+  const result = await query(queryText, queryParams);
   return result.rows;
 }
 
 export async function getAllPhotographers(
   searchParam?: string
 ): Promise<PhotographerAccount[]> {
-  let query = "SELECT * FROM photographer_account";
+  let queryText = "SELECT * FROM photographer_account";
   let values: string[] = [];
 
   if (searchParam) {
-    query += " WHERE $1 = ANY(skills)";
+    queryText += " WHERE $1 = ANY(skills)";
     values.push(searchParam);
   }
 
-  const result = await client.query(query, values);
+  const result = await query(queryText, values);
   return result.rows;
 }
 
 export async function getPGGalleries(clerkID: string): Promise<string[]> {
-  const result = await client.query(
+  const result = await query(
     "SELECT paid_jobs FROM photographer_account WHERE clerk_id = $1",
     [clerkID]
   );
@@ -272,7 +282,7 @@ export async function getPGGalleries(clerkID: string): Promise<string[]> {
 }
 
 export async function getJobDetails(convoID: string): Promise<JobDetails> {
-  const result = await client.query(
+  const result = await query(
     "SELECT * FROM jobs j JOIN job_detail jd ON j.conversation_id = jd.conversation_id WHERE j.conversation_id = $1",
     [convoID]
   );
@@ -280,7 +290,7 @@ export async function getJobDetails(convoID: string): Promise<JobDetails> {
 }
 
 export async function getCustomerInfo(clerkID: string): Promise<Customer> {
-  const result = await client.query(
+  const result = await query(
     "SELECT * FROM customer_account WHERE clerkid = $1",
     [clerkID]
   );
@@ -288,7 +298,7 @@ export async function getCustomerInfo(clerkID: string): Promise<Customer> {
 }
 
 export async function getCustomerGalleries(clerkID: string): Promise<string[]> {
-  const result = await client.query(
+  const result = await query(
     "SELECT paid_jobs FROM customer_account WHERE clerkid = $1",
     [clerkID]
   );
@@ -296,16 +306,15 @@ export async function getCustomerGalleries(clerkID: string): Promise<string[]> {
 }
 
 export async function getAllApplications(): Promise<Application[] | null> {
-  const result = await client.query("SELECT * FROM applications");
+  const result = await query("SELECT * FROM applications");
 
   return result.rows;
 }
 
 export async function getApplication(clerkID: string): Promise<Application> {
-  const result = await client.query(
-    "SELECT * FROM applications WHERE clerk_id = $1",
-    [clerkID]
-  );
+  const result = await query("SELECT * FROM applications WHERE clerk_id = $1", [
+    clerkID,
+  ]);
 
   return result.rows[0];
 }
@@ -313,7 +322,7 @@ export async function getApplication(clerkID: string): Promise<Application> {
 export async function getPhotographerRatings(
   clerkID: string
 ): Promise<Ratings> {
-  const result = await client.query(
+  const result = await query(
     `
     SELECT 
       AVG(rating) as "avgRating",
@@ -329,7 +338,7 @@ export async function getPhotographerRatings(
 }
 
 export async function getJobRating(convoID: string): Promise<Rating> {
-  const result = await client.query(
+  const result = await query(
     "SELECT rating, comment FROM ratings WHERE conversation_id = $1",
     [convoID]
   );
@@ -338,14 +347,14 @@ export async function getJobRating(convoID: string): Promise<Rating> {
 }
 
 export async function updateProfilePicture(clerkID: string, pfpURL: string) {
-  await client.query(
+  await query(
     "UPDATE photographer_account SET pfp_url = $1 WHERE clerk_id = $2",
     [pfpURL, clerkID]
   );
 }
 
 export async function updateJobPrice(convoID: string, job_price: string) {
-  await client.query(
+  await query(
     "UPDATE jobs SET job_price = $1, price_finalized = true WHERE conversation_id = $2",
     [job_price, convoID]
   );
@@ -356,7 +365,7 @@ export async function updateJobPrice(convoID: string, job_price: string) {
 }
 
 export async function updateMessageSent(convoID: string) {
-  await client.query(
+  await query(
     "UPDATE jobs set message_sent = true WHERE conversation_id = $1",
     [convoID]
   );
@@ -367,70 +376,65 @@ export async function updatePaid(
   customer_clerkID: string,
   pg_clerkID: string
 ) {
-  await client.query("BEGIN");
+  const client = await pool.connect();
   try {
+    await client.query("BEGIN");
     await client.query(
       "UPDATE jobs SET paid = true WHERE conversation_id = $1",
       [convoID]
     );
-
     await client.query(
-      `
-      UPDATE customer_account 
+      `UPDATE customer_account 
       SET paid_jobs = ARRAY_APPEND(paid_jobs, $1) 
-      WHERE clerkid = $2
-    `,
+      WHERE clerkid = $2`,
       [convoID, customer_clerkID]
     );
-
     await client.query(
-      `
-      UPDATE photographer_account 
+      `UPDATE photographer_account 
       SET paid_jobs = ARRAY_APPEND(paid_jobs, $1) 
-      WHERE clerk_id = $2
-    `,
+      WHERE clerk_id = $2`,
       [convoID, pg_clerkID]
     );
-
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("Error updating paid status:", error);
     throw error;
+  } finally {
+    client.release();
   }
 }
 
 export async function updateJobPictures(convoID: string, currentDate: Date) {
   const isoDate = currentDate.toISOString();
-  await client.query(
+  await query(
     "UPDATE jobs SET pictures_uploaded = true, closed = true, picture_upload_time = $1 WHERE conversation_id = $2",
     [isoDate, convoID]
   );
 }
 
 export async function updateCoverImage(convoID: string, coverImageURL: string) {
-  await client.query(
-    "UPDATE jobs SET cover_image = $1 WHERE conversation_id = $2",
-    [coverImageURL, convoID]
-  );
+  await query("UPDATE jobs SET cover_image = $1 WHERE conversation_id = $2", [
+    coverImageURL,
+    convoID,
+  ]);
 }
 
 export async function closeJob(convoID: string) {
-  await client.query(
-    "UPDATE jobs SET closed = true WHERE conversation_id = $1",
-    [convoID]
-  );
+  await query("UPDATE jobs SET closed = true WHERE conversation_id = $1", [
+    convoID,
+  ]);
 }
 
 export async function updateHires(clerkID: string) {
-  await client.query(
+  await query(
     "UPDATE photographer_account SET hires = hires + 1 WHERE clerk_id = $1",
     [clerkID]
   );
 }
 
 export async function updateStripeID(stripeID: string, clerkID: string) {
-  await client.query(
+  await query(
     "UPDATE photographer_account SET stripe_id = $1 WHERE clerk_id = $2",
     [stripeID, clerkID]
   );
@@ -447,7 +451,7 @@ export async function updatePhotographerAccount(
   visible: boolean,
   custom_url: string
 ) {
-  await client.query(
+  await query(
     `UPDATE photographer_account 
      SET about = $2, 
          location = $3, 
@@ -473,9 +477,9 @@ export async function updatePhotographerAccount(
 }
 
 export async function moveApplication(clerkID: string) {
-  await client.query("BEGIN");
-
+  const client = await pool.connect();
   try {
+    await client.query("BEGIN");
     await client.query(
       `
       WITH ranked_applications AS (
@@ -523,5 +527,7 @@ export async function moveApplication(clerkID: string) {
     await client.query("ROLLBACK");
     console.error("Error moving application:", error);
     throw error;
+  } finally {
+    client.release();
   }
 }
