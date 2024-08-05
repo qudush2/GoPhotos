@@ -235,7 +235,7 @@ export default function JobsTable({
       ) : (
         <div className="text-center py-8">
           <p className="text-gray-600">
-            No jobs found. Create a new job to get started!
+            No jobs found matching your search criteria.
           </p>
         </div>
       )}

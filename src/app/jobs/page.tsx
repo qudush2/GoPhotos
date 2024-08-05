@@ -5,7 +5,7 @@ import {
   isPGClerk,
 } from "@/src/utils/db";
 import JobsTable from "@/src/components/JobsTable";
-import { UnauthorizedError} from '@/src/utils/errors'
+import { notFound } from "next/navigation";
 
 export default async function Jobs({
   searchParams,
@@ -15,7 +15,7 @@ export default async function Jobs({
   const user = await currentUser();
 
   if (!(await isPGClerk(user!.id))) {
-    throw new UnauthorizedError()
+    notFound();
   }
 
   const searchTerm =
@@ -31,7 +31,16 @@ export default async function Jobs({
     filterStatus
   );
 
-  // Fetch customer information for each job
+  if (!jobs) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-600">
+          You don't have any jobs yet. Create a new job to get started!
+        </p>
+      </div>
+    );
+  }
+
   const jobsWithCustomers = await Promise.all(
     jobs.map(async (job) => {
       const customer = await getCustomerInfo(job.customer_clerk_id);
