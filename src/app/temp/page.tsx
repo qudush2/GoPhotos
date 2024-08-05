@@ -1,22 +1,18 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 
 import Link from "next/link";
-import Modal from "@/src/components/Images/Modal";
-import { PhotographerAccount } from "@/src/utils/types";
-import { getPortfolioPictures, getPhotographerRatings } from "@/src/utils/db";
+import ImageModal from "@/src/components/Images/Modal";
+import {
+  getAccountByEmail,
+  getPortfolioPictures,
+  getPhotographerRatings,
+} from "@/src/utils/db";
 import { Avatar } from "@nextui-org/react";
-import { getImageUrl } from "@/src/utils/imageOptimization";
 
-type PhotographerPreviewCardProps = {
-  photographer: PhotographerAccount;
-  pgType?: string;
-};
+export default async function Temp() {
+  const photographer = await getAccountByEmail("qudus@gophotos.us");
 
-export default async function PhotographerPreviewCard({
-  photographer,
-  pgType,
-}: PhotographerPreviewCardProps) {
-  const assets = await getPortfolioPictures(photographer.clerk_id, pgType);
+  const assets = await getPortfolioPictures(photographer.clerk_id);
   const { avgRating, totalRatings } = await getPhotographerRatings(
     photographer.clerk_id
   );
@@ -37,7 +33,7 @@ export default async function PhotographerPreviewCard({
   };
 
   return (
-    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg">
+    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg pr-1">
       {/* Scroll Area */}
       <div className="h-full w-full rounded-md md:col-start-2 overflow-x-auto flex items-center">
         <div className="flex w-max gap-1">
@@ -49,10 +45,10 @@ export default async function PhotographerPreviewCard({
               <div
                 className="absolute inset-0 bg-cover bg-center blur-lg opacity-50"
                 style={{
-                  backgroundImage: `url(${getImageUrl(asset.key, 100, 100)})`,
+                  backgroundImage: `url(${asset.url})`,
                 }}
               />
-              <Modal alt="" src={getImageUrl(asset.key)} />
+              <ImageModal alt="" src={asset.url} />
             </div>
           ))}
           {assets.length > 7 && (
@@ -68,7 +64,7 @@ export default async function PhotographerPreviewCard({
               <div
                 className="absolute inset-0 bg-cover bg-center blur-sm"
                 style={{
-                  backgroundImage: `url(${getImageUrl(assets[7].key, 100, 100)})`,
+                  backgroundImage: `url(${assets[7].url})`,
                 }}
               />
             </div>
@@ -80,7 +76,6 @@ export default async function PhotographerPreviewCard({
       <Link
         href={`/discover/${encodeURIComponent(photographer.custom_url)}`}
         passHref
-        target="_blank"
         className="rounded-md md:row-start-1 grid grid-cols-2 aspect-auto md:aspect-[3/2] overflow-hidden relative group border border-gray-200 shadow-lg"
       >
         <div className="absolute inset-0 z-10 hidden md:block">

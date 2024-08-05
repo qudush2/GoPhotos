@@ -5,13 +5,12 @@ import {
   UploadPartCommand,
   CompleteMultipartUploadCommand,
   AbortMultipartUploadCommand,
-  ListObjectsV2Command,
-  HeadObjectCommand,
+  // ListObjectsV2Command,
+  // HeadObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({ region: process.env.AWS_REGION });
-const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
 
 export async function POST(req: Request) {
   const { files, folderName } = await req.json();
@@ -111,66 +110,67 @@ export async function PUT(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const folderId = searchParams.get("folderId");
+// export async function GET(req: Request) {
+//   const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
+//   const { searchParams } = new URL(req.url);
+//   const folderId = searchParams.get("folderId");
 
-  if (!folderId) {
-    return new Response(JSON.stringify({ error: "Folder ID is required" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+//   if (!folderId) {
+//     return new Response(JSON.stringify({ error: "Folder ID is required" }), {
+//       status: 400,
+//       headers: { "Content-Type": "application/json" },
+//     });
+//   }
 
-  const command = new ListObjectsV2Command({
-    Bucket: process.env.AWS_BUCKET_NAME!,
-    Prefix: folderId,
-  });
+//   const command = new ListObjectsV2Command({
+//     Bucket: process.env.AWS_BUCKET_NAME!,
+//     Prefix: folderId,
+//   });
 
-  const { Contents } = await s3Client.send(command);
+//   const { Contents } = await s3Client.send(command);
 
-  if (!Contents) {
-    return new Response(JSON.stringify([]), {
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+//   if (!Contents) {
+//     return new Response(JSON.stringify([]), {
+//       headers: { "Content-Type": "application/json" },
+//     });
+//   }
 
-  const images = await Promise.all(
-    Contents.map(async (item) => {
-      if (!item.Key) return null;
+//   const images = await Promise.all(
+//     Contents.map(async (item) => {
+//       if (!item.Key) return null;
 
-      const headCommand = new HeadObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: item.Key,
-      });
+//       const headCommand = new HeadObjectCommand({
+//         Bucket: process.env.AWS_BUCKET_NAME!,
+//         Key: item.Key,
+//       });
 
-      try {
-        const headResponse = await s3Client.send(headCommand);
-        const skills = headResponse.Metadata?.skills
-          ? JSON.parse(headResponse.Metadata.skills)
-          : [];
+//       try {
+//         const headResponse = await s3Client.send(headCommand);
+//         const skills = headResponse.Metadata?.skills
+//           ? JSON.parse(headResponse.Metadata.skills)
+//           : [];
 
-        return {
-          key: item.Key,
-          url: `https://${CLOUDFRONT_DOMAIN}/${item.Key}`,
-          size: item.Size,
-          skills,
-        };
-      } catch (error) {
-        console.error(`Error fetching metadata for ${item.Key}:`, error);
-        return null;
-      }
-    })
-  );
+//         return {
+//           key: item.Key,
+//           url: `https://${CLOUDFRONT_DOMAIN}/${item.Key}`,
+//           size: item.Size,
+//           skills,
+//         };
+//       } catch (error) {
+//         console.error(`Error fetching metadata for ${item.Key}:`, error);
+//         return null;
+//       }
+//     })
+//   );
 
-  const validImages = images.filter(
-    (image): image is NonNullable<typeof image> => image !== null
-  );
+//   const validImages = images.filter(
+//     (image): image is NonNullable<typeof image> => image !== null
+//   );
 
-  return new Response(JSON.stringify(validImages), {
-    headers: { "Content-Type": "application/json" },
-  });
-}
+//   return new Response(JSON.stringify(validImages), {
+//     headers: { "Content-Type": "application/json" },
+//   });
+// }
 
 export async function DELETE(req: Request) {
   const { keys } = await req.json();

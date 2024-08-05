@@ -45,7 +45,7 @@ export default function ViewAllImages({ assets }: ViewAllImagesProps) {
                     className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
                     style={{
                       filter: "blur(20px)",
-                      backgroundImage: `url(${asset.url})`,
+                      backgroundImage: `url(${asset.url}?width=100&height=100)`,
                       zIndex: 0,
                     }}
                   />

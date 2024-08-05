@@ -7,6 +7,7 @@ import {
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageUrl } from "@/src/utils/imageOptimization";
 
 export default async function Gallery() {
   const user = await currentUser();
@@ -39,7 +40,7 @@ export default async function Gallery() {
                   {job.pictures_uploaded ? (
                     job.cover_image ? (
                       <Image
-                        src={job.cover_image}
+                        src={getImageUrl(job.cover_image)}
                         alt={job.event_title}
                         layout="fill"
                         objectFit="cover"

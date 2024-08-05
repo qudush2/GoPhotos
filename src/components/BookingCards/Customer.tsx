@@ -16,6 +16,7 @@ import { shuffle } from "lodash";
 import Image from "next/image";
 import { format, subDays } from "date-fns";
 import { getJobStatus } from "@/src/utils/types";
+import { getImageUrl } from "@/src/utils/imageOptimization";
 
 export default async function BookingCardCustomer({
   jobDetails,
@@ -37,12 +38,16 @@ export default async function BookingCardCustomer({
   } = jobDetails;
 
   const account = await getAccountByClerkId(jobDetails.photographer_clerk_id);
-  const assets = await getPortfolioPictures(account.clerk_id);
+  let assets = await getPortfolioPictures(account.clerk_id);
+  assets = assets.map((asset) => ({
+    ...asset,
+    url: getImageUrl(asset.key),
+  }));
 
   return (
     <Card className={`px-2 relative overflow-hidden ${className}`}>
-      <div 
-        className="absolute top-0 left-0 w-full h-1" 
+      <div
+        className="absolute top-0 left-0 w-full h-1"
         style={{ backgroundColor: statusColor }}
       />
       <CardHeader className="flex gap-3">
@@ -50,9 +55,9 @@ export default async function BookingCardCustomer({
           <p className="text-xl font-medium">
             {event_title} with {account.full_name.split(" ")[0]}
           </p>
-          <span 
+          <span
             className="text-sm font-medium px-2 py-1 rounded"
-            style={{ backgroundColor: statusColor, color: '#000' }}
+            style={{ backgroundColor: statusColor, color: "#000" }}
           >
             {statusText}
           </span>
@@ -77,7 +82,7 @@ export default async function BookingCardCustomer({
                   <div
                     className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                     style={{
-                      backgroundImage: `url(${asset.url})`,
+                      backgroundImage: `url(${asset.url})?width=100&height=100`,
                       filter: "blur(20px)",
                       zIndex: 0,
                       opacity: 0.5,

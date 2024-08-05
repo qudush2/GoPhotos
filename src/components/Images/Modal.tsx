@@ -10,7 +10,7 @@ interface ImageModalProps {
   selectMode?: boolean;
 }
 
-export default function ImageModal({
+export default function Modal({
   src,
   alt,
   className,
@@ -50,12 +50,7 @@ export default function ImageModal({
         htmlFor={selectMode ? undefined : `image-modal-${src}`}
         className="cursor-pointer relative w-full h-full block"
       >
-        <Image
-          alt={alt}
-          src={src}
-          fill
-          style={{ objectFit: "contain", zIndex: 1 }}
-        />
+        <Image alt={alt} src={src} fill className="object-contain z-[1]" />
       </label>
       {!selectMode && (
         <label
