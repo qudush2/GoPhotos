@@ -3,16 +3,16 @@ import { updateCoverImage } from "@/src/utils/db";
 
 export async function POST(request: Request) {
   try {
-    const { convoID, coverImageURL } = await request.json();
+    const { convoID, coverImageKey } = await request.json();
 
-    if (!convoID || !coverImageURL) {
+    if (!convoID || !coverImageKey) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    await updateCoverImage(convoID, coverImageURL);
+    await updateCoverImage(convoID, coverImageKey);
 
     return NextResponse.json(
       { message: "Cover image updated successfully" },

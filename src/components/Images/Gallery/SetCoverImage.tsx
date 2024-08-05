@@ -36,7 +36,7 @@ export default function SetCoverImage({
             },
             body: JSON.stringify({
               convoID: convoID,
-              coverImageURL: selectedImage.url,
+              coverImageKey: selectedImage.key,
             }),
           }
         );
