@@ -1,20 +1,11 @@
-import { PlusIcon } from "@heroicons/react/20/solid";
 import { StarIcon } from "@heroicons/react/24/solid";
 
-import Tag from "@/src/components/Tag";
-import {
-  ScrollArea,
-  ScrollBar,
-} from "@/src/components/ScrollingFeatures/ScrollArea";
-
 import Link from "next/link";
-import ImageModal from "@/src/components/Images/Modal";
+import Modal from "@/src/components/Images/Modal";
 import { PhotographerAccount } from "@/src/utils/types";
-import {
-  getPortfolioPictures,
-  getPhotographerRatings,
-} from "@/src/utils/db";
+import { getPortfolioPictures, getPhotographerRatings } from "@/src/utils/db";
 import { Avatar } from "@nextui-org/react";
+import { getImageUrl } from "@/src/utils/imageOptimization";
 
 type PhotographerPreviewCardProps = {
   photographer: PhotographerAccount;
@@ -58,10 +49,10 @@ export default async function PhotographerPreviewCard({
               <div
                 className="absolute inset-0 bg-cover bg-center blur-lg opacity-50"
                 style={{
-                  backgroundImage: `url(${asset.url})`,
+                  backgroundImage: `url(${getImageUrl(asset.key, 100, 100)})`,
                 }}
               />
-              <ImageModal alt="" src={asset.url} />
+              <Modal alt="" src={getImageUrl(asset.key)} />
             </div>
           ))}
           {assets.length > 7 && (
@@ -77,7 +68,7 @@ export default async function PhotographerPreviewCard({
               <div
                 className="absolute inset-0 bg-cover bg-center blur-sm"
                 style={{
-                  backgroundImage: `url(${assets[7].url})`,
+                  backgroundImage: `url(${getImageUrl(assets[7].key, 100, 100)})`,
                 }}
               />
             </div>

@@ -9,6 +9,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import ShareProfile from "@/src/components/ShareProfile";
+import { getImageUrl } from "@/src/utils/imageOptimization";
 
 import Tag from "@/src/components/Tag";
 import {
@@ -30,7 +31,12 @@ export default async function PhotographerUniquePage({
 }) {
   const decodedURL = decodeURIComponent(params.photographerURL);
   const account = await getAccountByCustomURL(decodedURL);
-  const assets = await getPortfolioPictures(account.clerk_id);
+  let assets = await getPortfolioPictures(account.clerk_id);
+  assets = assets.map((asset) => ({
+    ...asset,
+    url: getImageUrl(asset.key),
+  }));
+
   const user = await currentUser();
   const { avgRating, totalRatings } = await getPhotographerRatings(
     account.clerk_id
