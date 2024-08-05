@@ -80,6 +80,7 @@ export default async function PhotographerPreviewCard({
       <Link
         href={`/discover/${encodeURIComponent(photographer.custom_url)}`}
         passHref
+        target="_blank"
         className="rounded-md md:row-start-1 grid grid-cols-2 aspect-auto md:aspect-[3/2] overflow-hidden relative group border border-gray-200 shadow-lg"
       >
         <div className="absolute inset-0 z-10 hidden md:block">
