@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from 'react';
 import { cn } from "@/src/utils/cn";
 import { Playfair_Display as PlayfairDisplay } from "next/font/google";
-import { Questrial } from "next/font/google";
 import SearchArea from "@/src/app/discover/search-area";
 import Image from "next/image";
 
@@ -13,15 +11,8 @@ const playfairDisplay = PlayfairDisplay({
   preload: true,
 });
 
-// const questrial = Questrial({
-//   weight: "400", // Add this line
-//   preload: true,
-// });
-
 export default function LandingPage() {
-  const [view, setView] = useState('customer');
-
-  const LandingPageCustomer = () => (
+  return (
     <div className="relative h-auto bg-[#f4f4f4] py-20 sm:pb-7 sm:pt-5">
       <div className="justify-right flex items-center space-x-7">
         <div className="md:w-1/2 px-8 sm:pl-20">
@@ -47,9 +38,6 @@ export default function LandingPage() {
               {" "}
               Currently available in Boston, MA & Cambridge, MA areas
             </p>
-            <button onClick={() => setView('photographers')} className="text-blue-500">
-              View Photographers
-            </button>
           </div>
         </div>
         <div className="hidden md:flex w-1/2 items-center justify-end pr-16">
@@ -64,15 +52,4 @@ export default function LandingPage() {
       </div>
     </div>
   );
-
-  const LandingPagePhotographers = () => (
-    <div>
-      <h1>Photographers</h1>
-      <button onClick={() => setView('customer')} className="text-blue-500">
-        Back to Customer View
-      </button>
-    </div>
-  );
-
-  return view === 'customer' ? <LandingPageCustomer /> : <LandingPagePhotographers />;
 }
