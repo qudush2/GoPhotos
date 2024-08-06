@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { useRouter } from "next/navigation";
-import Upload from '@/src/components/Images/Apply/Upload'
+import Upload from "@/src/components/Images/Apply/Upload";
 
 interface ApplicationFormProps {
   firstName: string;
@@ -23,6 +23,8 @@ export default function ApplicationForm({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
+  const [otherLocation, setOtherLocation] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const skillOptions = skills.map((skill) => ({ value: skill, label: skill }));
 
@@ -111,12 +113,32 @@ export default function ApplicationForm({
             name="location"
             required
             className="w-full px-3 py-2 border rounded"
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
           >
             <option value="">Select a location</option>
             <option value="Boston, MA">Boston, MA</option>
             <option value="Cambridge, MA">Cambridge, MA</option>
+            <option value="other">Other</option>
           </select>
         </div>
+        {selectedLocation === "other" && (
+          <div>
+            <label htmlFor="otherLocation" className="block mb-1">
+              Specify Location
+            </label>
+            <input
+              type="text"
+              id="otherLocation"
+              name="otherLocation"
+              value={otherLocation}
+              onChange={(e) => setOtherLocation(e.target.value)}
+              required
+              className="w-full px-3 py-2 border rounded"
+              placeholder="Enter your location"
+            />
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="price_low" className="block mb-1">
@@ -198,7 +220,8 @@ export default function ApplicationForm({
       <div>
         <label htmlFor="portfolio" className="block mb-1">
           Upload up to 15 images that showcase your work with the skills you
-          have selected.
+          have selected. (These will be the first images to appear on your
+          portfolio. You will be able to update these afterwards.)
         </label>
         <Upload
           folderId={`photographer-application/${clerkID}`}
