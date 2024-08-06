@@ -13,8 +13,8 @@ export default async function DiscoverPage({
   const photographers = await getAllPhotographers(searchParams.photographyType);
 
   return (
-    <div className="bg-[#f4f4f4]">
-      <div className="w-full border-b border-t border-gray-200 py-5 bg-white px-8 sm:px-20 shadow-sm">
+    <div className="">
+      <div className="w-full border-b border-gray-200 py-5 bg-white px-8 sm:px-20 shadow-sm">
         <SearchArea pgType={searchParams.photographyType} />
         <p className="pt-3 text-sm italic text-gray-600">
           Currently available in Boston, MA & Cambridge, MA areas

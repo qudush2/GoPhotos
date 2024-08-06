@@ -18,7 +18,10 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
   const { userId } = useAuth();
 
   return (
-    <Navbar isBlurred className="sticky z-20 bg-white px-8 sm:px-20 py-7">
+    <Navbar
+      isBlurred
+      className="sticky z-20 bg-white px-8 sm:px-20 py-7 border-b border-gray-200"
+    >
       <NavbarContent>
         <NavbarBrand>
           <Link href="/" className="cursor-pointer">
