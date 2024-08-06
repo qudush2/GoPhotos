@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SKILLS } from "@/src/utils/fetchImages";
+import { SKILLS } from "@/src/utils/types";
 import { s3Images } from "@/src/utils/types";
 
 interface MetadataEditorProps {

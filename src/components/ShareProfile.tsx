@@ -8,14 +8,15 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/src/components/Dialog";
 
 export default function ShareProfileButton({
   photographerName,
-  photographerURL
+  photographerURL,
 }: {
   photographerName: string;
-  photographerURL : string
+  photographerURL: string;
 }) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -57,31 +58,34 @@ export default function ShareProfileButton({
           Share
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogTitle>
-          <DialogTitle>Share Profile</DialogTitle>
-        </DialogTitle>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter recipient's email"
-            required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
-          >
-            {isLoading ? "Sending..." : "Send"}
-          </Button>
-        </form>
-        {isSuccess && (
-          <p className="text-green-600 mt-2">Profile shared successfully!</p>
-        )}
-        {error && <p className="text-red-600 mt-2">{error}</p>}
+      <DialogContent className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <DialogClose className="absolute inset-0 cursor-default" />
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative z-10">
+          <DialogTitle className="text-lg font-semibold mb-4">
+            Share Profile
+          </DialogTitle>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter recipient's email"
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            />
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
+            >
+              {isLoading ? "Sending..." : "Send"}
+            </Button>
+          </form>
+          {isSuccess && (
+            <p className="text-green-600 mt-2">Profile shared successfully!</p>
+          )}
+          {error && <p className="text-red-600 mt-2">{error}</p>}
+        </div>
       </DialogContent>
     </Dialog>
   );

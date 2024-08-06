@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { isPGClerk, applicationSubmitted } from "@/src/utils/db";
-import { SKILLS } from "@/src/utils/fetchImages";
+import { SKILLS } from "@/src/utils/types";
 import { redirect } from "next/navigation";
 import ApplicationForm from "./application-form";
 

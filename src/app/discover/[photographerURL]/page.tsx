@@ -161,16 +161,25 @@ export default async function PhotographerUniquePage({
                                             md:col-span-2 md:col-start-5
                                             xl:col-span-3 xl:col-start-7"
             >
-              <p className="text-base sm:text-lg font-medium">
-                Estimated price
-              </p>
-              <p className="mt-0.5 text-sm text-gray-700">
-                This estimate is based on 1 hour of {account.full_name}&apos;s
-                average hourly price range.
-              </p>
-              <p className="mt-0.5 text-lg font-semibold">
-                ${account.price_low} - ${account.price_high}
-              </p>
+              <div className="space-y-2 mb-5">
+                <div className="flex items-baseline">
+                  <span className="text-xl font-bold">
+                    ${account.price_low}
+                  </span>
+                  <span className="mx-2 text-xl">-</span>
+                  <span className="text-xl font-bold">
+                    ${account.price_high}
+                  </span>
+                  <span className="ml-2 text-sm text-gray-700">per hour</span>
+                </div>
+                <p className="text-base text-gray-800">
+                  Estimated range for a 1-hour session with{" "}
+                  {account.full_name.split(" ")[0]}.
+                </p>
+                <p className="text-sm text-gray-600">
+                  *Actual pricing may vary based on project requirements.
+                </p>
+              </div>
               {user && (
                 <Dialog>
                   <div className="flex justify-center">
