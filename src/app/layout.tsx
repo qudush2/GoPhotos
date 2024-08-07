@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Footer from "@/src/app/footer";
-import { Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -11,10 +10,15 @@ import Loading from "./loading";
 import AdminShortcut from "@/src/components/AdminShortcut";
 import { isPGClerk } from "@/src/utils/db";
 
-import { cn } from "@/src/utils/cn";
-
 import { Toaster } from "sonner";
 import NavigationBar from "./navigation-bar";
+import {
+  playfairDisplay,
+  questrial,
+  fragmentMono,
+  inter,
+  spaceGrotesk,
+} from "@/src/utils/fonts";
 
 export const metadata: Metadata = {
   title: "GoPhotos",
@@ -26,12 +30,6 @@ export const metadata: Metadata = {
     },
   },
 };
-
-const spaceGrotesk = SpaceGrotesk({
-  style: "normal",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
 
 export default async function RootLayout({
   children,
@@ -46,10 +44,11 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider>
-      <html lang="en" className="h-full">
-        <body
-          className={cn("flex flex-col min-h-full", spaceGrotesk.className)}
-        >
+      <html
+        lang="en"
+        className={`h-full ${playfairDisplay.variable} ${questrial.variable} ${fragmentMono.variable} ${inter.variable} ${spaceGrotesk.variable}`}
+      >
+        <body className="flex flex-col min-h-full font-spaceGrotesk">
           <Suspense fallback={<Loading />}>
             <NavigationBar isPG={isPG} />
             <main className="flex-grow">{children}</main>
