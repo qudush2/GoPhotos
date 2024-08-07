@@ -38,6 +38,7 @@ export default function NavigationBar() {
           </NavigationLink>
         </NavbarItem>
         {userId && (
+<<<<<<< Updated upstream
           <NavbarItem>
             <NavigationLink
               href={`/messages`}
@@ -47,6 +48,39 @@ export default function NavigationBar() {
               Messages
             </NavigationLink>
           </NavbarItem>
+=======
+          <>
+            <NavbarItem>
+              <NavigationLink
+                href={`/gallery`}
+                linkPath="/gallery"
+                className="hover-gradient text-lg sm:text-base font-medium"
+              >
+                Gallery
+              </NavigationLink>
+            </NavbarItem>
+            {isPG && (
+              <NavbarItem>
+                <NavigationLink
+                  href={`/jobs`}
+                  linkPath="/jobs"
+                  className="hover-gradient text-lg sm:text-base font-medium"
+                >x
+                  Jobs
+                </NavigationLink>
+              </NavbarItem>
+            )}
+            <NavbarItem>
+              <NavigationLink
+                href={`/messages`}
+                linkPath="/messages"
+                className="hover-gradient text-lg sm:text-base font-medium"
+              >
+                Messages
+              </NavigationLink>
+            </NavbarItem>
+          </>
+>>>>>>> Stashed changes
         )}
       </NavbarContent>
 
