@@ -37,6 +37,14 @@ export default function ApplicationForm({
     setIsSubmitting(true);
 
     const formData = new FormData(event.currentTarget);
+    const university = formData.get("school") as string;
+    if (!university) {
+      formData.set("school", "N/A");
+    }
+    const other = formData.get("other") as string;
+    if (!other) {
+      formData.set("other", "nothing else");
+    }
 
     try {
       const response = await fetch("/api/applications/submit", {
@@ -61,8 +69,8 @@ export default function ApplicationForm({
   };
 
   return (
-    <div className="space-y-4">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="first_name" className="block mb-1">
@@ -139,48 +147,58 @@ export default function ApplicationForm({
             />
           </div>
         )}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="price_low" className="block mb-1">
-              Minimum Price
-            </label>
-            <input
-              type="number"
-              id="price_low"
-              name="price_low"
-              required
-              className="w-full px-3 py-2 border rounded"
-            />
+        <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="price_low" className="block mb-1 font-medium">
+                Minimum Hourly Price
+              </label>
+              <input
+                type="number"
+                id="price_low"
+                name="price_low"
+                required
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="price_high" className="block mb-1 font-medium">
+                Maximum Hourly Price
+              </label>
+              <input
+                type="number"
+                id="price_high"
+                name="price_high"
+                required
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor="price_high" className="block mb-1">
-              Maximum Price
-            </label>
-            <input
-              type="number"
-              id="price_high"
-              name="price_high"
-              required
-              className="w-full px-3 py-2 border rounded"
-            />
-          </div>
+          <p className="text-sm text-gray-600 italic">
+            Note: This price range helps potential clients understand your rates
+            before reaching out. It's not a fixed value, and you're not
+            obligated to stay within this range. We understand that job costs
+            may vary, and you'll still determine the final price for each job.
+          </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="school" className="block mb-1">
-              School
+            <label htmlFor="school" className="block mb-1 font-medium">
+              Current University
             </label>
             <input
               type="text"
               id="school"
               name="school"
-              required
               className="w-full px-3 py-2 border rounded"
             />
+            <p className="text-sm text-gray-600 italic mt-2">
+              If applicable. Leave empty if not currently enrolled.
+            </p>
           </div>
           <div>
-            <label htmlFor="hires" className="block mb-1">
-              Number of Hires
+            <label htmlFor="hires" className="block mb-1 font-medium">
+              Approximate Number of Photography Jobs Completed
             </label>
             <input
               type="number"
@@ -189,6 +207,10 @@ export default function ApplicationForm({
               required
               className="w-full px-3 py-2 border rounded"
             />
+            <p className="text-sm text-gray-600 italic mt-2">
+              This number will be displayed on your profile and will increase
+              with each new GoPhotos job you complete.
+            </p>
           </div>
         </div>
         <div>
@@ -217,12 +239,15 @@ export default function ApplicationForm({
         </div>
       </form>
 
-      <div>
-        <label htmlFor="portfolio" className="block mb-1">
+      <div className="space-y-2">
+        <label htmlFor="portfolio" className="block mb-1 font-medium">
           Upload up to 15 images that showcase your work with the skills you
-          have selected. (These will be the first images to appear on your
-          portfolio. You will be able to update these afterwards.)
+          have selected.
         </label>
+        <p className="text-sm text-gray-600 italic">
+          Note: These will be the first images to appear on your portfolio. You
+          will be able to update these afterwards.
+        </p>
         <Upload
           folderId={`photographer-application/${clerkID}`}
           onUploadComplete={() => setUploadComplete(true)}
@@ -231,7 +256,9 @@ export default function ApplicationForm({
 
       <div>
         <label htmlFor="other" className="block mb-1">
-          Any other questions, comments, or feedback
+          Any other questions, comments, or feedback. <br />
+          Have other friends who should join GoPhotos? Leave their instagram
+          here.
         </label>
         <textarea
           id="other"
