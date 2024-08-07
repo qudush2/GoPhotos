@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
+@layer utilities {#fc7674
   .gradient {
     background: linear-gradient(to right, #ff9993, #fc7674, #fc4d74);
   }
@@ -14,5 +14,12 @@
     background: linear-gradient(to right, #ff9993, #fc7674, #fc4d74);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
   }
 }

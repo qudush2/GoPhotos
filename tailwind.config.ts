@@ -19,11 +19,26 @@ const config: Config = {
       },
       animation: {
         "loading-bar": "loading 2s linear infinite",
+        'blob-wide': "blob-wide 20s infinite",
       },
       keyframes: {
         loading: {
           "0%": { left: "-50%" },
           "100%": { left: "100%" },
+        },
+        'blob-wide': {
+          "0%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "33%": {
+            transform: "translate(calc(100vw * 0.3), calc(100vh * -0.3)) scale(1.1)",
+          },
+          "66%": {
+            transform: "translate(calc(100vw * -0.2), calc(100vh * 0.2)) scale(0.9)",
+          },
+          "100%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
         },
       },
     },
@@ -35,5 +50,10 @@ const config: Config = {
     require("@tailwindcss/container-queries"),
 	nextui()
   ],
+  variants: {
+    extend: {
+      animation: ["responsive", "motion-safe", "motion-reduce"],
+    },
+  },
 };
 export default config;

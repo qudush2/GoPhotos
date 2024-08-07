@@ -35,7 +35,6 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
     <Navbar
       isBlurred
       shouldHideOnScroll
-      isBordered
       maxWidth="xl"
       className="sticky z-20 py-1"
       isMenuOpen={isMenuOpen}
