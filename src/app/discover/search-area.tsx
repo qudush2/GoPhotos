@@ -23,27 +23,30 @@ export default function SearchArea({ className, pgType }: SearchProps) {
   return (
     <div className={cn("@container", className)}>
       <div className="grid @md:grid-cols-8 @md:gap-2">
-        <div className="mt-3 @md:col-span-3 @md:mt-0">
-          <label htmlFor="location" className="sm text-sm font-medium">
+        <div className="@md:col-span-3">
+          <label htmlFor="location" className="block text-sm font-medium mb-1">
             Location
           </label>
           <input
             id="location"
             name="location"
-            className="w-full rounded-md border border-gray-200 text-sm outline-none"
+            className="w-full h-10 rounded-md border border-gray-200 text-sm outline-none px-3"
             defaultValue="Boston, MA + Cambridge, MA"
             readOnly
           />
         </div>
 
         <div className="@md:col-span-3">
-          <label htmlFor="photographyType" className="text-sm font-medium">
+          <label
+            htmlFor="photographyType"
+            className="block text-sm font-medium mb-1"
+          >
             Photography Type
           </label>
           <select
             id="photographyType"
             name="photographyType"
-            className="w-full rounded-md border border-gray-200 text-sm outline-none"
+            className="w-full h-10 rounded-md border border-gray-200 text-sm outline-none px-3"
             onChange={handlePhotographyTypeChange}
             defaultValue={pgType}
           >
@@ -63,7 +66,7 @@ export default function SearchArea({ className, pgType }: SearchProps) {
           </select>
         </div>
 
-        <div className="mt-3 @md:col-span-2 @md:col-start-7 @md:mt-[30px]">
+        <div className="@md:col-span-2 @md:col-start-7 flex flex-col justify-end">
           <Button
             as={Link}
             href={
@@ -71,7 +74,7 @@ export default function SearchArea({ className, pgType }: SearchProps) {
                 ? "/discover"
                 : `/discover?photographyType=${photographyType}`
             }
-            className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white"
+            className="w-full h-10 rounded-md bg-black px-3 text-sm font-medium text-white"
           >
             Search
           </Button>

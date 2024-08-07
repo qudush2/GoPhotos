@@ -1,11 +1,5 @@
-'use client'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Divider,
-  Link,
-} from "@nextui-org/react";
+"use client";
+import { Card, CardHeader, CardBody, Divider, Link } from "@nextui-org/react";
 
 export default function BookingCardDefault({
   className,
@@ -13,7 +7,7 @@ export default function BookingCardDefault({
   className?: string;
 }) {
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="flex gap-3">
         <div className="flex ml-2">
           <p className="text-lg">Booking Details</p>

@@ -6,102 +6,68 @@ import {
   NavbarItem,
   Button,
   NavbarBrand,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
 } from "@nextui-org/react";
-import gpLogo from "../../public/GoPhotos_logo.png";
-import Image from "next/image";
+import { GoPhotosLogo } from "@/src/components/Logo";
 import { UserButton, useAuth, SignInButton } from "@clerk/nextjs";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/utils/cn";
 
 export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
   const { userId } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = [
+    { href: "/discover", label: "Discover" },
+    ...(userId
+      ? [
+          { href: "/gallery", label: "Gallery" },
+          ...(isPG ? [{ href: "/jobs", label: "Jobs" }] : []),
+          { href: "/messages", label: "Messages" },
+        ]
+      : []),
+  ];
 
   return (
-    <Navbar isBlurred className="sticky z-20 bg-white px-8 sm:px-20 py-7">
-      <NavbarContent>
-        <NavbarBrand>
-          <Link href="/" className="cursor-pointer">
-            <Image src={gpLogo} alt="" width={150} height={800} />
-          </Link>
-        </NavbarBrand>
+    <Navbar
+      isBlurred
+      shouldHideOnScroll
+      isBordered
+      maxWidth="xl"
+      className="sticky z-20 py-1"
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+    >
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        />
       </NavbarContent>
 
-      <NavbarContent className="hidden md:flex gap-4" justify="center">
-        <NavbarItem>
-          <NavigationLink
-            href={`/discover`}
-            linkPath="/discover"
-            className="hover-gradient text-lg sm:text-base font-medium"
-          >
-            Discover
-          </NavigationLink>
-        </NavbarItem>
-        {userId && (
-          <>
-            <NavbarItem>
-              <NavigationLink
-                href={`/gallery`}
-                linkPath="/gallery"
-                className="hover-gradient text-lg sm:text-base font-medium"
-              >
-                Gallery
-              </NavigationLink>
-            </NavbarItem>
-            {isPG && (
-              <NavbarItem>
-                <NavigationLink
-                  href={`/jobs`}
-                  linkPath="/jobs"
-                  className="hover-gradient text-lg sm:text-base font-medium"
-                >
-                  Jobs
-                </NavigationLink>
-              </NavbarItem>
-            )}
-            <NavbarItem>
-              <NavigationLink
-                href={`/messages`}
-                linkPath="/messages"
-                className="hover-gradient text-lg sm:text-base font-medium"
-              >
-                Messages
-              </NavigationLink>
-            </NavbarItem>
-          </>
-        )}
+      <NavbarBrand>
+        <Link href="/">
+          <GoPhotosLogo />
+        </Link>
+      </NavbarBrand>
+
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        {menuItems.map((item) => (
+          <NavbarItem key={item.href}>
+            <NavigationLink
+              href={item.href}
+              linkPath={item.href}
+              className="hover-gradient text-lg sm:text-base font-medium"
+            >
+              {item.label}
+            </NavigationLink>
+          </NavbarItem>
+        ))}
       </NavbarContent>
 
       <NavbarContent justify="end" className="gap-4">
-        <NavbarItem className="flex md:hidden">
-          <NavigationLink
-            href={`/discover`}
-            linkPath="/discover"
-            className="hover-gradient sm:text-base font-medium"
-          >
-            Discover
-          </NavigationLink>
-        </NavbarItem>
-        <NavbarItem className="flex md:hidden">
-          <NavigationLink
-            href={`/gallery`}
-            linkPath="/gallery"
-            className="hover-gradient sm:text-base font-medium"
-          >
-            Gallery
-          </NavigationLink>
-        </NavbarItem>
-        {userId && (
-          <NavbarItem className="flex md:hidden">
-            <NavigationLink
-              href={`/messages`}
-              linkPath="/messages"
-              className="hover-gradient sm:text-base font-medium"
-            >
-              Messages
-            </NavigationLink>
-          </NavbarItem>
-        )}
         <NavbarItem>
           {userId ? (
             <UserButton
@@ -115,11 +81,25 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
             />
           ) : (
             <SignInButton>
-              <Button className="font-medium hover-gradient">Sign In </Button>
+              <Button className="font-medium hover-gradient">Sign In</Button>
             </SignInButton>
           )}
         </NavbarItem>
       </NavbarContent>
+
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item.href}-${index}`}>
+            <NavigationLink
+              href={item.href}
+              linkPath={item.href}
+              className="w-full hover-gradient text-lg font-medium"
+            >
+              {item.label}
+            </NavigationLink>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 }
