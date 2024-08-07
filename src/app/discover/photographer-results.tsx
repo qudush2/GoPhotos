@@ -2,12 +2,12 @@ import { cn } from "@/src/utils/cn";
 
 import PhotographerPreviewCard from "./photographer-preview-card";
 import { Fragment } from "react";
-import { Photographer } from "@/src/utils/types";
+import { PhotographerAccount } from "@/src/utils/types";
 import { isVisible } from "@/src/utils/db";
 
 type PhotographerResultsProps = {
   className?: string;
-  photographers: Photographer[];
+  photographers: PhotographerAccount[];
   pgType: string;
   bypassVisibility?: boolean;
 };
@@ -16,7 +16,7 @@ export default async function PhotographerResults({
   className,
   photographers,
   pgType,
-  bypassVisibility = false, // change to true to display test account, SET TO FALSE BEFORE PUSH
+  bypassVisibility = process.env.bypass_vis === "true",
 }: PhotographerResultsProps) {
   shuffleArray(photographers);
 
@@ -28,9 +28,7 @@ export default async function PhotographerResults({
 
   const visiblePhotographers = await Promise.all(
     photographers.map(async (photographer) => ({
-      visible:
-        (await isVisible(photographer.accountId)) ||
-        (bypassVisibility && photographer.accountId === "prklVeM"),
+      visible: (await isVisible(photographer.clerk_id)) || (bypassVisibility && photographer.clerk_id === 'user_2f7VEMmcqr2ihVrGyLo1AlmlhtC'),
       photographer,
     }))
   ).then((results) =>
@@ -42,12 +40,12 @@ export default async function PhotographerResults({
   return (
     <div className={cn("space-y-5", className)}>
       {visiblePhotographers.map((photographer, idx) => (
-        <Fragment key={photographer.id}>
+        <Fragment key={photographer.clerk_id}>
           <PhotographerPreviewCard
             photographer={photographer}
             pgType={pgType}
           />
-          {idx !== photographers.length - 1}
+          {idx !== visiblePhotographers.length - 1}
         </Fragment>
       ))}
     </div>

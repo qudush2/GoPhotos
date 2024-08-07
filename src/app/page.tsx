@@ -1,5 +1,6 @@
-import { cn } from "@/src/utils/cn";
+"use client";
 
+import { cn } from "@/src/utils/cn";
 import { Playfair_Display as PlayfairDisplay } from "next/font/google";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { getPGinfo } from "../utils/db";
@@ -85,49 +86,14 @@ export default async function LandingPage() {
             </div>
           </div>
         </div>
-      </div>
-    );
-
-    const LandingPagePhotographers = () => (
-      <div className="relative h-auto bg-[#fefefe] py-20 sm:pb-7 sm:pt-5 flex justify-center items-center">
-        <div className="w-full max-w-7xl mx-auto">
-          <div className="flex justify-center gap-3">
-            <p>Hire a Photographer</p>
-            {/* <button onClick={() => setView('customer')} className="text-blue-500 text-center" > */}
-            <button disabled className="text-blue-500 text-center">
-              View
-            </button>
-            <p>I'm a Photographer</p>
-          </div>
-          <div className="flex items-center justify-center space-x-7">
-            <div className="md:1/2 px-8 sm:pl-20">
-              <div className="text-black text-center">
-                <p
-                  className={cn(
-                    playfairDisplay.className,
-                    "text-5xl mt-5 sm:text-7xl font-medium"
-                  )}
-                >
-                  Getting Hired <br />
-                  <span className="inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text pl-0.5 italic leading-snug text-transparent">
-                    Made Easy.
-                  </span>
-                </p>
-                <p
-                  className={cn(
-                    inter.className,
-                    "mb-5 sm:mb-10 mt-4 text-1xl  font-bold text-black"
-                  )}
-                >
-                  Hiring for local photography talent done right
-                </p>
-              </div>
-              <div className="flex justify-center ">
-                <button className="button1">Apply</button>
-                <button className="button2">Login into your account</button>
-              </div>
-            </div>
-          </div>
+        <div className="hidden md:flex w-1/2 items-center justify-end pr-16">
+          <Image
+            src="https://res.cloudinary.com/dklvhnniq/image/upload/f_auto,q_auto/kymcdxwxu270hpjh8gfz"
+            alt="Photographer taking a picture"
+            width={700}
+            height={100}
+            className="rounded-md"
+          />
         </div>
       </div>
     );

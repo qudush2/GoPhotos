@@ -6,26 +6,20 @@ import { HiX } from "react-icons/hi";
 
 import {
   getJobDetails,
-  getAccountByEmail,
-  getEmailByClerk,
   getCustomerInfo,
+  getAccountByClerkId,
 } from "../../../utils/db";
-import { currentUser } from "@clerk/nextjs";
-import { JobDetails, Customer, Account } from "@/src/utils/types";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function MessageUniquePage({
   params,
 }: {
   params: { convoId: string };
 }) {
-  const jobDetails = (await getJobDetails(params.convoId)) as JobDetails;
-  const customer = (await getCustomerInfo(
-    jobDetails.customer_clerk_id
-  )) as Customer;
+  const jobDetails = await getJobDetails(params.convoId);
+  const customer = await getCustomerInfo(jobDetails.customer_clerk_id);
   const pgClerkID = jobDetails.photographer_clerk_id;
-  const account = (await getAccountByEmail(
-    await getEmailByClerk(pgClerkID)
-  )) as Account;
+  const account = await getAccountByClerkId(pgClerkID);
 
   const decodedId = decodeURIComponent(params.convoId);
 
@@ -36,7 +30,7 @@ export default async function MessageUniquePage({
   }
 
   if (user) {
-    const isPG = user.publicMetadata.isPhotographer as boolean;
+    const isPG = user!.id === pgClerkID;
 
     return (
       <div className="flex h-[80vh] w-full overflow-auto px-7 sm:px-20 sm:mb-10">
@@ -63,7 +57,7 @@ export default async function MessageUniquePage({
               jobDetails={jobDetails}
               convoId={decodedId}
               pgEmail={account.email}
-              pgName={account.fullName}
+              pgName={account.full_name}
               pgClerkID={pgClerkID}
               customer={customer}
             />
@@ -74,11 +68,7 @@ export default async function MessageUniquePage({
           lg:block lg:col-span-2"
           >
             {!isPG && (
-              <BookingCardCustomer
-                jobDetails={jobDetails}
-                pgName={account.fullName}
-                className="h-full"
-              />
+              <BookingCardCustomer jobDetails={jobDetails} className="h-full" />
             )}
             {isPG && (
               <BookingCardPhotographer

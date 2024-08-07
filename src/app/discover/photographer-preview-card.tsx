@@ -1,17 +1,14 @@
-import { PlusIcon } from "@heroicons/react/20/solid";
-
-import Tag from "@/src/components/Tag";
-import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
+import { StarIcon } from "@heroicons/react/24/solid";
 
 import Link from "next/link";
-import ImageModal from "@/src/components/Images/ImageModal";
-import { Photographer } from "@/src/utils/types";
-import { getAccountByPhotographerId, getAssets } from "@/src/utils/db";
-import { shuffle } from "lodash";
+import Modal from "@/src/components/Images/Modal";
+import { PhotographerAccount } from "@/src/utils/types";
+import { getPortfolioPictures, getPhotographerRatings } from "@/src/utils/db";
 import { Avatar } from "@nextui-org/react";
+import { getImageUrl } from "@/src/utils/imageOptimization";
 
 type PhotographerPreviewCardProps = {
-  photographer: Photographer;
+  photographer: PhotographerAccount;
   pgType?: string;
 };
 
@@ -19,143 +16,157 @@ export default async function PhotographerPreviewCard({
   photographer,
   pgType,
 }: PhotographerPreviewCardProps) {
-  const account = await getAccountByPhotographerId(photographer.accountId);
-  const assets = await getAssets(photographer.id);
+  const assets = await getPortfolioPictures(photographer.clerk_id, pgType);
+  const { avgRating, totalRatings } = await getPhotographerRatings(
+    photographer.clerk_id
+  );
+
+  const renderStars = (rating: number) => {
+    return (
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <StarIcon
+            key={star}
+            className={`h-4 w-4 ${
+              star <= rating ? "text-yellow-400" : "text-gray-300"
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
-    <div className="my-2 grid gap-5 rounded-md bg-white py-5 md:grid-cols-[21rem_1fr] md:gap-2 shadow-lg pr-1">
-      <ScrollArea className="h-full w-full rounded-md md:col-start-2">
+    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg">
+      {/* Scroll Area */}
+      <div className="h-full w-full rounded-md md:col-start-2 overflow-x-auto flex items-center">
         <div className="flex w-max gap-1">
-          {shuffle(assets)
-            .slice(0, 7)
-            .map((asset, idx) => (
+          {assets.slice(0, 7).map((asset, idx) => (
+            <div
+              key={idx}
+              className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 lg:w-[28rem]"
+            >
               <div
-                key={idx}
-                className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden w-80 md:w-80 lg:w-[28rem]"
+                className="absolute inset-0 bg-cover bg-center blur-lg opacity-50"
                 style={{
-                  position: "relative",
+                  backgroundImage: `url(${getImageUrl(asset.key, 100, 100)})`,
                 }}
-              >
-                <div
-                  className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${asset.cdnPath})`,
-                    filter: "blur(20px)",
-                    zIndex: 0,
-                    opacity: 0.5,
-                  }}
-                />
-                <ImageModal
-                  alt=""
-                  src={asset.cdnPath}
-                  placeholder="blur"
-                  blurDataURL={asset.placeholderBase64}
-                />
-              </div>
-            ))}
+              />
+              <Modal alt="" src={getImageUrl(asset.key)} />
+            </div>
+          ))}
           {assets.length > 7 && (
             <div className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 lg:w-[28rem]">
               <Link
-                href={`/discover/${encodeURIComponent(account.fullName)}`}
+                href={`/discover/${encodeURIComponent(photographer.custom_url)}`}
                 passHref
                 target="_blank"
-                className="text-md bg-white px-3 py-1 font-medium text-black shadow-md absolute left-1/2 top-1/2 z-10 m-2 -translate-x-1/2 -translate-y-1/2 transform "
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform z-10 bg-white px-3 py-1 text-md font-medium text-black shadow-md"
               >
                 View all
               </Link>
               <div
-                className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
+                className="absolute inset-0 bg-cover bg-center blur-sm"
                 style={{
-                  backgroundImage: `url(${assets[7].cdnPath})`,
-                  filter: "blur(5px)",
+                  backgroundImage: `url(${getImageUrl(assets[7].key, 100, 100)})`,
                 }}
               />
             </div>
           )}
         </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      </div>
 
-      {/* brief pg info section */}
-      <div className="flex flex-col justify-between gap-2 rounded-md p-2 shadow-lg md:row-start-1 pl-3">
-        <div>
-          <div className="flex items-center justify-between">
-            <div className="flex w-full items-center gap-2">
-              {/* add pfp here */}
-              <div className="relative w-14 h-14 rounded-full p-[2px] bg-gradient-to-r from-[#ff9993] via-[#fc7674] to-[#fc4d74]">
-                <Avatar
-                  showFallback
-                  name={account.fullName}
-                  src={account.profile_picture_url}
-                  className="w-full h-full rounded-full bg-white"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium">{account.fullName}</p>
-                <p className="text-xs text-gray-600">{photographer.location}</p>
-              </div>
-            </div>
-            <div className="whitespace-nowrap pt-2 text-right">
-              {(!pgType || pgType !== "Graduation") && (
-                <>
-                  <p className="text-xs text-gray-600">Est. Hourly Price</p>
-                  <p className="text-lg font-semibold">
-                    ${photographer.hourlyPriceLow} - $
-                    {photographer.hourlyPriceHigh}
-                  </p>
-                </>
-              )}
-              {pgType === "Graduation" && (
-                <>
-                  <div className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 bg-[#FC4D74] text-white text-xs sm:text-sm font-medium">
-                    Special Grad Pricing
-                  </div>
-                </>
-              )}
-            </div>
+      {/* PG Info */}
+      <Link
+        href={`/discover/${encodeURIComponent(photographer.custom_url)}`}
+        passHref
+        target="_blank"
+        className="rounded-md md:row-start-1 grid grid-cols-2 aspect-auto md:aspect-[3/2] overflow-hidden relative group border border-gray-200 shadow-lg"
+      >
+        <div className="absolute inset-0 z-10 hidden md:block">
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="text-white text-xl font-semibold">
+              View Profile
+            </span>
           </div>
-          <div className="mt-1 grid gap-1 sm:grid-cols-2 sm:grid-rows-1 md:grid-cols-1 md:grid-rows-[auto_auto]">
-            <div className="sm:col-start-1 sm:row-start-1">
-              <p className="mt-2 text-xs uppercase text-gray-600">About</p>
-              <p className="line-clamp-2 text-sm md:line-clamp-3">
+        </div>
+
+        <div className="overflow-y-auto flex flex-col items-center justify-start pt-6 md:pt-10">
+          {/* Column 1 content */}
+          <div className="md:w-[5rem] md:h-[5rem] w-[4.5rem] h-[4.5rem] mb-2 rounded-full p-[2px] bg-gradient-to-r from-[#ff9993] via-[#fc7674] to-[#fc4d74] flex-shrink-0">
+            <Avatar
+              showFallback
+              name={photographer.full_name.split(/[\s-]/).map(n => n.match(/[a-zA-Z]/)?.[0] || '').join('')}
+              src={photographer.pfp_url}
+              className="w-full h-full rounded-full bg-white"
+            />
+          </div>
+          <div className="mt-2 text-base md:text-lg font-semibold">
+            {photographer.full_name.split(" ")[0]}
+          </div>
+          <div className="text-xs md:text-sm text-gray-500">
+            {photographer.location}
+          </div>
+          <div className="mt-3 md:pt-3">
+            {totalRatings > 0 ? (
+              <div className="flex flex-col items-center">
+                {renderStars(avgRating)}
+                <span className="text-xs md:text-sm text-gray-600 mt-1">
+                  ({totalRatings})
+                </span>
+              </div>
+            ) : (
+              <p className="text-xs md:text-sm text-gray-600">
+                No rating available
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="overflow-y-auto p-4">
+          {/* Column 2 content */}
+          <div className="space-y-3">
+            <div>
+              <p className="text-base md:text-lg font-semibold">
+                ${photographer.price_low} - ${photographer.price_high}
+              </p>
+              <p className="text-xs md:text-sm text-gray-500">
+                Est. Hourly Price
+              </p>
+            </div>
+            <hr className="border-gray-200 w-full" />
+            <div>
+              <h3 className="text-sm md:text-base font-semibold mb-1">About</h3>
+              <p className="line-clamp-3 text-xs md:text-sm">
                 {photographer.about}
               </p>
             </div>
-            <div className="md:row-start-2">
-              <p className="mt-2 text-xs uppercase text-gray-600">School</p>
-              <p className="text-sm">{photographer.school}</p>
-            </div>
-            <div className="sm:col-start-2 sm:row-start-1 md:col-start-1 md:row-start-3">
-              <p className="mt-2 text-xs uppercase text-gray-600">Skills</p>
-              <div className="mt-0.5 flex flex-wrap gap-1">
-                {photographer.skills.slice(0, 3).map((skill) => (
-                  <Tag key={skill}>{skill}</Tag>
+            <hr className="border-gray-200 w-full" />
+            <div>
+              <h3 className="text-sm md:text-base font-semibold mb-1">
+                Skills
+              </h3>
+              <div className="text-xs md:text-sm">
+                {photographer.skills.slice(0, 3).map((skill, index) => (
+                  <span key={skill}>
+                    {index > 0 && <span className="mx-1 text-gray-300">•</span>}
+                    {skill}
+                  </span>
                 ))}
-                {photographer.skills.length - 3 > 0 && (
-                  <Tag key={photographer.skills[0]}>
-                    <span className="flex items-center font-medium">
-                      <PlusIcon className="h-3 w-3" />
-                      {photographer.skills.length - 3}
-                    </span>
-                  </Tag>
+                {photographer.skills.length > 3 && (
+                  <span className="ml-1 text-gray-500">
+                    +{photographer.skills.length - 3} more
+                  </span>
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Book Now button */}
-        <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black">
-          <Link
-            href={`/discover/${encodeURIComponent(account.fullName)}`}
-            passHref
-            target="_blank"
-            className="flex justify-center"
-          >
-            View Profile
-          </Link>
+        {/* New button for small screens */}
+        <div className="mt-2 w-full rounded-md border border-gray-600 px-2 py-1 text-sm font-medium text-black col-span-2 md:hidden">
+          <span className="flex justify-center">View Profile</span>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }

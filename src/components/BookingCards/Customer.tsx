@@ -6,22 +6,27 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
-import { JobDetails, Account, Asset } from "@/src/utils/types";
-import { ScrollArea, ScrollBar } from "@/src/components/ScrollArea";
-import { getAccountDetailsByName, getAssets } from "@/src/utils/db";
+import { JobDetails } from "@/src/utils/types";
+import {
+  ScrollArea,
+  ScrollBar,
+} from "@/src/components/ScrollingFeatures/ScrollArea";
+import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
 import { format, subDays } from "date-fns";
+import { getJobStatus } from "@/src/utils/types";
+import { getImageUrl } from "@/src/utils/imageOptimization";
 
 export default async function BookingCardCustomer({
   jobDetails,
-  pgName,
   className,
 }: {
   jobDetails: JobDetails;
-  pgName: string;
   className?: string;
 }) {
+  const { text: statusText, color: statusColor } = getJobStatus(jobDetails);
+
   const {
     event_title,
     loc,
@@ -30,61 +35,71 @@ export default async function BookingCardCustomer({
     job_price,
     paid,
     pictures_uploaded,
-    picture_url,
+    picture_url
   } = jobDetails;
 
-  const account = (await getAccountDetailsByName(pgName)) as Account;
-  const assets = (await getAssets(account.id)) as Asset[];
+  const account = await getAccountByClerkId(jobDetails.photographer_clerk_id);
+  let assets = await getPortfolioPictures(account.clerk_id);
+  assets = assets.map((asset) => ({
+    ...asset,
+    url: getImageUrl(asset.key),
+  }));
 
   return (
-    <Card className="px-2">
+    <Card className={`px-2 relative overflow-hidden ${className}`}>
+      <div
+        className="absolute top-0 left-0 w-full h-1"
+        style={{ backgroundColor: statusColor }}
+      />
       <CardHeader className="flex gap-3">
-        <div className="flex ml-2">
+        <div className="flex ml-2 justify-between w-full items-center">
           <p className="text-xl font-medium">
-            {event_title} with {account.fullName.split(" ")[0]}
+            {event_title} with {account.full_name.split(" ")[0]}
           </p>
+          <span
+            className="text-sm font-medium px-2 py-1 rounded"
+            style={{ backgroundColor: statusColor, color: "#000" }}
+          >
+            {statusText}
+          </span>
         </div>
       </CardHeader>
       <Divider className="h-[1px] bg-black my-2" />
       <CardBody>
         <Link
-          href={`/discover/${encodeURIComponent(account.fullName)}`}
+          href={`/discover/${encodeURIComponent(account.custom_url)}`}
           target="_blank"
         >
-          <a>
-            <ScrollArea className="h-full w-full rounded-md md:col-start-2">
-              <div className="flex w-max gap-1">
-                {shuffle(assets).map((asset, idx) => (
+          <ScrollArea className="h-full w-full rounded-md md:col-start-2">
+            <div className="flex w-max gap-1">
+              {shuffle(assets).map((asset, idx) => (
+                <div
+                  key={idx}
+                  className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 md:w-80 lg:w-[28rem]"
+                  style={{
+                    position: "relative",
+                  }}
+                >
                   <div
-                    key={idx}
-                    className="relative mr-1 aspect-[3/2] h-full w-48 flex-shrink-0 overflow-hidden border w-80 md:w-80 lg:w-[28rem]"
+                    className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                     style={{
-                      position: "relative",
+                      backgroundImage: `url(${asset.url})?width=100&height=100`,
+                      filter: "blur(20px)",
+                      zIndex: 0,
+                      opacity: 0.5,
                     }}
-                  >
-                    <div
-                      className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url(${asset.cdnPath})`,
-                        filter: "blur(20px)",
-                        zIndex: 0,
-                        opacity: 0.5,
-                      }}
-                    />
-                    <Image
-                      alt=""
-                      src={asset.cdnPath}
-                      placeholder="blur"
-                      blurDataURL={asset.placeholderBase64}
-                      fill
-                      className="object-contain z-10"
-                    />
-                  </div>
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </a>
+                  />
+                  <Image
+                    alt=""
+                    src={asset.url}
+                    fill
+                    className="object-contain z-10"
+                  />
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </Link>
         <p className="text-base italic">
           Scroll to view more or click on the image to return the photographer's
@@ -148,8 +163,30 @@ export default async function BookingCardCustomer({
           </>
         )}
 
+        {paid && pictures_uploaded && (
+          <div className="mt-10">
+            <p className="flex flex-col items-center text-lg">
+              Your pictures are ready to be viewed!
+            </p>
+            <div className="flex justify-center mt-4">
+              <Link
+                href={picture_url || `/gallery/${jobDetails.conversation_id}`}
+                className="px-4 py-2 bg-black text-white font-bold rounded hover:bg-gray-800 transition-colors"
+              >
+                View Images
+              </Link>
+            </div>
+            <p className="text-center mt-4 text-sm italic">
+              Please review your images and confirm receipt. If we don't hear
+              from you within 3 days, we'll assume you're satisfied with the
+              images.
+            </p>
+          </div>
+        )}
+
         {!paid && !pictures_uploaded && (
-          <p className="text-base mt-10">
+          <>
+            <p className="text-base mt-10"></p>
             How it works:
             <ul className="list-disc">
               <li className="mt-2">
@@ -157,7 +194,7 @@ export default async function BookingCardCustomer({
                 given payment instructions.
               </li>
               <li className="mt-2">
-                The photographer will not recieve this payment until after they
+                The photographer will not receive this payment until after they
                 return your pictures from "{event_title}".
               </li>
               <li className="mt-2">
@@ -173,20 +210,7 @@ export default async function BookingCardCustomer({
                 {format(subDays(new Date(event_date), 7), "PPP")}
               </li>
             </ul>
-          </p>
-        )}
-
-        {paid && pictures_uploaded && (
-          <div className="mt-10">
-            <p className="flex flex-col items-center text-lg">
-              Your pictures are ready to be viewed!
-            </p>
-            <a href={picture_url} className="underline" target="_blank">
-              <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
-                Click to view your pictures
-              </p>
-            </a>
-          </div>
+          </>
         )}
 
         <br />
@@ -210,7 +234,7 @@ export function PayNowButton({ jobDetails }: { jobDetails: JobDetails }) {
   return (
     <>
       <form
-        action="/api/create-checkout-session"
+        action="/api/stripe/create-checkout-session"
         method="POST"
         target="_blank"
         className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
