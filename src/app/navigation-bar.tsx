@@ -14,7 +14,7 @@ import React, { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/src/utils/cn";
 
-export default function NavigationBar() {
+export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
   const { userId } = useAuth();
 
   return (
@@ -38,17 +38,6 @@ export default function NavigationBar() {
           </NavigationLink>
         </NavbarItem>
         {userId && (
-<<<<<<< Updated upstream
-          <NavbarItem>
-            <NavigationLink
-              href={`/messages`}
-              linkPath="/messages"
-              className="hover-gradient text-lg sm:text-base font-medium"
-            >
-              Messages
-            </NavigationLink>
-          </NavbarItem>
-=======
           <>
             <NavbarItem>
               <NavigationLink
@@ -65,7 +54,7 @@ export default function NavigationBar() {
                   href={`/jobs`}
                   linkPath="/jobs"
                   className="hover-gradient text-lg sm:text-base font-medium"
-                >x
+                >
                   Jobs
                 </NavigationLink>
               </NavbarItem>
@@ -80,7 +69,6 @@ export default function NavigationBar() {
               </NavigationLink>
             </NavbarItem>
           </>
->>>>>>> Stashed changes
         )}
       </NavbarContent>
 
@@ -92,6 +80,15 @@ export default function NavigationBar() {
             className="hover-gradient sm:text-base font-medium"
           >
             Discover
+          </NavigationLink>
+        </NavbarItem>
+        <NavbarItem className="flex md:hidden">
+          <NavigationLink
+            href={`/gallery`}
+            linkPath="/gallery"
+            className="hover-gradient sm:text-base font-medium"
+          >
+            Gallery
           </NavigationLink>
         </NavbarItem>
         {userId && (
@@ -108,7 +105,6 @@ export default function NavigationBar() {
         <NavbarItem>
           {userId ? (
             <UserButton
-              afterSignOutUrl="/"
               appearance={{
                 elements: {
                   userButtonAvatarBox: "h-9 w-9",
