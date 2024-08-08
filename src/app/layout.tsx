@@ -1,17 +1,17 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Footer from "@/src/app/footer";
+import Footer from "@/src/components/Layout/Footer";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Suspense } from "react";
-import Loading from "./loading";
+import Loading from "../components/Layout/Loading";
 import AdminShortcut from "@/src/components/AdminShortcut";
 import { isPGClerk } from "@/src/utils/db";
 
 import { Toaster } from "sonner";
-import NavigationBar from "./navigation-bar";
+import NavigationBar from "../components/Layout/NavBar";
 import {
   playfairDisplay,
   questrial,

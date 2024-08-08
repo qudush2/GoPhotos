@@ -1,4 +1,5 @@
 "use client";
+
 import { JobDetails } from "@/src/utils/types";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/src/utils/cn";

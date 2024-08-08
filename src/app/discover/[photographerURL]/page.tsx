@@ -8,18 +8,17 @@ import ViewAllImages from "@/src/components/Images/ViewAll";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { Button } from "@nextui-org/react";
 import { StarIcon } from "@heroicons/react/24/solid";
-import ShareProfile from "@/src/components/ShareProfile";
+import ShareProfile from "@/src/components/DiscoverPage/PhotographerPage/ShareProfile";
 import { getImageUrl } from "@/src/utils/imageOptimization";
 
-import Tag from "@/src/components/Tag";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogOverlay,
   DialogTrigger,
-} from "@/src/components/Dialog";
-import CreateChatPanel from "../create-chat-panel";
+} from "@radix-ui/react-dialog";
+import CreateChatPanel from "../../../components/DiscoverPage/CreateChatPanel";
 import { SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import ScrollableAssets from "@/src/components/ScrollingFeatures/ScrollableAssets";
@@ -137,9 +136,14 @@ export default async function PhotographerUniquePage({
                   <p className="mb-1 text-sm sm:text-base font-medium">
                     Skills
                   </p>
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-2">
                     {account.skills.map((skill) => (
-                      <Tag key={skill}>{skill}</Tag>
+                      <div
+                        key={skill}
+                        className="whitespace-nowrap rounded-md border border-gray-300 px-2 py-1 text-xs sm:text-sm font-medium"
+                      >
+                        {skill}
+                      </div>
                     ))}
                   </div>
                 </div>

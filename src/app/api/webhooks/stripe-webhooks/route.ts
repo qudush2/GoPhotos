@@ -7,8 +7,8 @@ import {
   getCustomerInfo,
   getAccountByClerkId,
 } from "@/src/utils/db";
-import PaymentConfirmedCustomer from "@/src/components/Emails/PaymentConfirmedCustomer";
-import PaymentConfirmedPhotographer from "@/src/components/Emails/PaymentConfirmedPhotographer";
+import PaymentConfirmedCustomer from "@/src/components/EmailTemplates/PaymentConfirmedCustomer";
+import PaymentConfirmedPhotographer from "@/src/components/EmailTemplates/PaymentConfirmedPhotographer";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",

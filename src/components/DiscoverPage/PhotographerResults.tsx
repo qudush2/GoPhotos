@@ -1,6 +1,6 @@
 import { cn } from "@/src/utils/cn";
 
-import PhotographerPreviewCard from "./photographer-preview-card";
+import PhotographerPreviewCard from "./PhotographerPreviewCard";
 import { Fragment } from "react";
 import { PhotographerAccount } from "@/src/utils/types";
 import { isVisible } from "@/src/utils/db";
@@ -28,7 +28,10 @@ export default async function PhotographerResults({
 
   const visiblePhotographers = await Promise.all(
     photographers.map(async (photographer) => ({
-      visible: (await isVisible(photographer.clerk_id)) || (bypassVisibility && photographer.clerk_id === 'user_2f7VEMmcqr2ihVrGyLo1AlmlhtC'),
+      visible:
+        (await isVisible(photographer.clerk_id)) ||
+        (bypassVisibility &&
+          photographer.clerk_id === "user_2f7VEMmcqr2ihVrGyLo1AlmlhtC"),
       photographer,
     }))
   ).then((results) =>

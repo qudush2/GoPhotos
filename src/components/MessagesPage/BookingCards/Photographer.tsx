@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardHeader, CardBody, Divider, Link } from "@nextui-org/react";
 import { JobDetails, Customer } from "@/src/utils/types";
-import PhotographerPriceForm from "../PhotographerPriceForm";
+import PhotographerPriceForm from "@/src/components/MessagesPage/BookingCards/PhotographerPriceForm";
 import { getJobStatus } from "@/src/utils/types";
 
 export default function BookingCardPhotographer({
@@ -29,21 +29,21 @@ export default function BookingCardPhotographer({
     conversation_id,
     pictures_uploaded,
     picture_upload_time,
-    picture_url
+    picture_url,
   } = jobDetails;
 
   return (
     <Card className={`px-2 relative overflow-hidden ${className}`}>
-      <div 
-        className="absolute top-0 left-0 w-full h-1" 
+      <div
+        className="absolute top-0 left-0 w-full h-1"
         style={{ backgroundColor: statusColor }}
       />
       <CardHeader className="flex gap-3">
         <div className="flex ml-2 justify-between w-full items-center">
           <p className="text-lg">Photographer Panel</p>
-          <span 
+          <span
             className="text-sm font-medium px-2 py-1 rounded"
-            style={{ backgroundColor: statusColor, color: '#000' }}
+            style={{ backgroundColor: statusColor, color: "#000" }}
           >
             {statusText}
           </span>

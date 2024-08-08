@@ -6,9 +6,9 @@ import {
   getJobRating,
 } from "@/src/utils/db";
 import Manager from "@/src/components/Images/Gallery/Manager";
-import NotifyCustomerButton from "@/src/components/NotifyCustomerButton";
+import NotifyCustomerButton from "@/src/components/GalleryPage/Photographer/NotifyCustomerButton";
 import Link from "next/link";
-import RatingSection from "@/src/components/RatingSection";
+import RatingSection from "@/src/components/GalleryPage/Customer/RatingSection";
 
 export default async function GalleryPage({
   params,

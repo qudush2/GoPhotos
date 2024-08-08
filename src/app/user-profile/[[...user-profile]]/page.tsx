@@ -1,4 +1,4 @@
-import AccountProfile from "./AccountProfile";
+import AccountProfile from "../../../components/UserProfilePage/AccountProfile";
 import { currentUser } from "@clerk/nextjs/server";
 import { isPGClerk, getAccountByClerkId } from "@/src/utils/db";
 import { PhotographerAccount } from "@/src/utils/types";

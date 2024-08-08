@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { moveApplication } from "@/src/utils/db";
 import { Resend } from "resend";
-import ApplicationApproved from "@/src/components/Emails/ApplicationApproved";
+import ApplicationApproved from "@/src/components/EmailTemplates/ApplicationApproved";
 import {
   S3Client,
   CopyObjectCommand,

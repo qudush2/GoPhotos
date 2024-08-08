@@ -1,5 +1,5 @@
-import SearchArea from "./search-area";
-import PhotographerResults from "./photographer-results";
+import SearchArea from "../../components/DiscoverPage/SearchArea";
+import PhotographerResults from "../../components/DiscoverPage/PhotographerResults";
 
 import { getAllPhotographers } from "@/src/utils/db";
 

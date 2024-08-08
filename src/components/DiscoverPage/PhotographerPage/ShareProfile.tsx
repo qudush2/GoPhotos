@@ -8,14 +8,14 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "@/src/components/Dialog";
+} from "@radix-ui/react-dialog";
 
 export default function ShareProfileButton({
   photographerName,
-  photographerURL
+  photographerURL,
 }: {
   photographerName: string;
-  photographerURL : string
+  photographerURL: string;
 }) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);

@@ -4,7 +4,7 @@ import {
   getCustomerInfo,
   isPGClerk,
 } from "@/src/utils/db";
-import JobsTable from "@/src/components/JobsTable";
+import JobsTable from "@/src/components/JobsPage/JobsTable";
 import { notFound } from "next/navigation";
 
 export default async function Jobs({

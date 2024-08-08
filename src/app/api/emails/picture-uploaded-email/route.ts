@@ -7,7 +7,7 @@ import {
   updateHires,
 } from "@/src/utils/db";
 import { JobDetails } from "@/src/utils/types";
-import PicturesUploadedEmail from "@/src/components/Emails/PicturesUploadedEmail";
+import PicturesUploadedEmail from "@/src/components/EmailTemplates/PicturesUploadedEmail";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

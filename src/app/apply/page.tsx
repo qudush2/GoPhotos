@@ -2,7 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { isPGClerk, applicationSubmitted } from "@/src/utils/db";
 import { SKILLS } from "@/src/utils/fetchImages";
 import { redirect } from "next/navigation";
-import ApplicationForm from "./application-form";
+import ApplicationForm from "../../components/ApplyPage/ApplicationForm";
 
 export default async function Apply() {
   const user = await currentUser();

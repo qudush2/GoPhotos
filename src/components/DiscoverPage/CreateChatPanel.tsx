@@ -1,4 +1,5 @@
 "use client";
+
 import { PhotographerAccount } from "@/src/utils/types";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";

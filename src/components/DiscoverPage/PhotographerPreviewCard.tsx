@@ -96,7 +96,10 @@ export default async function PhotographerPreviewCard({
           <div className="md:w-[5rem] md:h-[5rem] w-[4.5rem] h-[4.5rem] mb-2 rounded-full p-[2px] bg-gradient-to-r from-[#ff9993] via-[#fc7674] to-[#fc4d74] flex-shrink-0">
             <Avatar
               showFallback
-              name={photographer.full_name.split(/[\s-]/).map(n => n.match(/[a-zA-Z]/)?.[0] || '').join('')}
+              name={photographer.full_name
+                .split(/[\s-]/)
+                .map((n) => n.match(/[a-zA-Z]/)?.[0] || "")
+                .join("")}
               src={photographer.pfp_url}
               className="w-full h-full rounded-full bg-white"
             />

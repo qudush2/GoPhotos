@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/src/components/Dialog";
+import { Dialog, DialogContent } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import { s3Images } from "@/src/utils/types";
 import { XMarkIcon } from "@heroicons/react/20/solid";

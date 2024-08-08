@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { createApplication } from "@/src/utils/db";
 import { Resend } from "resend";
-import NewApplication from "@/src/components/Emails/NewApplication";
+import NewApplication from "@/src/components/EmailTemplates/NewApplication";
 
 export async function POST(request: Request) {
   try {

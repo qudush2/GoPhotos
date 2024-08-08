@@ -35,7 +35,7 @@ export default async function BookingCardCustomer({
     job_price,
     paid,
     pictures_uploaded,
-    picture_url
+    picture_url,
   } = jobDetails;
 
   const account = await getAccountByClerkId(jobDetails.photographer_clerk_id);

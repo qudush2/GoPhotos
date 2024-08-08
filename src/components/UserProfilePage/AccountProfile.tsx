@@ -1,9 +1,10 @@
 "use client";
+
 import { UserProfile, useUser } from "@clerk/nextjs";
 import { Edit2, DollarSquare, Image } from "iconic-react";
 import { PhotographerAccount } from "@/src/utils/types";
 import Manage from "@/src/components/Images/AccountProfile/Manager";
-import EditProfile from "@/src/components/EditProfile";
+import EditProfile from "@/src/components/UserProfilePage/EditProfile";
 
 interface AccountProfileProps {
   photographerAccount: PhotographerAccount | null;

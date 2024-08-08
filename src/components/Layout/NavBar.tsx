@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import {
   Navbar,
@@ -10,7 +11,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@nextui-org/react";
-import { GoPhotosLogo } from "@/src/components/Logo";
+import { GoPhotosLogo } from "@/src/components/Layout/Logo";
 import { UserButton, useAuth, SignInButton } from "@clerk/nextjs";
 import React, { ReactNode, useState } from "react";
 import { usePathname } from "next/navigation";

@@ -1,6 +1,6 @@
-import ChatBox from "../chat-inbox";
-import BookingCardCustomer from "../../../components/BookingCards/Customer";
-import BookingCardPhotographer from "../../../components/BookingCards/Photographer";
+import ChatBox from "@/src/components/MessagesPage/ChatInbox";
+import BookingCardCustomer from "@/src/components/MessagesPage/BookingCards/Customer";
+import BookingCardPhotographer from "@/src/components/MessagesPage/BookingCards/Photographer";
 import { Banner, BannerCollapseButton } from "flowbite-react";
 import { HiX } from "react-icons/hi";
 
@@ -8,7 +8,7 @@ import {
   getJobDetails,
   getCustomerInfo,
   getAccountByClerkId,
-} from "../../../utils/db";
+} from "@/src/utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 
 export default async function MessageUniquePage({

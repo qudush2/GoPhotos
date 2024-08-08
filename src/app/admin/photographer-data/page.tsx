@@ -4,10 +4,9 @@ import {
   getAccountByClerkId,
   getAllJobIDs,
 } from "@/src/utils/db";
-import { CopyEmailsButton } from "./copy-email";
+import { CopyEmailsButton } from "../../../components/AdminPage/CopyEmail";
 
 export default async function AdminPage() {
-
   const accounts = await getAllPhotographers();
   const jobIDs = await getAllJobIDs();
   const jobDetails = await Promise.all(
