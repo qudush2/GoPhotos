@@ -7,7 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 import Loading from "../components/Layout/Loading";
-import AdminShortcut from "@/src/components/AdminShortcut";
+import AdminShortcut from "@/src/components/AdminPage/AdminShortcut";
 import { isPGClerk } from "@/src/utils/db";
 
 import { Toaster } from "sonner";
