@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-const AnimatedBackground: React.FC = () => {
+const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => {
   const blobs = useMemo(() => [
     { shape: 'circle', size: 'w-1/2 h-1/2', color: 'from-pink-300 to-purple-300' },
     { shape: 'ellipse', size: 'w-2/3 h-1/3', color: 'from-yellow-300 to-red-300' },
@@ -15,7 +15,7 @@ const AnimatedBackground: React.FC = () => {
   })), []);
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden">
+    <div className={`fixed inset-0 -z-10 overflow-hidden ${className}`}>
       {blobs.map((blob, index) => (
         <div
           key={index}

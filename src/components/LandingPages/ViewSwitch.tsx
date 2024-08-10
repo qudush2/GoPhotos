@@ -23,10 +23,10 @@ export default function LandingPageSwitch({
   return (
     <>
       <AnimatedBackground key={backgroundKey} />
-      <div className="mx-24 py-20 space-y-10">
-        <div className="flex justify-center gap-4 py-5">
+      <div className="lg:mx-24 mx-6 md:py-20 py-3 space-y-5 md:space-y-10 md:mb-20">
+        <div className="flex justify-center gap-2 md:gap-4 py-2 md:py-5">
           <span
-            className={`text-base uppercase ${!isPhotographer ? "font-semibold" : "text-gray-500"}`}
+            className={`text-sm md:text-base uppercase flex items-center ${!isPhotographer ? "font-semibold" : "text-gray-500"}`}
           >
             Hire a Photographer
           </span>
@@ -42,7 +42,7 @@ export default function LandingPageSwitch({
             }}
           />
           <span
-            className={`text-base uppercase ${isPhotographer ? "font-semibold" : "text-gray-500"}`}
+            className={`text-sm md:text-base uppercase flex items-center ${isPhotographer ? "font-semibold" : "text-gray-500"}`}
           >
             I'm a Photographer
           </span>

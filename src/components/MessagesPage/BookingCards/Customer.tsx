@@ -120,7 +120,7 @@ export default async function BookingCardCustomer({
               been finazlied, you will be able to pay.
             </p>
             <Button
-              className="w-full rounded-md bg-gray-300 px-3 py-2 text-sm font-medium text-gray-500 flex items-center justify-center"
+              className="w-full rounded-md bg-gray-300 px-3 text-sm font-medium text-gray-500 flex items-center justify-center"
               disabled
             >
               Pay Now
@@ -237,11 +237,16 @@ export function PayNowButton({ jobDetails }: { jobDetails: JobDetails }) {
         action="/api/stripe/create-checkout-session"
         method="POST"
         target="_blank"
-        className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
+        className="w-full"
       >
         <input type="hidden" name="conversation_id" value={conversation_id} />
         <input type="hidden" name="job_price" value={job_price} />
-        <Button type="submit">Pay Now</Button>
+        <Button
+          type="submit"
+          className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
+        >
+          Pay Now
+        </Button>
       </form>
     </>
   );

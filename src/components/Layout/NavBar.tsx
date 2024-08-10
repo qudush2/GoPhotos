@@ -35,6 +35,7 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
   return (
     <Navbar
       isBlurred
+      position="static"
       maxWidth="xl"
       className="sticky z-50 py-1"
       isMenuOpen={isMenuOpen}

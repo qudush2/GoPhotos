@@ -8,11 +8,11 @@ export default function LeftColumn() {
           GoPhotos
         </span>
       </p>
-      <h2 className="font-playfair text-5xl mb-7 leading-[1.2]">
+      <h2 className="font-playfair lg:text-5xl text-4xl mb-7 leading-[1.2]">
         Find your perfect <br />
         photographer
       </h2>
-      <p className="text-lg text-gray-500 font-sans mb-7">
+      <p className="text-xl text-gray-500 font-sans mb-7">
         From discovery to final delivery, manage the entire process in one
         seamless location.
       </p>
