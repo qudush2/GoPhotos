@@ -48,7 +48,7 @@ export default function LandingPageSwitch({
           </span>
         </div>
         {isPhotographer ? (
-          <PhotographerLandingPage />
+          <PhotographerLandingPage LPImages={LPImages} />
         ) : (
           <CustomerLandingPage LPImages={LPImages} />
         )}
