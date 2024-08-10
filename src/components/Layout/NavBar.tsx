@@ -35,9 +35,8 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
   return (
     <Navbar
       isBlurred
-      shouldHideOnScroll
       maxWidth="xl"
-      className="sticky z-20 py-1"
+      className="sticky z-50 py-1"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
     >
@@ -81,7 +80,9 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
             />
           ) : (
             <SignInButton>
-              <Button className="font-medium hover-gradient">Sign In</Button>
+              <Button className="rounded-md text-white h-8 animated-gradient-button">
+                Sign In
+              </Button>
             </SignInButton>
           )}
         </NavbarItem>

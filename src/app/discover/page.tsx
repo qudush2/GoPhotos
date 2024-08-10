@@ -4,18 +4,24 @@ import PhotographerResults from "../../components/DiscoverPage/PhotographerResul
 import { getAllPhotographers } from "@/src/utils/db";
 
 type DiscoverPageProps = {
-  searchParams: { photographyType?: string };
+  searchParams: { photographyType?: string; location?: string };
 };
 
 export default async function DiscoverPage({
   searchParams,
 }: DiscoverPageProps) {
-  const photographers = await getAllPhotographers(searchParams.photographyType);
+  const photographers = await getAllPhotographers(
+    searchParams.photographyType,
+    searchParams.location
+  );
 
   return (
     <div className="bg-[#f4f4f4]">
       <div className="w-full border-b border-gray-200 py-5 bg-white px-8 sm:px-20 shadow-sm">
-        <SearchArea pgType={searchParams.photographyType} />
+        <SearchArea
+          pgType={searchParams.photographyType}
+          location={searchParams.location}
+        />
         <p className="pt-1 text-sm italic text-gray-600">
           Currently available in Boston, MA & Cambridge, MA areas
         </p>

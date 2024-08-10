@@ -2,22 +2,45 @@
 
 import { cn } from "@/src/utils/cn";
 import { Button } from "@nextui-org/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type SearchProps = {
   className?: string;
   pgType?: string;
+  location?: string;
 };
 
-export default function SearchArea({ className, pgType }: SearchProps) {
-  const [photographyType, setPhotographyType] = useState(
-    pgType ?? "Graduation"
-  );
+export default function SearchArea({
+  className,
+  pgType,
+  location,
+}: SearchProps) {
+  const router = useRouter();
+  const [photographyType, setPhotographyType] = useState(pgType ?? "");
+  const [selectedLocation, setSelectedLocation] = useState(location ?? "");
+
   const handlePhotographyTypeChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setPhotographyType(e.target.value);
+  };
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLocation(e.target.value);
+  };
+
+  const handleSearch = () => {
+    const searchParams = new URLSearchParams();
+    if (photographyType) {
+      searchParams.append("photographyType", photographyType);
+    }
+    if (selectedLocation) {
+      searchParams.append("location", selectedLocation);
+    }
+    router.push(
+      `/discover${searchParams.toString() ? `?${searchParams.toString()}` : ""}`
+    );
   };
 
   return (
@@ -27,13 +50,17 @@ export default function SearchArea({ className, pgType }: SearchProps) {
           <label htmlFor="location" className="block text-sm font-medium mb-1">
             Location
           </label>
-          <input
+          <select
             id="location"
             name="location"
             className="w-full h-10 rounded-md border border-gray-200 text-sm outline-none px-3"
-            defaultValue="Boston, MA + Cambridge, MA"
-            readOnly
-          />
+            onChange={handleLocationChange}
+            value={selectedLocation}
+          >
+            <option value=""></option>
+            <option value="Boston, MA">Boston, MA</option>
+            <option value="Cambridge, MA">Cambridge, MA</option>
+          </select>
         </div>
 
         <div className="@md:col-span-3">
@@ -48,10 +75,11 @@ export default function SearchArea({ className, pgType }: SearchProps) {
             name="photographyType"
             className="w-full h-10 rounded-md border border-gray-200 text-sm outline-none px-3"
             onChange={handlePhotographyTypeChange}
-            defaultValue={pgType}
+            value={photographyType}
           >
-            <option value="Graduation">Graduation</option>
+            <option value=""></option>
             <option value="Portrait">Portrait</option>
+            <option value="Graduation">Graduation</option>
             <option value="Candid">Candid</option>
             <option value="Corporate Event">Corporate Event</option>
             <option value="University Event">University Event</option>
@@ -62,18 +90,12 @@ export default function SearchArea({ className, pgType }: SearchProps) {
             <option value="Fashion">Fashion</option>
             <option value="Outdoor Photoshoot">Outdoor Photoshoot</option>
             <option value="Videography">Videography</option>
-            <option value="View All">View All</option>
           </select>
         </div>
 
         <div className="@md:col-span-2 @md:col-start-7 flex flex-col justify-end">
           <Button
-            as={Link}
-            href={
-              photographyType === "View All"
-                ? "/discover"
-                : `/discover?photographyType=${photographyType}`
-            }
+            onClick={handleSearch}
             className="w-full h-10 rounded-md bg-black px-3 text-sm font-medium text-white"
           >
             Search

@@ -77,6 +77,12 @@ export type Rating = {
   comment: string;
 };
 
+export type LandingPageImage = {
+  clerk_id: string;
+  image_url: string;
+  account: PhotographerAccount;
+};
+
 export function getJobStatus(job: JobDetails) {
   if (job.closed && !job.pictures_uploaded) {
     return { text: "Job Closed", color: "#E5E7EB" };

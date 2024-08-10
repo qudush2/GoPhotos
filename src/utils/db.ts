@@ -7,6 +7,7 @@ import {
   Application,
   Ratings,
   Rating,
+  LandingPageImage,
 } from "./types";
 import { getImages } from "./fetchImages";
 
@@ -259,14 +260,25 @@ export async function getAllPhotographerJobsFiltered(
 }
 
 export async function getAllPhotographers(
-  searchParam?: string
+  photographyType?: string,
+  location?: string
 ): Promise<PhotographerAccount[]> {
   let queryText = "SELECT * FROM photographer_account";
+  let conditions: string[] = [];
   let values: string[] = [];
 
-  if (searchParam) {
-    queryText += " WHERE $1 = ANY(skills)";
-    values.push(searchParam);
+  if (photographyType) {
+    conditions.push("$1 = ANY(skills)");
+    values.push(photographyType);
+  }
+
+  if (location) {
+    conditions.push("location = $" + (values.length + 1));
+    values.push(location);
+  }
+
+  if (conditions.length > 0) {
+    queryText += " WHERE " + conditions.join(" AND ");
   }
 
   const result = await query(queryText, values);
@@ -344,6 +356,11 @@ export async function getJobRating(convoID: string): Promise<Rating> {
   );
 
   return result.rows[0];
+}
+
+export async function getLandingPageImages() {
+  const result = await query("SELECT * from landing_page_images");
+  return result.rows;
 }
 
 export async function updateProfilePicture(clerkID: string, pfpURL: string) {

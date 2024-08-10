@@ -9,7 +9,7 @@ import {
 export const playfairDisplay = PlayfairDisplay({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  weight: ["600", "700"],
+  weight: ["500", "700"],
   variable: "--font-playfair-display",
 });
 

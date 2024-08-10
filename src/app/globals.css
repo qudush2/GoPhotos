@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {#fc7674
-  .gradient {
+@layer components {
+  .animated-gradient-button {
+    @apply bg-gradient-to-r from-[#FFD1CC] via-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-[length:400%_100%] animate-gradient;
+  }
+}
+
+@layer utilities {
+  #fc7674 .gradient {
     background: linear-gradient(to right, #ff9993, #fc7674, #fc4d74);
   }
   .hover-gradient-bg:hover {
@@ -21,5 +27,17 @@
   }
   .animation-delay-4000 {
     animation-delay: 4s;
+  }
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
