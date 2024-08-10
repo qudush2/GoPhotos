@@ -97,3 +97,19 @@ export function getJobStatus(job: JobDetails) {
   }
   return { text: "Unknown", color: "#E5E7EB" };
 }
+
+export const SKILLS = [
+  "Portrait",
+  "Candid",
+  "Corporate Event",
+  "University Event",
+  "Sport",
+  "Journalism",
+  "Graduation",
+  "Headshot",
+  "Concert",
+  "Fashion",
+  "Outdoor Photoshoot",
+  "Videography",
+  "Pet Portrait",
+];

@@ -41,7 +41,7 @@ export default async function PhotographerResults({
   );
 
   return (
-    <div className={cn("space-y-5", className)}>
+    <div className={cn("space-y-10", className)}>
       {visiblePhotographers.map((photographer, idx) => (
         <Fragment key={photographer.clerk_id}>
           <PhotographerPreviewCard

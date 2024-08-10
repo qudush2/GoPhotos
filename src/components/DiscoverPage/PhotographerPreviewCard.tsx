@@ -37,7 +37,7 @@ export default async function PhotographerPreviewCard({
   };
 
   return (
-    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg">
+    <div className="my-2 grid rounded-md bg-white md:grid-cols-[28rem_1fr] md:gap-2 shadow-lg border border-gray-300">
       {/* Scroll Area */}
       <div className="h-full w-full rounded-md md:col-start-2 overflow-x-auto flex items-center">
         <div className="flex w-max gap-1">

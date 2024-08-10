@@ -10,7 +10,10 @@ const s3Client = new S3Client({
 });
 const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
 
-export async function getImages(folderId: string, photographyType?: string): Promise<s3Images[]> {
+export async function getImages(
+  folderId: string,
+  photographyType?: string
+): Promise<s3Images[]> {
   try {
     const command = new ListObjectsV2Command({
       Bucket: process.env.AWS_BUCKET_NAME!,
@@ -46,7 +49,7 @@ export async function getImages(folderId: string, photographyType?: string): Pro
           };
         } catch (error) {
           console.error(`Error fetching metadata for ${item.Key}:`, error);
-          
+
           return {
             key: item.Key!,
             url: `https://${CLOUDFRONT_DOMAIN}/${item.Key}`,
@@ -60,7 +63,7 @@ export async function getImages(folderId: string, photographyType?: string): Pro
     let matchingImages: s3Images[] = [];
     let nonMatchingImages: s3Images[] = [];
 
-    images.forEach(image => {
+    images.forEach((image) => {
       if (photographyType && image.skills.includes(photographyType)) {
         matchingImages.push(image);
       } else {
@@ -88,19 +91,3 @@ function shuffleArray(array: any[]) {
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
-export const SKILLS = [
-  "Portrait",
-  "Candid",
-  "Corporate Event",
-  "University Event",
-  "Sport",
-  "Journalism",
-  "Graduation",
-  "Headshot",
-  "Concert",
-  "Fashion",
-  "Outdoor Photoshoot",
-  "Videography",
-  "Pet Portrait",
-];

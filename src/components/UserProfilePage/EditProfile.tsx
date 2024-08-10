@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PhotographerAccount } from "@/src/utils/types";
-import { SKILLS } from "@/src/utils/fetchImages";
+import { SKILLS } from "@/src/utils/types";
 
 export default function EditProfile({
   photographerAccount,

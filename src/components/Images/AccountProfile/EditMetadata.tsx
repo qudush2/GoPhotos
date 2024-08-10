@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SKILLS } from "@/src/utils/fetchImages";
+import { SKILLS } from "@/src/utils/types";
 import { s3Images } from "@/src/utils/types";
 
 interface MetadataEditorProps {
@@ -24,7 +24,7 @@ export default function MetadataEditor({
   const [isUpdating, setIsUpdating] = useState(false);
 
   const toggleSkill = (skill: string) => {
-    setSelectedSkill(prevSkill => prevSkill === skill ? null : skill);
+    setSelectedSkill((prevSkill) => (prevSkill === skill ? null : skill));
   };
 
   const updateMetadata = async () => {
@@ -70,7 +70,9 @@ export default function MetadataEditor({
                 key={skill}
                 onClick={() => toggleSkill(skill)}
                 className={`px-2 py-1 rounded ${
-                  selectedSkill === skill ? "bg-blue-500 text-white" : "bg-gray-200"
+                  selectedSkill === skill
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
                 }`}
               >
                 {skill}
