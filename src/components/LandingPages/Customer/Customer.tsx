@@ -5,7 +5,6 @@ import { LandingPageImage } from "@/src/utils/types";
 import { Divider } from "@nextui-org/divider";
 import RightColumn from "@/src/components/LandingPages/Customer/RightColumn/RightColumn";
 import LeftColumn from "@/src/components/LandingPages/LeftColumn";
-import AnimatedBackground from "@/src/components/LandingPages/AnimatedBackground";
 
 export default function CustomerLandingPage({
   LPImages,
@@ -35,7 +34,6 @@ export default function CustomerLandingPage({
       </div>
       <div className="w-full flex flex-col md:flex-row relative">
         <div className="w-full md:w-2/5 lg:pr-24 sticky top-0 md:h-screen bg-white md:bg-transparent py-5 md:py-0 z-30">
-          <AnimatedBackground className="md:hidden" />
           <LeftColumn LPInfo={customerLPInfo} />
         </div>
         <Divider
