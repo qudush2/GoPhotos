@@ -524,17 +524,6 @@ export async function moveApplication(clerkID: string) {
       [clerkID]
     );
 
-    await client.query(
-      `INSERT INTO customer_account (
-        email, full_name, clerkid
-      )
-      SELECT email, full_name, clerk_id
-      FROM applications
-      WHERE clerk_id = $1
-      `,
-      [clerkID]
-    );
-
     await client.query("DELETE FROM applications WHERE clerk_id = $1", [
       clerkID,
     ]);
