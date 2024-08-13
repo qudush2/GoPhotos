@@ -510,16 +510,16 @@ export async function moveApplication(clerkID: string) {
       custom_url_generated AS (
         SELECT *,
           CASE 
-            WHEN rn = 1 THEN base_url
-            ELSE base_url || rn::text
+            WHEN rn = 1 THEN REGEXP_REPLACE(base_url, '[^a-zA-Z0-9]', '', 'g')
+            ELSE REGEXP_REPLACE(base_url, '[^a-zA-Z0-9]', '', 'g') || rn::text
           END AS custom_url
         FROM ranked_applications
       )
       INSERT INTO photographer_account (
-        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url, visible
       )
       SELECT 
-        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url_generated, true
       FROM custom_url_generated`,
       [clerkID]
     );
