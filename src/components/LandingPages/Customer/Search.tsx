@@ -3,6 +3,7 @@
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { SKILLS } from "@/src/utils/types";
 
 type SearchProps = {};
 
@@ -59,18 +60,9 @@ export default function SearchArea({}: SearchProps) {
           value={photographyType}
         >
           <option value="">Select Photography Type</option>
-          <option value="Portrait">Portrait</option>
-          <option value="Graduation">Graduation</option>
-          <option value="Candid">Candid</option>
-          <option value="Corporate Event">Corporate Event</option>
-          <option value="University Event">University Event</option>
-          <option value="Sport">Sport</option>
-          <option value="Journalism">Journalism</option>
-          <option value="Headshot">Headshot</option>
-          <option value="Concert">Concert</option>
-          <option value="Fashion">Fashion</option>
-          <option value="Outdoor Photoshoot">Outdoor Photoshoot</option>
-          <option value="Videography">Videography</option>
+          {SKILLS.map((skill) => (
+            <option value={skill}>{skill}</option>
+          ))}
         </select>
       </div>
 

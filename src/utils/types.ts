@@ -111,5 +111,7 @@ export const SKILLS = [
   "Fashion",
   "Outdoor Photoshoot",
   "Videography",
-  "Pet Portrait",
+  "Product",
+  "Food",
+  "Wedding",
 ];
