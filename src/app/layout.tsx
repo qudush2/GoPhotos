@@ -10,7 +10,7 @@ import Loading from "../components/Layout/Loading";
 import AdminShortcut from "@/src/components/AdminPage/AdminShortcut";
 import { isPGClerk } from "@/src/utils/db";
 
-import { Toaster } from "sonner";
+import { Toaster } from "react-hot-toast";
 import NavigationBar from "../components/Layout/NavBar";
 import {
   playfairDisplay,

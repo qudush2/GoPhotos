@@ -20,28 +20,39 @@ async function moveS3Objects(sourcePrefix: string, destinationPrefix: string) {
 
   const { Contents } = await s3Client.send(listCommand);
 
-  if (!Contents) return;
+  if (!Contents) return { success: true, movedCount: 0, totalCount: 0 };
+
+  let movedCount = 0;
+  const totalCount = Contents.length;
 
   for (const object of Contents) {
     if (!object.Key) continue;
 
-    const newKey = object.Key.replace(sourcePrefix, destinationPrefix);
+    try {
+      const newKey = object.Key.replace(sourcePrefix, destinationPrefix);
 
-    await s3Client.send(
-      new CopyObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME!,
-        CopySource: `${process.env.AWS_BUCKET_NAME}/${object.Key}`,
-        Key: newKey,
-      })
-    );
+      await s3Client.send(
+        new CopyObjectCommand({
+          Bucket: process.env.AWS_BUCKET_NAME!,
+          CopySource: `${process.env.AWS_BUCKET_NAME}/${object.Key}`,
+          Key: newKey,
+        })
+      );
 
-    await s3Client.send(
-      new DeleteObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME!,
-        Key: object.Key,
-      })
-    );
+      await s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.AWS_BUCKET_NAME!,
+          Key: object.Key,
+        })
+      );
+
+      movedCount++;
+    } catch (error) {
+      console.error(`Failed to move object ${object.Key}:`, error);
+    }
   }
+
+  return { success: movedCount === totalCount, movedCount, totalCount };
 }
 
 export async function POST(request: Request) {
@@ -58,16 +69,24 @@ export async function POST(request: Request) {
     }
 
     await moveApplication(clerkID);
-    await clerkClient.users.updateUserMetadata(clerkID, {
-      publicMetadata: {
-        isPhotographer: true,
-        hasStripeID: false,
-      },
-    });
 
-    const sourcePrefix = `photographer-application/${clerkID}/`;
-    const destinationPrefix = `portfolio-pictures/${clerkID}/`;
-    await moveS3Objects(sourcePrefix, destinationPrefix);
+    const [updateResult, s3Result] = await Promise.all([
+      clerkClient.users.updateUserMetadata(clerkID, {
+        publicMetadata: {
+          isPhotographer: true,
+          hasStripeID: false,
+        },
+      }),
+      moveS3Objects(
+        `photographer-application/${clerkID}/`,
+        `portfolio-pictures/${clerkID}/`
+      ),
+    ]);
+
+    let alertMessage = "";
+    if (!s3Result.success) {
+      alertMessage = `Some images failed to transfer. ${s3Result.movedCount} out of ${s3Result.totalCount} images were moved successfully.`;
+    }
 
     await resend.emails.send({
       from: "gigs@gophotos.us",
@@ -80,11 +99,18 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: "Application approved successfully",
+      alert: alertMessage,
+      s3Result,
     });
   } catch (error) {
     console.error("Error approving application:", error);
     return NextResponse.json(
-      { error: "Failed to approve application" },
+      {
+        error: "Failed to approve application",
+        details: (error as Error).message,
+        alert:
+          "An error occurred while processing your application. Please contact support.",
+      },
       { status: 500 }
     );
   }

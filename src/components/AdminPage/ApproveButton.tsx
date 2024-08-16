@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function ApproveButton({
   clerkID,
@@ -27,8 +28,26 @@ export default function ApproveButton({
         body: JSON.stringify({ clerkID, email }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to approve application");
+        throw new Error(data.error || "Failed to approve application");
+      }
+
+      // Display success message
+      toast.success("Application approved successfully");
+
+      // Display alert message if present
+      if (data.alert) {
+        toast(data.alert, {
+          icon: "⚠️",
+          className: "bg-yellow-100 text-yellow-800",
+        });
+      }
+
+      // Log S3 transfer results for admin information
+      if (data.s3Result) {
+        console.log("S3 transfer results:", data.s3Result);
       }
 
       if (refresh) {
@@ -38,6 +57,7 @@ export default function ApproveButton({
       }
     } catch (error) {
       console.error("Error approving application:", error);
+      toast.error("Failed to approve application. Please try again.");
     } finally {
       setIsApproving(false);
       setShowConfirmation(false);

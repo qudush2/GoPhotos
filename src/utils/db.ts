@@ -496,31 +496,30 @@ export async function updatePhotographerAccount(
 export async function moveApplication(clerkID: string) {
   const client = await pool.connect();
   try {
-    await client.query("BEGIN");
     await client.query(
       `
-      WITH ranked_applications AS (
+      WITH base_custom_url AS (
         SELECT 
           email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires,
-          REGEXP_REPLACE(full_name, '\s+', '', 'g') AS base_url,
-          ROW_NUMBER() OVER (PARTITION BY REGEXP_REPLACE(full_name, '\s+', '', 'g') ORDER BY clerk_id) AS rn
+          REPLACE(full_name, ' ', '') AS base_url
         FROM applications
         WHERE clerk_id = $1
       ),
-      custom_url_generated AS (
+      numbered_custom_url AS (
         SELECT *,
+          base_url || 
           CASE 
-            WHEN rn = 1 THEN REGEXP_REPLACE(base_url, '[^a-zA-Z0-9]', '', 'g')
-            ELSE REGEXP_REPLACE(base_url, '[^a-zA-Z0-9]', '', 'g') || rn::text
+            WHEN ROW_NUMBER() OVER (PARTITION BY base_url ORDER BY clerk_id) = 1 THEN ''
+            ELSE ROW_NUMBER() OVER (PARTITION BY base_url ORDER BY clerk_id)::text
           END AS custom_url
-        FROM ranked_applications
+        FROM base_custom_url
       )
       INSERT INTO photographer_account (
         email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url, visible
       )
       SELECT 
-        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url_generated, true
-      FROM custom_url_generated`,
+        email, full_name, clerk_id, location, price_low, price_high, school, skills, about, hires, custom_url, true
+      FROM numbered_custom_url`,
       [clerkID]
     );
 
