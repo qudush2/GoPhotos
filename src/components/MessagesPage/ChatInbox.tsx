@@ -129,14 +129,17 @@ export default function ChatInbox({
       useEffect(() => {
         const updateMessageSent = async () => {
           try {
-            const response = await fetch("/api/update-message-sent", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ convoId }),
-              redirect: "manual", // This tells fetch to not follow redirects automatically
-            });
+            const response = await fetch(
+              "/api/database-updates/update-message-sent",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ convoId }),
+                redirect: "manual", // This tells fetch to not follow redirects automatically
+              }
+            );
 
             if (response.type === "opaqueredirect") {
               // The response is a redirect, so we manually redirect here
