@@ -136,7 +136,7 @@ export default function ChatInbox({
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ convoId }),
+                body: JSON.stringify({ convoId, customer, pgName, jobDetails }),
                 redirect: "manual", // This tells fetch to not follow redirects automatically
               }
             );
