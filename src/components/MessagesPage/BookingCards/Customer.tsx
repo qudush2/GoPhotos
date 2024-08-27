@@ -127,7 +127,7 @@ export default async function BookingCardCustomer({
             </Button>
           </div>
         )}
-        {price_finalized && !paid && !pictures_uploaded && (
+        {price_finalized && !paid && (
           <>
             <div className="flex flex-col items-center">
               <br />

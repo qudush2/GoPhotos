@@ -70,7 +70,7 @@ export default function BookingCardPhotographer({
             <br />
           </>
         )}
-        {price_finalized && !paid && !pictures_uploaded && (
+        {price_finalized && !paid && (
           <>
             <div>
               <br />
