@@ -18,6 +18,7 @@ export default async function setupProductAndPrice(
     description: `${event_title}. Please note that there is an additional GoPhotos fee added on to the final price. This helps keep GoPhotos alive and growing!`,
     metadata: {
       convoID: convoID,
+      originalPrice: job_price,
     },
   });
 
