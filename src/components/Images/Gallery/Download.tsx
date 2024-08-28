@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import JSZip from "jszip";
 
 interface ImageDownloaderProps {
   selectedImages: Set<string>;
@@ -20,11 +21,6 @@ export default function Download({
     setDownloadProgress(0);
     setDownloadTime("Preparing download...");
 
-    const totalSize = keys.reduce((sum, key) => {
-      const image = images.find((img) => img.key === key);
-      return sum + (image?.size || 0);
-    }, 0);
-
     try {
       const response = await fetch("/api/images/download", {
         method: "POST",
@@ -32,35 +28,47 @@ export default function Download({
         body: JSON.stringify({ imageKeys: keys }),
       });
 
-      if (!response.ok) throw new Error("Download failed");
-
-      const reader = response.body!.getReader();
-      let receivedLength = 0;
-      const chunks = [];
-
+      if (!response.ok) throw new Error("Failed to get presigned URLs");
+      const { presignedUrls } = await response.json();
+      const totalSize = presignedUrls.reduce(
+        (sum: number, item: { size: number }) => sum + item.size,
+        0
+      );
+      let downloadedSize = 0;
       const startTime = Date.now();
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      const zip = new JSZip();
+      await Promise.all(
+        presignedUrls.map(
+          async ({
+            url,
+            name,
+            size,
+          }: {
+            url: string;
+            name: string;
+            size: number;
+          }) => {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            zip.file(name, blob);
 
-        chunks.push(value);
-        receivedLength += value.length;
-        const progress = totalSize ? (receivedLength / totalSize) * 100 : 0;
-        setDownloadProgress(progress);
+            downloadedSize += size;
+            const progress = (downloadedSize / totalSize) * 100;
+            setDownloadProgress(progress);
 
-        const elapsedSeconds = (Date.now() - startTime) / 1000;
-        if (elapsedSeconds > 0 && progress > 0) {
-          const bytesPerSecond = receivedLength / elapsedSeconds;
-          const remainingBytes = totalSize - receivedLength;
-          const remainingSeconds =
-            bytesPerSecond > 0 ? remainingBytes / bytesPerSecond : 0;
-          setDownloadTime(`Estimated time: ${Math.ceil(remainingSeconds)}s`);
-        }
-      }
+            const elapsedSeconds = (Date.now() - startTime) / 1000;
+            const bytesPerSecond = downloadedSize / elapsedSeconds;
+            const remainingBytes = totalSize - downloadedSize;
+            const remainingSeconds =
+              bytesPerSecond > 0 ? remainingBytes / bytesPerSecond : 0;
+            setDownloadTime(`Estimated time: ${Math.ceil(remainingSeconds)}s`);
+          }
+        )
+      );
 
-      const blob = new Blob(chunks);
-      const url = URL.createObjectURL(blob);
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(content);
       const a = document.createElement("a");
       a.href = url;
       a.download = "GoPhotosImages.zip";
