@@ -19,6 +19,7 @@ import {
   inter,
   spaceGrotesk,
 } from "@/src/utils/fonts";
+import { CSPostHogProvider } from "./providers";
 
 export const metadata: Metadata = {
   title: "GoPhotos",
@@ -48,17 +49,19 @@ export default async function RootLayout({
         lang="en"
         className={`h-full ${playfairDisplay.variable} ${questrial.variable} ${fragmentMono.variable} ${inter.variable} ${spaceGrotesk.variable}`}
       >
-        <body className="flex flex-col min-h-full font-spaceGrotesk">
-          <Suspense fallback={<Loading />}>
-            <NavigationBar isPG={isPG} />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </Suspense>
-          <AdminShortcut />
-          <Analytics />
-          <SpeedInsights />
-          <Toaster />
-        </body>
+        <CSPostHogProvider>
+          <body className="flex flex-col min-h-full font-spaceGrotesk">
+            <Suspense fallback={<Loading />}>
+              <NavigationBar isPG={isPG} />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </Suspense>
+            <AdminShortcut />
+            <Analytics />
+            <SpeedInsights />
+            <Toaster />
+          </body>
+        </CSPostHogProvider>
       </html>
     </ClerkProvider>
   );
