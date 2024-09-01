@@ -12,6 +12,7 @@ export type PhotographerAccount = {
   hires: number;
   visible: boolean;
   paid_jobs: string[];
+  stripe_id: string;
   custom_url: string;
 };
 

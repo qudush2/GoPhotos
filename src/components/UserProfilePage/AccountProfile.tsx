@@ -17,6 +17,21 @@ export default function AccountProfile({
 }: AccountProfileProps) {
   const { user } = useUser();
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await fetch("/api/stripe/stripe-account-setup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ photographerAccount }),
+      });
+    } catch (err) {
+      console.error("Error loading Stripe account:", err);
+    }
+  };
+
   if (user && !isPhotographer) {
     return <UserProfile path="/user-profile" routing="path" />;
   }
@@ -33,39 +48,40 @@ export default function AccountProfile({
         </UserProfile.Page>
 
         <UserProfile.Page
-          label="Stripe Dashbord"
+          label="Stripe Dashboard"
           labelIcon={<DollarSquare variant="Bold" />}
           url="stripe-dashboard"
         >
-          {!user.publicMetadata.hasStripeID ? (
+          {!photographerAccount.stripe_id ? (
             <>
-              hi, please complete the setup of your stripe account to begin
-              receiving payments and manage your completed jobs
+              <p className="mb-4">
+                Hi, please complete the setup of your Stripe account to begin
+                receiving payments and manage your completed jobs.
+              </p>
               <form
-                action="/api/stripe/stripe-account-setup"
+                onSubmit={handleSubmit}
                 className="border-2 border-black p-2 my-5 bg-[#FC7674] flex justify-center text-white"
-                method="POST"
+                target="_blank"
               >
                 <button type="submit">Set up Stripe Account</button>
               </form>
             </>
           ) : (
             <>
-              {" "}
-              hi, you will be able to see your updated expected payout within a
-              couple days of completing a job.
+              <p className="mb-4">
+                hi, you will be able to see your updated expected payout within
+                a couple days of completing a job.
+              </p>
               <form
-                action="/api/stripe/stripe-account-setup"
+                onSubmit={handleSubmit}
                 className="border-2 border-black p-2 my-5 bg-[#FC7674] flex justify-center text-white"
-                method="POST"
                 target="_blank"
               >
                 <button type="submit">Manage Account</button>
               </form>
             </>
           )}
-          <p className="font-medium">
-            {" "}
+          <p className="font-medium mt-4">
             Sorry for the appearance of this page, we will soon fix this!
           </p>
         </UserProfile.Page>
