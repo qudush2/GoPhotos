@@ -20,13 +20,20 @@ export default function AccountProfile({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch("/api/stripe/stripe-account-setup", {
+      const response = await fetch("/api/stripe/stripe-account-setup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ photographerAccount }),
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        window.open(data.url, "_blank");
+      } else {
+        console.error("Error loading Stripe account:", await response.text());
+      }
     } catch (err) {
       console.error("Error loading Stripe account:", err);
     }
@@ -61,7 +68,6 @@ export default function AccountProfile({
               <form
                 onSubmit={handleSubmit}
                 className="border-2 border-black p-2 my-5 bg-[#FC7674] flex justify-center text-white"
-                target="_blank"
               >
                 <button type="submit">Set up Stripe Account</button>
               </form>
@@ -75,7 +81,6 @@ export default function AccountProfile({
               <form
                 onSubmit={handleSubmit}
                 className="border-2 border-black p-2 my-5 bg-[#FC7674] flex justify-center text-white"
-                target="_blank"
               >
                 <button type="submit">Manage Account</button>
               </form>
