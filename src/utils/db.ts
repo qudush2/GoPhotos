@@ -22,8 +22,9 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false,
   },
-  max: 20, // maximum number of clients in the pool
-  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+  max: 10, // Reduced from 20 to 10
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000, // Added connection timeout
 });
 
 // Helper function to execute queries
