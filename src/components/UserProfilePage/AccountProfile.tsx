@@ -25,7 +25,7 @@ export default function AccountProfile({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ photographerAccount }),
+        body: JSON.stringify(photographerAccount),
       });
 
       if (response.ok) {
