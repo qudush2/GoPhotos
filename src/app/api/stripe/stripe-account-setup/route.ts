@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { updateStripeID } from "@/src/utils/db";
 import { PhotographerAccount } from "@/src/utils/types";
 
@@ -52,10 +52,24 @@ export async function POST(request: Request) {
       await updateStripeID(account.id, photographerAccount.clerk_id);
       accountLinkUrl = accountLink.url;
     } else {
-      const accountLink = await stripe.accounts.createLoginLink(
-        photographerAccount.stripe_id
-      );
-      accountLinkUrl = accountLink.url;
+      const accountInfoComplete = (
+        await stripe.accounts.retrieve(photographerAccount.stripe_id)
+      ).payouts_enabled;
+
+      if (!accountInfoComplete) {
+        const accountLink = await stripe.accountLinks.create({
+          account: photographerAccount.stripe_id,
+          type: "account_update",
+          refresh_url: "https://www.gophotos.us/user-profile/profile-page",
+          return_url: "https://www.gophotos.us/user-profile/profile-page",
+        });
+        accountLinkUrl = accountLink.url;
+      } else {
+        const accountLink = await stripe.accounts.createLoginLink(
+          photographerAccount.stripe_id
+        );
+        accountLinkUrl = accountLink.url;
+      }
     }
 
     return NextResponse.json({ url: accountLinkUrl });
