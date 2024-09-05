@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       if (!accountInfoComplete) {
         const accountLink = await stripe.accountLinks.create({
           account: photographerAccount.stripe_id,
-          type: "account_update",
+          type: "account_onboarding",
           refresh_url: "https://www.gophotos.us/user-profile/profile-page",
           return_url: "https://www.gophotos.us/user-profile/profile-page",
         });
