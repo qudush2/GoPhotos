@@ -16,6 +16,7 @@
     "@clerk/nextjs": "^5.2.8",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.1.5",
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@nextui-org/react": "^2.4.6",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
@@ -83,6 +84,7 @@
   "devDependencies": {
     "@types/archiver": "^6.0.2",
     "@types/lodash": "^4.14.202",
+    "@types/mailchimp__mailchimp_marketing": "^3.0.20",
     "@types/pg": "^8.11.4",
     "@types/react-lazy-load-image-component": "^1.6.4",
     "@types/stream-throttle": "^0.1.4",

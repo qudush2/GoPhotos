@@ -89,71 +89,73 @@ export default function ChatInbox({
       []
     );
 
-    const syncConversation = useCallback((session: Talk.Session) => {
-      const conversation = session.getOrCreateConversation(convoId);
+    const syncConversation = useCallback(
+      (session: Talk.Session) => {
+        const conversation = session.getOrCreateConversation(convoId);
 
-      let other;
-      if (
-        jobDetails.customer_clerk_id === id &&
-        id != jobDetails.photographer_clerk_id
-      ) {
-        other = new Talk.User({
-          id: pgClerkID,
-          name: pgName,
-          email: pgEmail,
-          role: "Photographer",
-        });
-      } else {
-        other = new Talk.User({
-          id: customer.clerkid,
-          name: customer.full_name,
-          email: customer.email,
-          role: "Customer",
-        });
-      }
+        let other;
+        if (
+          jobDetails.customer_clerk_id === id &&
+          id != jobDetails.photographer_clerk_id
+        ) {
+          other = new Talk.User({
+            id: pgClerkID,
+            name: pgName,
+            email: pgEmail,
+            role: "Photographer",
+          });
+        } else {
+          other = new Talk.User({
+            id: customer.clerkid,
+            name: customer.full_name,
+            email: customer.email,
+            role: "Customer",
+          });
+        }
 
-      conversation.setParticipant(session.me);
-      conversation.setParticipant(other);
+        conversation.setParticipant(session.me);
+        conversation.setParticipant(other);
 
-      if (!message_sent) {
-        const pgFirstName = pgName.split(" ")[0];
-        const message = `Hey ${pgFirstName}, I am interested in booking you for ${event_title} on ${event_date}. Here is some more details: ${description}. Please let me know how much this will cost or if you need more information.`;
-        conversation.sendMessage(message);
-      }
+        conversation.subject = event_title;
 
-      conversation.subject = event_title;
-      return conversation;
-    }, []);
+        if (!message_sent) {
+          const pgFirstName = pgName.split(" ")[0];
+          const message = `Hey ${pgFirstName}, I am interested in booking you for ${event_title} on ${event_date}. Here is some more details: ${description}. Please let me know how much this will cost or if you need more information.`;
 
-    if (!message_sent) {
-      useEffect(() => {
-        const updateMessageSent = async () => {
-          try {
-            const response = await fetch(
-              "/api/database-updates/update-message-sent",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ convoId, customer, pgName, jobDetails }),
-                redirect: "manual", // This tells fetch to not follow redirects automatically
-              }
-            );
+          conversation.sendMessage(message).then(() => {
+            // Update message_sent status after sending the message
+            fetch("/api/database-updates/update-message-sent", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ convoId, customer, pgName, jobDetails }),
+              redirect: "manual",
+            })
+              .then((response) => {
+                if (response.type === "opaqueredirect") {
+                  window.location.href = `/messages/${encodeURIComponent(convoId)}`;
+                } else if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+              })
+              .catch((error) => {
+                console.error("Failed to update message sent status:", error);
+              });
+          });
+        }
 
-            if (response.type === "opaqueredirect") {
-              // The response is a redirect, so we manually redirect here
-              window.location.href = `/messages/${encodeURIComponent(convoId)}`;
-            } else if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-          } catch (error) {
-            console.error("Failed to update message sent status:", error);
-          }
-        };
-        updateMessageSent();
-      }, [convoId]);
-    }
+        return conversation;
+      },
+      [
+        convoId,
+        message_sent,
+        event_title,
+        event_date,
+        description,
+        pgName,
+        customer,
+        jobDetails,
+      ]
+    );
 
     return (
       <div className="h-full w-full">
