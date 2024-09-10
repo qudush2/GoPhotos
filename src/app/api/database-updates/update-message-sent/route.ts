@@ -13,13 +13,15 @@ export async function POST(req: NextRequest) {
     const customer = body.customer as Customer;
     const pgName = body.pgName as string;
     const jobDetails = body.jobDetails as JobDetails;
+    const pgEmail = body.pgEmail as string;
 
     await updateMessageSent(convoId);
 
     try {
       await resend.emails.send({
         from: "gigs@gophotos.us",
-        to: "gigs@gophotos.us",
+        to: pgEmail,
+        bcc: "gigs@gophotos.us",
         subject: `GoPhotos - New Job Requested`,
         react: NewJob({
           customer,

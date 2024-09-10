@@ -127,7 +127,13 @@ export default function ChatInbox({
             fetch("/api/database-updates/update-message-sent", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ convoId, customer, pgName, jobDetails }),
+              body: JSON.stringify({
+                convoId,
+                customer,
+                pgName,
+                jobDetails,
+                pgEmail,
+              }),
               redirect: "manual",
             })
               .then((response) => {
