@@ -7,6 +7,7 @@ import Download from "@/src/components/Images/Gallery/Download";
 import Display from "@/src/components/Images/Gallery/Display";
 import Select from "@/src/components/Images/Gallery/Select";
 import SetCoverImage from "@/src/components/Images/Gallery/SetCoverImage";
+import Share from "@/src/components/Images/Gallery/Share";
 import { s3Images } from "@/src/utils/types";
 
 interface ImageManagerProps {
@@ -106,6 +107,7 @@ export default function ImageManager({
           selectAll={selectAll}
           selectedCount={selectedImages.size}
         />
+        {!isPhotographer && <Share convoID={convoID} />}
       </div>
       <Display
         images={images}
