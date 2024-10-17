@@ -8,14 +8,14 @@ type SessionClaims = {
 
 // if gophotos.us/qudus --> change the public route to include /.*
 const publicRoutes = createRouteMatcher([
-  '/',
-  '(^/discover.*)',
-  '/api/webhooks/(.*)'
+  "/",
+  "(^/discover.*)",
+  "/api/webhooks/(.*)",
+  "/terms-of-service(.*)",
+  "/privacy-policy(.*)",
 ]);
 
-const adminRoutes = createRouteMatcher([
-  '/admin(.*)',
-]);
+const adminRoutes = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware((auth, req) => {
   if (adminRoutes(req)) {
@@ -34,8 +34,8 @@ export default clerkMiddleware((auth, req) => {
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // Always run for API routes
-    '/(api|trpc)(.*)',
+    "/(api|trpc)(.*)",
   ],
 };
