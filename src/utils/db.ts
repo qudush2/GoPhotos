@@ -54,6 +54,14 @@ export async function isVisible(clerkID: string): Promise<boolean> {
   return result.rows[0].visible;
 }
 
+export async function isCustomer(email: string): Promise<boolean> {
+  const result = await query(
+    "SELECT email FROM customer_account WHERE email = $1",
+    [email]
+  );
+  return result.rows.length > 0;
+}
+
 export async function hasRating(convoID: string): Promise<boolean> {
   const result = await query(
     "SELECT * FROM ratings where conversation_id = $1",
@@ -75,11 +83,20 @@ export async function createCustomer(
   email: string,
   fullName: string,
   clerkid: string
-) {
-  await query(
-    "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
-    [email, fullName, clerkid]
+): Promise<void> {
+  // Check if email or clerkid already exist
+  const checkResult = await query(
+    "SELECT * FROM customer_account WHERE email = $1 OR clerkid = $2",
+    [email, clerkid]
   );
+
+  if (checkResult.rows.length === 0) {
+    // If no existing record found, insert new customer
+    await query(
+      "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
+      [email, fullName, clerkid]
+    );
+  }
 }
 
 export async function createJob(
@@ -106,10 +123,11 @@ export async function createJobDetails(
   endTime: string,
   eventDate: string,
   organization: string,
-  description: string
+  description: string,
+  photographer_created: boolean
 ) {
   await query(
-    "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+    "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
     [
       convoID,
       eventTitle,
@@ -119,6 +137,7 @@ export async function createJobDetails(
       eventDate,
       organization,
       description,
+      photographer_created
     ]
   );
 }
@@ -307,6 +326,15 @@ export async function getCustomerInfo(clerkID: string): Promise<Customer> {
     "SELECT * FROM customer_account WHERE clerkid = $1",
     [clerkID]
   );
+  return result.rows[0];
+}
+
+export async function getCustomerInfoEmail(email: string): Promise<Customer> {
+  const result = await query(
+    "SELECT * FROM customer_account WHERE email = $1",
+    [email]
+  );
+
   return result.rows[0];
 }
 

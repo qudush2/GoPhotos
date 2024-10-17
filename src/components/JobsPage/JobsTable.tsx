@@ -12,7 +12,11 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Button,
 } from "@nextui-org/react";
+import { Dialog, DialogClose, DialogContent } from "@radix-ui/react-dialog";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useUser } from "@clerk/nextjs";
 
 type JobsTableProps = {
   jobs: (JobDetails & { customer: Customer })[];
@@ -32,6 +36,10 @@ export default function JobsTable({
   const [filterStatus, setFilterStatus] = useState(initialFilterStatus);
   const router = useRouter();
   const [closingJobs, setClosingJobs] = useState<Set<string>>(new Set());
+  const [isCreateJobDialogOpen, setIsCreateJobDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { user, isLoaded } = useUser();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -41,6 +49,16 @@ export default function JobsTable({
 
     router.push(`/jobs?${params.toString()}`, { scroll: false });
   }, [searchTerm, sortBy, filterStatus, router]);
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>Please sign in to view jobs.</div>;
+  }
+
+  const userID = user.id;
 
   const handleCloseJob = async (convoID: string) => {
     setClosingJobs((prev) => new Set(prev).add(convoID));
@@ -111,7 +129,9 @@ export default function JobsTable({
 
     switch (columnKey) {
       case "event_title":
-        return (
+        return job.photographer_created ? (
+          <span>{job.event_title}</span>
+        ) : (
           <Link
             href={`/messages/${encodeURIComponent(job.conversation_id)}`}
             className="text-blue-600 hover:underline"
@@ -196,6 +216,32 @@ export default function JobsTable({
     }
   };
 
+  const handleCreateJob = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const formData = new FormData(event.currentTarget);
+
+    try {
+      const response = await fetch("/api/database-updates/create-job", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create job");
+      }
+
+      router.refresh();
+      setIsCreateJobDialogOpen(false);
+    } catch (error) {
+      console.error("Error creating job:", error);
+      alert("Failed to create job. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="mb-4 flex justify-between items-center">
@@ -207,6 +253,12 @@ export default function JobsTable({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div>
+          <Button
+            className="mr-2 rounded-md text-white animated-gradient-button"
+            onClick={() => setIsCreateJobDialogOpen(true)}
+          >
+            Create a Job
+          </Button>
           <select
             className="p-2 border rounded mr-2 w-40"
             value={sortBy}
@@ -229,6 +281,129 @@ export default function JobsTable({
           </select>
         </div>
       </div>
+
+      {isCreateJobDialogOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          aria-hidden="true"
+        />
+      )}
+
+      <Dialog
+        open={isCreateJobDialogOpen}
+        onOpenChange={setIsCreateJobDialogOpen}
+      >
+        <DialogContent className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 max-w-md w-full bg-white rounded-lg shadow-xl p-6">
+          <div className="my-4">
+            <h2 className="text-xl font-medium mb-4">Create a New Job</h2>
+            <form onSubmit={handleCreateJob} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="customerName"
+                  className="block text-sm font-medium"
+                >
+                  Client Name
+                </label>
+                <input
+                  id="customerName"
+                  name="customerName"
+                  type="text"
+                  required
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="customerEmail"
+                  className="block text-sm font-medium"
+                >
+                  Client Email
+                </label>
+                <input
+                  id="customerEmail"
+                  name="customerEmail"
+                  type="email"
+                  required
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="eventTitle"
+                  className="block text-sm font-medium"
+                >
+                  Event Title
+                </label>
+                <input
+                  id="eventTitle"
+                  name="eventTitle"
+                  type="text"
+                  required
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="eventDate"
+                  className="block text-sm font-medium"
+                >
+                  Event Date
+                </label>
+                <input
+                  id="eventDate"
+                  name="eventDate"
+                  type="date"
+                  required
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+              <div>
+                <label htmlFor="price" className="block text-sm font-medium">
+                  Price (please enter as a whole number)
+                </label>
+                <input
+                  id="price"
+                  name="price"
+                  type="number"
+                  required
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="eventDescription"
+                  className="block text-sm font-medium"
+                >
+                  Event Description
+                </label>
+                <textarea
+                  id="eventDescription"
+                  name="eventDescription"
+                  required
+                  rows={4}
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                ></textarea>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="inline-flex justify-center rounded-md border border-transparent bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                >
+                  {isLoading ? "Creating..." : "Create Job"}
+                </button>
+              </div>
+            </form>
+          </div>
+          <DialogClose
+            autoFocus={false}
+            className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+          >
+            <XMarkIcon className="w-6 h-6" />
+            <span className="sr-only">Close</span>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
 
       {jobs.length > 0 ? (
         <Table isStriped aria-label="Jobs table">

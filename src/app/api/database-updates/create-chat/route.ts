@@ -23,7 +23,8 @@ export async function POST(req: NextRequest) {
       endTime,
       eventDate,
       organization,
-      eventDescription
+      eventDescription,
+      false
     );
 
     await createJob(pgClerkID, customerID, convoID);

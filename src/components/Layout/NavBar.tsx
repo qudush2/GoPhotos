@@ -26,7 +26,8 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
     ...(userId
       ? [
           { href: "/gallery", label: "Gallery" },
-          ...(isPG ? [{ href: "/jobs", label: "Jobs" }] : []),
+          { href: "/jobs", label: "Jobs" },
+          // ...(isPG ? [{ href: "/jobs", label: "Jobs" }] : []),
           { href: "/messages", label: "Messages" },
         ]
       : []),
