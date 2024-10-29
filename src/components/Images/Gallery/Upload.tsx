@@ -20,6 +20,8 @@ export default function Upload({
 
   const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
 
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (files.length === 0) {
@@ -108,6 +110,13 @@ export default function Upload({
     return response.json();
   };
 
+  const handleFileClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    if (isSafari) {
+      e.preventDefault();
+      alert("Safari compresses images automatically. Please use Chrome or Firefox for uploading images to ensure the best quality.");
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -115,6 +124,7 @@ export default function Upload({
           id="file"
           type="file"
           multiple
+          onClick={handleFileClick}
           onChange={(e) => {
             const fileList = e.target.files;
             if (fileList) setFiles(Array.from(fileList));

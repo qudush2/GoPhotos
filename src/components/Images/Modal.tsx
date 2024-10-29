@@ -50,7 +50,13 @@ export default function Modal({
         htmlFor={selectMode ? undefined : `image-modal-${src}`}
         className="cursor-pointer relative w-full h-full block"
       >
-        <Image alt={alt} src={src} fill className="object-contain z-[1]" />
+        <Image
+          alt={alt}
+          src={src}
+          fill
+          sizes="auto"
+          className="object-contain z-[1]"
+        />
       </label>
       {!selectMode && (
         <label
@@ -62,6 +68,7 @@ export default function Modal({
               src={src}
               alt={alt}
               fill
+              sizes="auto"
               className="rounded-md object-contain"
             />
           </div>
