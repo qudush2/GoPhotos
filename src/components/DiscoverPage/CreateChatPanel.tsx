@@ -139,6 +139,38 @@ export default function CreateChatPanel({
             placeholder="Please be sure to include an overall description of the event, types of photos you expect, & any other necessary information."
           />
         </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Payment Method
+          </label>
+          <div className="flex space-x-4">
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="mit_po"
+                name="mit_po"
+                value="true"
+                required
+                className="h-4 w-4 border-gray-300 text-black focus:ring-black"
+              />
+              <label htmlFor="mit_po" className="ml-2 text-sm">
+                MIT Purchase Order
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="credit_card"
+                name="mit_po"
+                value="false"
+                className="h-4 w-4 border-gray-300 text-black focus:ring-black"
+              />
+              <label htmlFor="credit_card" className="ml-2 text-sm">
+                Online Credit Card Payment
+              </label>
+            </div>
+          </div>
+        </div>
         <RequestQuoteButton isLoading={isLoading} />
       </form>
     </div>

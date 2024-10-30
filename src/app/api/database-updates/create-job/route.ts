@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
     const customerEmail = body.get("customerEmail") as string;
     const customerName = body.get("customerName") as string;
     const price = body.get("price") as string;
+    const mit_po = body.get("mit_po") === "true";
     const [location, startTime, endTime, organization] = Array(4).fill(
       ""
     ) as string[];
@@ -76,7 +77,8 @@ export async function POST(req: NextRequest) {
       eventDate,
       organization,
       eventDescription,
-      true
+      true,
+      mit_po
     );
     await updateMessageSent(jobID);
     await updateJobPrice(jobID, price)

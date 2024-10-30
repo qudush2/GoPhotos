@@ -384,6 +384,38 @@ export default function JobsTable({
                   className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
                 ></textarea>
               </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Client's Payment Method
+                </label>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="mit_po"
+                      name="mit_po"
+                      value="true"
+                      required
+                      className="h-4 w-4 border-gray-300 text-black focus:ring-black"
+                    />
+                    <label htmlFor="mit_po" className="ml-2 text-sm">
+                      MIT Purchase Order
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="credit_card"
+                      name="mit_po"
+                      value="false"
+                      className="h-4 w-4 border-gray-300 text-black focus:ring-black"
+                    />
+                    <label htmlFor="credit_card" className="ml-2 text-sm">
+                      Online Credit Card Payment
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div className="flex justify-end">
                 <button
                   type="submit"

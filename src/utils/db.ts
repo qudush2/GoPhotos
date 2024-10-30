@@ -124,10 +124,11 @@ export async function createJobDetails(
   eventDate: string,
   organization: string,
   description: string,
-  photographer_created: boolean
+  photographer_created: boolean,
+  mit_po:boolean
 ) {
   await query(
-    "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+    "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created, mit_po) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
     [
       convoID,
       eventTitle,
@@ -137,7 +138,8 @@ export async function createJobDetails(
       eventDate,
       organization,
       description,
-      photographer_created
+      photographer_created,
+      mit_po
     ]
   );
 }
@@ -274,6 +276,48 @@ export async function getAllPhotographerJobsFiltered(
   }
 
   queryText += ` ORDER BY ${sortBy === "date" ? "jd.event_date" : "jd.event_title"}`;
+
+  const result = await query(queryText, queryParams);
+  return result.rows;
+}
+
+export async function getAllCustomerBookingsFiltered(
+  clerkID: string,
+  searchTerm: string = "",
+  sortBy: "date" | "title" = "date",
+  filterStatus: string = "all"
+): Promise<JobDetails[]> {
+  let queryText = `
+    SELECT j.*, jd.*, pa.full_name as photographer_name
+    FROM jobs j 
+    JOIN job_detail jd ON j.conversation_id = jd.conversation_id
+    JOIN photographer_account pa ON j.photographer_clerk_id = pa.clerk_id
+    WHERE j.customer_clerk_id = $1
+  `;
+
+  const queryParams: any[] = [clerkID];
+  let paramCount = 1;
+
+  if (searchTerm) {
+    paramCount++;
+    queryText += ` AND (jd.event_title ILIKE $${paramCount} OR jd.loc ILIKE $${paramCount})`;
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (filterStatus !== "all") {
+    paramCount++;
+    queryText += ` AND (
+      ($${paramCount} = 'awaiting price' AND NOT j.price_finalized) OR
+      ($${paramCount} = 'awaiting payment' AND j.price_finalized AND NOT j.paid) OR
+      ($${paramCount} = 'awaiting upload' AND j.paid AND NOT j.pictures_uploaded) OR
+      ($${paramCount} = 'completed' AND j.pictures_uploaded AND j.closed)
+    )`;
+    queryParams.push(filterStatus);
+  }
+
+  queryText += ` ORDER BY ${
+    sortBy === "date" ? "jd.event_date" : "jd.event_title"
+  }`;
 
   const result = await query(queryText, queryParams);
   return result.rows;

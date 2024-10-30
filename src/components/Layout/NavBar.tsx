@@ -25,10 +25,11 @@ export default function NavigationBar({ isPG }: { isPG: boolean | null }) {
     { href: "/discover", label: "Discover" },
     ...(userId
       ? [
-          { href: "/gallery", label: "Gallery" },
-          { href: "/jobs", label: "Jobs" },
-          // ...(isPG ? [{ href: "/jobs", label: "Jobs" }] : []),
           { href: "/messages", label: "Messages" },
+          ...(isPG
+            ? [{ href: "/jobs", label: "Jobs" }]
+            : [{ href: "/bookings", label: "Bookings" }]),
+          { href: "/gallery", label: "Gallery" },
         ]
       : []),
   ];
