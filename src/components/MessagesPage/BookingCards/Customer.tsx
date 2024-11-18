@@ -11,6 +11,7 @@ import {
   ScrollArea,
   ScrollBar,
 } from "@/src/components/ScrollingFeatures/ScrollArea";
+import PayNowButton from "@/src/components/PayNowButton";
 import { getAccountByClerkId, getPortfolioPictures } from "@/src/utils/db";
 import { shuffle } from "lodash";
 import Image from "next/image";
@@ -129,13 +130,16 @@ export default async function BookingCardCustomer({
         )}
         {price_finalized && !paid && (
           <>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center w-full">
               <br />
               <p className="text-base mb-2">
                 here is the price as agreed upon by you and the photographer:{" "}
                 <span className="font-bold">${job_price}</span>
               </p>
-              <PayNowButton jobDetails={jobDetails} />
+              <PayNowButton
+                jobDetails={jobDetails}
+                className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
+              />
               <p className="text-sm italic">
                 final price includes service fees + additional charges that help
                 maintain this platform
@@ -225,29 +229,5 @@ export default async function BookingCardCustomer({
         </p>
       </CardBody>
     </Card>
-  );
-}
-
-export function PayNowButton({ jobDetails }: { jobDetails: JobDetails }) {
-  const { conversation_id, job_price } = jobDetails;
-
-  return (
-    <>
-      <form
-        action="/api/stripe/create-checkout-session"
-        method="POST"
-        target="_blank"
-        className="w-full"
-      >
-        <input type="hidden" name="conversation_id" value={conversation_id} />
-        <input type="hidden" name="job_price" value={job_price} />
-        <Button
-          type="submit"
-          className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
-        >
-          Pay Now
-        </Button>
-      </form>
-    </>
   );
 }

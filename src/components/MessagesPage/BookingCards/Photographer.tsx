@@ -61,7 +61,7 @@ export default function BookingCardPhotographer({
         <p>Initial Date: {event_date}</p>
         {start_time && <p> Time: {start_time}</p>}
         {end_time && <p> Time: {end_time}</p>}
-        {organization && <p>Organizatoin: {organization}</p>}
+        {organization && <p>Organization: {organization}</p>}
         Description: {description}
         <br />
         {!price_finalized && (

@@ -54,6 +54,14 @@ export async function isVisible(clerkID: string): Promise<boolean> {
   return result.rows[0].visible;
 }
 
+export async function isCustomer(email: string): Promise<boolean> {
+  const result = await query(
+    "SELECT email FROM customer_account WHERE email = $1",
+    [email]
+  );
+  return result.rows.length > 0;
+}
+
 export async function hasRating(convoID: string): Promise<boolean> {
   const result = await query(
     "SELECT * FROM ratings where conversation_id = $1",
@@ -75,11 +83,20 @@ export async function createCustomer(
   email: string,
   fullName: string,
   clerkid: string
-) {
-  await query(
-    "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
-    [email, fullName, clerkid]
+): Promise<void> {
+  // Check if email or clerkid already exist
+  const checkResult = await query(
+    "SELECT * FROM customer_account WHERE email = $1 OR clerkid = $2",
+    [email, clerkid]
   );
+
+  if (checkResult.rows.length === 0) {
+    // If no existing record found, insert new customer
+    await query(
+      "INSERT INTO customer_account (email, full_name, clerkid) VALUES ($1, $2, $3)",
+      [email, fullName, clerkid]
+    );
+  }
 }
 
 export async function createJob(
@@ -106,21 +123,50 @@ export async function createJobDetails(
   endTime: string,
   eventDate: string,
   organization: string,
-  description: string
+  description: string,
+  photographer_created: boolean,
+  mit_po: boolean
 ) {
-  await query(
-    "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-    [
-      convoID,
-      eventTitle,
-      location,
-      startTime,
-      endTime,
-      eventDate,
-      organization,
-      description,
-    ]
-  );
+  if (mit_po) {
+    // First get the highest invoice number
+    const result = await query(
+      "SELECT MAX(invoice_number) as max_invoice FROM job_detail"
+    );
+    const nextInvoiceNumber = result.rows[0].max_invoice + 1;
+
+    await query(
+      "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created, mit_po, invoice_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+      [
+        convoID,
+        eventTitle,
+        location,
+        startTime,
+        endTime,
+        eventDate,
+        organization,
+        description,
+        photographer_created,
+        mit_po,
+        nextInvoiceNumber,
+      ]
+    );
+  } else {
+    await query(
+      "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created, mit_po) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+      [
+        convoID,
+        eventTitle,
+        location,
+        startTime,
+        endTime,
+        eventDate,
+        organization,
+        description,
+        photographer_created,
+        mit_po,
+      ]
+    );
+  }
 }
 
 export async function createApplication(
@@ -260,6 +306,48 @@ export async function getAllPhotographerJobsFiltered(
   return result.rows;
 }
 
+export async function getAllCustomerBookingsFiltered(
+  clerkID: string,
+  searchTerm: string = "",
+  sortBy: "date" | "title" = "date",
+  filterStatus: string = "all"
+): Promise<JobDetails[]> {
+  let queryText = `
+    SELECT j.*, jd.*, pa.full_name as photographer_name
+    FROM jobs j 
+    JOIN job_detail jd ON j.conversation_id = jd.conversation_id
+    JOIN photographer_account pa ON j.photographer_clerk_id = pa.clerk_id
+    WHERE j.customer_clerk_id = $1
+  `;
+
+  const queryParams: any[] = [clerkID];
+  let paramCount = 1;
+
+  if (searchTerm) {
+    paramCount++;
+    queryText += ` AND (jd.event_title ILIKE $${paramCount} OR jd.loc ILIKE $${paramCount})`;
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (filterStatus !== "all") {
+    paramCount++;
+    queryText += ` AND (
+      ($${paramCount} = 'awaiting price' AND NOT j.price_finalized) OR
+      ($${paramCount} = 'awaiting payment' AND j.price_finalized AND NOT j.paid) OR
+      ($${paramCount} = 'awaiting upload' AND j.paid AND NOT j.pictures_uploaded) OR
+      ($${paramCount} = 'completed' AND j.pictures_uploaded AND j.closed)
+    )`;
+    queryParams.push(filterStatus);
+  }
+
+  queryText += ` ORDER BY ${
+    sortBy === "date" ? "jd.event_date" : "jd.event_title"
+  }`;
+
+  const result = await query(queryText, queryParams);
+  return result.rows;
+}
+
 export async function getAllPhotographers(
   photographyType?: string,
   location?: string
@@ -307,6 +395,15 @@ export async function getCustomerInfo(clerkID: string): Promise<Customer> {
     "SELECT * FROM customer_account WHERE clerkid = $1",
     [clerkID]
   );
+  return result.rows[0];
+}
+
+export async function getCustomerInfoEmail(email: string): Promise<Customer> {
+  const result = await query(
+    "SELECT * FROM customer_account WHERE email = $1",
+    [email]
+  );
+
   return result.rows[0];
 }
 
