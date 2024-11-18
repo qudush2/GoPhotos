@@ -44,6 +44,9 @@ export type JobDetails = {
   description: string;
   message_sent: boolean;
   cover_image: string;
+  photographer_created: boolean;
+  mit_po: boolean;
+  photographer_name?: string;
 };
 
 export type Customer = {

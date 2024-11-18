@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     const eventDate = body.get("eventDate") as string;
     const organization = body.get("organization") as string;
     const eventDescription = body.get("eventDescription") as string;
+    const mit_po = body.get("mit_po") === "true"
 
     await createJobDetails(
       convoID,
@@ -23,7 +24,9 @@ export async function POST(req: NextRequest) {
       endTime,
       eventDate,
       organization,
-      eventDescription
+      eventDescription,
+      false,
+      mit_po
     );
 
     await createJob(pgClerkID, customerID, convoID);
