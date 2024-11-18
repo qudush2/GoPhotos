@@ -125,23 +125,48 @@ export async function createJobDetails(
   organization: string,
   description: string,
   photographer_created: boolean,
-  mit_po:boolean
+  mit_po: boolean
 ) {
-  await query(
-    "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created, mit_po) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-    [
-      convoID,
-      eventTitle,
-      location,
-      startTime,
-      endTime,
-      eventDate,
-      organization,
-      description,
-      photographer_created,
-      mit_po
-    ]
-  );
+  if (mit_po) {
+    // First get the highest invoice number
+    const result = await query(
+      "SELECT MAX(invoice_number) as max_invoice FROM job_detail"
+    );
+    const nextInvoiceNumber = result.rows[0].max_invoice + 1;
+
+    await query(
+      "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created, mit_po, invoice_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+      [
+        convoID,
+        eventTitle,
+        location,
+        startTime,
+        endTime,
+        eventDate,
+        organization,
+        description,
+        photographer_created,
+        mit_po,
+        nextInvoiceNumber,
+      ]
+    );
+  } else {
+    await query(
+      "INSERT INTO job_detail (conversation_id, event_title, loc, start_time, end_time, event_date, organization, description, photographer_created, mit_po) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+      [
+        convoID,
+        eventTitle,
+        location,
+        startTime,
+        endTime,
+        eventDate,
+        organization,
+        description,
+        photographer_created,
+        mit_po,
+      ]
+    );
+  }
 }
 
 export async function createApplication(

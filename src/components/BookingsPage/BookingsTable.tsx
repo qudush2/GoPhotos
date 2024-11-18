@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import {Link, Button} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { JobDetails, Customer, getJobStatus } from "@/src/utils/types";
 import { format } from "date-fns";
@@ -137,19 +137,48 @@ export default function BookingsTable({
           );
         }
         return booking.pictures_uploaded ? (
-          <Link
+          <Button
             href={booking.picture_url || `/gallery/${booking.conversation_id}`}
             className="bg-green-500 text-white px-2 py-1 rounded text-sm hover:bg-green-600"
           >
             View Gallery
-          </Link>
+          </Button>
         ) : booking.paid ? (
           <span className="text-sm text-gray-600">Awaiting Photos</span>
         ) : booking.price_finalized ? (
-          <PayNowButton
-            jobDetails={booking}
-            className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 h-8"
-          />
+          booking.mit_po ? (
+            <Button
+              onClick={async () => {
+                const response = await fetch('/api/invoice', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ jobId: booking.conversation_id }),
+                });
+
+                if (response.ok) {
+                  const blob = await response.blob();
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${booking.event_title}-invoice.pdf`;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                } else {
+                  console.error('Failed to generate invoice');
+                }
+              }}
+              className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+            >
+              Download Invoice
+            </Button>
+          ) : (
+            <PayNowButton
+              jobDetails={booking}
+              className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+            />
+          )
         ) : (
           <span className="text-sm text-gray-600">Awaiting Quote</span>
         );

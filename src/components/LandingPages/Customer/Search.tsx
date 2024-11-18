@@ -61,7 +61,7 @@ export default function SearchArea({}: SearchProps) {
         >
           <option value="">Select Photography Type</option>
           {SKILLS.map((skill) => (
-            <option value={skill}>{skill}</option>
+            <option key={skill} value={skill}>{skill}</option>
           ))}
         </select>
       </div>
