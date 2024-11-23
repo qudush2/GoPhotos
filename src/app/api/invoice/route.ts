@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
       day: "2-digit",
     });
 
-    // const invoiceNumber = String(jobData.invoiceNumber).padStart(4, "0");
-    // form.getTextField("InvNumber").setText(`#${invoiceNumber}`);
+    const invoiceNumber = String(jobData.invoice_number).padStart(4, "0");
+    form.getTextField("InvNumber").setText(`#${invoiceNumber}`);
     form.getTextField("InvDate").setText(currentDate);
     form.getTextField("Total").setText(`$ ${total.toFixed(2)}`);
     form.getTextField("CustomerName").setText(customer.full_name);
@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
     form.getTextField("EventName").setText(jobData.event_title);
     form.getTextField("Price").setText(`$ ${jobPrice.toFixed(2)}`);
     form.getTextField("ServF").setText(`$ ${serviceFee.toFixed(2)}`);
+    form.getTextField("JobID").setText(jobData.conversation_id)
 
     form.flatten();
     const pdfBytes = await pdfDoc.save();
@@ -59,15 +60,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// // dummy data, change to get from database directly
-// async function getJobData(jobId: string) {
-//   return {
-//     customerName: "John Doe",
-//     customerEmail: "john@example.com",
-//     photographerName: "Jane Smith",
-//     eventName: "Wedding Photography",
-//     price: 1000.0,
-//     invoiceNumber: 184,
-//   };
-// }

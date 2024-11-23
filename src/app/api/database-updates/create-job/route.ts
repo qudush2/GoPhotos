@@ -6,7 +6,8 @@ import {
   isCustomer,
   getCustomerInfoEmail,
   getAccountByClerkId,
-  updateJobPrice
+  updateJobPrice,
+  updatePaid
 } from "@/src/utils/db";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from "uuid";
@@ -82,6 +83,9 @@ export async function POST(req: NextRequest) {
     );
     await updateMessageSent(jobID);
     await updateJobPrice(jobID, price)
+    if (mit_po) {
+      updatePaid(jobID, customerClerkID, pgClerkID)
+    }
     await resend.emails.send({
       from: "gigs@gophotos.us",
       to: customerEmail,
