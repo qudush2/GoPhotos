@@ -37,6 +37,7 @@ export default async function BookingCardCustomer({
     paid,
     pictures_uploaded,
     picture_url,
+    mit_po,
   } = jobDetails;
 
   const account = await getAccountByClerkId(jobDetails.photographer_clerk_id);
@@ -117,8 +118,8 @@ export default async function BookingCardCustomer({
           <div className="flex flex-col items-center">
             <br />
             <p className="text-base mb-2">
-              The quote of the job has not been finalized. After the price has
-              been finazlied, you will be able to pay.
+              The quote of the job has not been finalized. After the price has been finalized, 
+              {mit_po && " you will be able to download an invoice and"} you will be able to pay.
             </p>
             <Button
               className="w-full rounded-md bg-gray-300 px-3 text-sm font-medium text-gray-500 flex items-center justify-center"
@@ -136,57 +137,93 @@ export default async function BookingCardCustomer({
                 here is the price as agreed upon by you and the photographer:{" "}
                 <span className="font-bold">${job_price}</span>
               </p>
-              <PayNowButton
-                jobDetails={jobDetails}
-                className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
-              />
+              {mit_po ? (
+                <>
+                  <Button
+                    className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center mb-2"
+                    onClick={async () => {
+                      const response = await fetch('/api/invoice', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ jobId: jobDetails.conversation_id }),
+                      });
+
+                      if (response.ok) {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${event_title}-invoice.pdf`;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                      } else {
+                        console.error('Failed to generate invoice');
+                      }
+                    }}
+                  >
+                    Download Invoice
+                  </Button>
+                  <p className="text-sm italic mb-2">
+                    Here is your invoice for processing. For MIT users, this can be submitted via Purchase Order.
+                  </p>
+                </>
+              ) : (
+                <PayNowButton
+                  jobDetails={jobDetails}
+                  className="w-full rounded-md bg-black px-3 py-2 text-sm font-medium text-white flex items-center justify-center"
+                />
+              )}
               <p className="text-sm italic">
-                final price includes service fees + additional charges that help
-                maintain this platform
+                final price includes service fees + additional charges that help maintain this platform
               </p>
             </div>
           </>
         )}
-        {price_finalized && paid && !pictures_uploaded && (
-          <>
+        {price_finalized &&
+          paid &&
+          !pictures_uploaded && (
+            <>
+              <div className="mt-10">
+                <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
+                  Congrats, your event {event_title} has been confirmed!
+                </p>
+
+                <p className="mt-5">
+                  You will be notified via email when your images have been
+                  uploaded.
+                </p>
+
+                <p className="mt-5 italic">
+                  You may cancel for a full refund by{" "}
+                  {format(subDays(new Date(event_date), 7), "PPP")}
+                </p>
+              </div>
+            </>
+          )}
+
+        {paid &&
+          pictures_uploaded && (
             <div className="mt-10">
-              <p className="flex flex-col items-center text-lg font-bold inline-block bg-gradient-to-r from-[#FF9993] via-[#FC7674] to-[#FC4D74] bg-clip-text px-0.5 italic leading-snug text-transparent">
-                Congrats, your event {event_title} has been confirmed!
+              <p className="flex flex-col items-center text-lg">
+                Your pictures are ready to be viewed!
               </p>
-
-              <p className="mt-5">
-                You will be notified via email when your images have been
-                uploaded.
-              </p>
-
-              <p className="mt-5 italic">
-                You may cancel for a full refund by{" "}
-                {format(subDays(new Date(event_date), 7), "PPP")}
+              <div className="flex justify-center mt-4">
+                <Link
+                  href={picture_url || `/gallery/${jobDetails.conversation_id}`}
+                  className="px-4 py-2 bg-black text-white font-bold rounded hover:bg-gray-800 transition-colors"
+                >
+                  View Images
+                </Link>
+              </div>
+              <p className="text-center mt-4 text-sm italic">
+                Please review your images and confirm receipt. If we don't hear
+                from you within 3 days, we'll assume you're satisfied with the
+                images.
               </p>
             </div>
-          </>
-        )}
-
-        {paid && pictures_uploaded && (
-          <div className="mt-10">
-            <p className="flex flex-col items-center text-lg">
-              Your pictures are ready to be viewed!
-            </p>
-            <div className="flex justify-center mt-4">
-              <Link
-                href={picture_url || `/gallery/${jobDetails.conversation_id}`}
-                className="px-4 py-2 bg-black text-white font-bold rounded hover:bg-gray-800 transition-colors"
-              >
-                View Images
-              </Link>
-            </div>
-            <p className="text-center mt-4 text-sm italic">
-              Please review your images and confirm receipt. If we don't hear
-              from you within 3 days, we'll assume you're satisfied with the
-              images.
-            </p>
-          </div>
-        )}
+          )}
 
         {!paid && !pictures_uploaded && (
           <>

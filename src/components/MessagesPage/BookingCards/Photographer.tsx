@@ -30,6 +30,7 @@ export default function BookingCardPhotographer({
     pictures_uploaded,
     picture_upload_time,
     picture_url,
+    mit_po,
   } = jobDetails;
 
   return (
@@ -78,6 +79,12 @@ export default function BookingCardPhotographer({
               <span className="font-bold">${job_price}</span>
               <br /> You will be notified when your client has been paid. This
               will then confirm the booking.
+              {mit_po && (
+                <p className="mt-2 text-amber-600 font-medium">
+                  Note: This is an invoiced job. Payment processing may take
+                  longer than usual.
+                </p>
+              )}
               <br /> <br />
             </div>
             <>
@@ -122,7 +129,12 @@ export default function BookingCardPhotographer({
                 Congrats, your event {event_title} has been confirmed! <br />{" "}
                 {customer.full_name.split(" ")[0]} has paid ${job_price}.
               </p>
-
+              {mit_po && (
+                <p className="mt-4 text-amber-600 font-medium text-center">
+                  Note: This is an invoiced job. Payment processing may take
+                  longer than usual.
+                </p>
+              )}
               <p className="font-medium text-xl mt-10">What's Next:</p>
               <ul className="list-disc">
                 <li className="mt-2">
@@ -175,6 +187,12 @@ export default function BookingCardPhotographer({
               {customer.full_name.split(" ")[0]} has confirmed they received the
               images, or 3 days after you returned the images.
             </p>
+            {mit_po && (
+              <p className="mt-2 text-amber-600 font-medium">
+                Note: This is an invoiced job. Payment processing may take
+                longer than usual.
+              </p>
+            )}
           </>
         )}
         <p className="text-base italic font-bold mt-5">
