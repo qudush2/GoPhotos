@@ -12,9 +12,12 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Dropdown,
+  DropdownTrigger, DropdownMenu, DropdownItem
 } from "@nextui-org/react";
 import PayNowButton from "@/src/components/PayNowButton";
 import { useUser } from "@clerk/nextjs";
+import { ChevronDown } from "lucide-react";
 
 type BookingsTableProps = {
   bookings: JobDetails[];
@@ -144,35 +147,52 @@ export default function BookingsTable({
             View Gallery
           </Button>
         ) : booking.paid ? (
-          <span className="text-sm text-gray-600">Awaiting Photos</span>
-        ) : booking.price_finalized ? (
           booking.mit_po ? (
-            <Button
-              onClick={async () => {
-                const response = await fetch('/api/invoice', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ jobId: booking.conversation_id }),
-                });
+            <Dropdown>
+              <DropdownTrigger>
+                <Button 
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-3 py-1.5 rounded text-sm flex items-center gap-1"
+                  endContent={<ChevronDown className="h-4 w-4" />}
+                >
+                  Actions
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Booking Actions">
+                <DropdownItem
+                  key="status"
+                  isDisabled={!booking.pictures_uploaded}
+                  href={booking.pictures_uploaded ? booking.picture_url || `/gallery/${booking.conversation_id}` : undefined}
+                >
+                  {booking.pictures_uploaded ? "View Gallery" : "Awaiting Photos"}
+                </DropdownItem>
+                <DropdownItem
+                  key="invoice"
+                  onClick={async () => {
+                    const response = await fetch('/api/invoice', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ jobId: booking.conversation_id }),
+                    });
 
-                if (response.ok) {
-                  const blob = await response.blob();
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `${booking.event_title}-invoice.pdf`;
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                } else {
-                  console.error('Failed to generate invoice');
-                }
-              }}
-              className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
-            >
-              Download Invoice
-            </Button>
+                    if (response.ok) {
+                      const blob = await response.blob();
+                      const url = window.URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = `${booking.event_title}-invoice.pdf`;
+                      a.click();
+                      window.URL.revokeObjectURL(url);
+                    } else {
+                      console.error('Failed to generate invoice');
+                    }
+                  }}
+                >
+                  Download Invoice
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           ) : (
             <PayNowButton
               jobDetails={booking}

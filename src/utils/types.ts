@@ -46,6 +46,7 @@ export type JobDetails = {
   cover_image: string;
   photographer_created: boolean;
   mit_po: boolean;
+  invoice_number: number;
   photographer_name?: string;
 };
 
