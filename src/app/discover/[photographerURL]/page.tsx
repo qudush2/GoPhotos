@@ -191,10 +191,17 @@ export default async function PhotographerUniquePage({
                       Request quote
                     </DialogTrigger>
                   </div>
-                  <DialogOverlay>
-                    <DialogContent className="fixed left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white p-4">
-                      <div className="my-7">
+                    <DialogOverlay className="fixed inset-0 bg-black/50 z-50">
+                    <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-xl w-full max-w-md">
+                      {/* <div className="my-7">
                         <CreateChatPanel account={account} />
+                      </div> */}
+                      <div className="my-7 flex flex-col items-center space-y-4">
+                        <h2 className="text-xl font-semibold">Contact Information</h2>
+                        <div className="text-center">
+                          <p className="text-lg font-medium">{account.full_name}</p>
+                          <p className="text-gray-600">{account.email}</p>
+                        </div>
                       </div>
                       <DialogClose
                         autoFocus={false}
