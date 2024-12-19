@@ -22,14 +22,6 @@ export default function PicturesUploadedEmail({
         View your images here: <a href={picture_url}>{event_title}</a>
       </p>
 
-      <p className="font-bold">
-        {" "}
-        Please reply to this email confirming you have received your images as
-        expected. This will allow us to begin the payout process for{" "}
-        {photographerName}. If we do not hear back within days, we will assume
-        all images have been well recieved and close this job.
-      </p>
-
       <p className="mt-2 italic">
         If you have any questions or concerns, feel free to reply to this email
         to get direct help from GoPhotos.
