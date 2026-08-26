@@ -39,8 +39,11 @@ export default async function MessageUniquePage({
             <p className="flex items-center text-sm font-normal text-white">
               Open on desktop to view full booking menu.
             </p>
-            <BannerCollapseButton className="border-0 bg-transparent text-gray-500 pl-4">
-              <HiX className="h-4 w-4" />
+            <BannerCollapseButton
+              aria-label="Dismiss banner"
+              className="border-0 bg-transparent text-gray-500 pl-4"
+            >
+              <HiX className="h-4 w-4" aria-hidden="true" />
             </BannerCollapseButton>
           </div>
         </Banner>

@@ -23,10 +23,15 @@ export default async function PhotographerPreviewCard({
 
   const renderStars = (rating: number) => {
     return (
-      <div className="flex items-center">
+      <div
+        className="flex items-center"
+        role="img"
+        aria-label={`Rating: ${rating} out of 5 stars`}
+      >
         {[1, 2, 3, 4, 5].map((star) => (
           <StarIcon
             key={star}
+            aria-hidden="true"
             className={`h-4 w-4 ${
               star <= rating ? "text-yellow-400" : "text-gray-300"
             }`}
@@ -52,7 +57,10 @@ export default async function PhotographerPreviewCard({
                   backgroundImage: `url(${getImageUrl(asset.key, 100, 100)})`,
                 }}
               />
-              <Modal alt="" src={getImageUrl(asset.key)} />
+              <Modal
+                alt={`Portfolio photo by ${photographer.full_name.split(" ")[0]}`}
+                src={getImageUrl(asset.key)}
+              />
             </div>
           ))}
           {assets.length > 7 && (

@@ -119,6 +119,7 @@ export default function Upload({
           if (fileList) setFiles(Array.from(fileList));
         }}
         accept="image/*,.raw,.nef,.cr2,.arw,.orf,.rw2,.dng,.heic"
+        aria-label="Select image files to upload (JPEG, PNG, HEIC, and RAW formats accepted)"
         className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
       />
       <button
@@ -143,6 +144,8 @@ export default function Upload({
       )}
       {uploadStatus && (
         <p
+          role="status"
+          aria-live="polite"
           className={`mt-4 ${uploadStatus.includes("failed") ? "text-red-500" : "text-green-500"}`}
         >
           {uploadStatus}

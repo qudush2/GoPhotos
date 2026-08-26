@@ -49,10 +49,15 @@ export default async function PhotographerUniquePage({
 
   const renderStars = (rating: number) => {
     return (
-      <div className="flex items-center">
+      <div
+        className="flex items-center"
+        role="img"
+        aria-label={`Rating: ${rating} out of 5 stars`}
+      >
         {[1, 2, 3, 4, 5].map((star) => (
           <StarIcon
             key={star}
+            aria-hidden="true"
             className={`h-5 w-5 ${
               star <= rating ? "text-yellow-400" : "text-gray-300"
             }`}
@@ -64,8 +69,8 @@ export default async function PhotographerUniquePage({
 
   return (
     <div className="grid gap-1 rounded-md py-1 px-8 sm:px-20 pt-7 pb-10">
-      <ScrollableAssets assets={assets} />
-      <ViewAllImages assets={assets} />
+      <ScrollableAssets assets={assets} photographerName={account.full_name} />
+      <ViewAllImages assets={assets} photographerName={account.full_name} />
 
       <div className="mt-2">
         <div>
@@ -205,9 +210,10 @@ export default async function PhotographerUniquePage({
                       </div>
                       <DialogClose
                         autoFocus={false}
+                        aria-label="Close"
                         className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
                       >
-                        <XMarkIcon className="w-8" />
+                        <XMarkIcon className="w-8" aria-hidden="true" />
                         <span className="sr-only">Close</span>
                       </DialogClose>
                     </DialogContent>

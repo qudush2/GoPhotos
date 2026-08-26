@@ -5,12 +5,20 @@ import {
   ScrollBar,
 } from "@/src/components/ScrollingFeatures/ScrollArea";
 import ImageModal from "@/src/components/Images/Modal";
+import { buildIndexedPhotoAlt } from "@/src/utils/imageAlt";
 
 interface ScrollableAssetsProps {
   assets: Array<{ url: string }>;
+  photographerName?: string;
 }
 
-export default function ScrollableAssets({ assets }: ScrollableAssetsProps) {
+export default function ScrollableAssets({
+  assets,
+  photographerName,
+}: ScrollableAssetsProps) {
+  const altLabel = photographerName
+    ? `Portfolio photo by ${photographerName}`
+    : "Portfolio photo";
   return (
     <ScrollArea className="w-full">
       <div className="flex flex-col gap-1">
@@ -31,7 +39,10 @@ export default function ScrollableAssets({ assets }: ScrollableAssetsProps) {
                   zIndex: 0,
                 }}
               />
-              <ImageModal alt="" src={asset.url} />
+              <ImageModal
+                alt={buildIndexedPhotoAlt(altLabel, idx, assets.length)}
+                src={asset.url}
+              />
             </div>
           ))}
         </div>
@@ -49,7 +60,14 @@ export default function ScrollableAssets({ assets }: ScrollableAssetsProps) {
                   zIndex: 0,
                 }}
               />
-              <ImageModal alt="" src={asset.url} />
+              <ImageModal
+                alt={buildIndexedPhotoAlt(
+                  altLabel,
+                  Math.ceil(assets.length / 2) + idx,
+                  assets.length
+                )}
+                src={asset.url}
+              />
             </div>
           ))}
         </div>

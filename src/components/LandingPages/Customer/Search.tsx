@@ -41,6 +41,7 @@ export default function SearchArea({}: SearchProps) {
         <select
           id="location"
           name="location"
+          aria-label="Location"
           className="w-full h-12 rounded-md border border-gray-500 text-sm outline-none px-3"
           onChange={handleLocationChange}
           value={selectedLocation}
@@ -55,6 +56,7 @@ export default function SearchArea({}: SearchProps) {
         <select
           id="photographyType"
           name="photographyType"
+          aria-label="Photography Type"
           className="w-full h-12 rounded-md border border-gray-500 text-sm outline-none px-3"
           onChange={handlePhotographyTypeChange}
           value={photographyType}

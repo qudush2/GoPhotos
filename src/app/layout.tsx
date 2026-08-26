@@ -51,9 +51,17 @@ export default async function RootLayout({
       >
         <CSPostHogProvider>
           <body className="flex flex-col min-h-full font-spaceGrotesk">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:shadow-lg"
+            >
+              Skip to main content
+            </a>
             <Suspense fallback={<Loading />}>
               <NavigationBar isPG={isPG} />
-              <main className="flex-grow">{children}</main>
+              <main id="main-content" className="flex-grow">
+                {children}
+              </main>
               <Footer />
             </Suspense>
             <AdminShortcut />

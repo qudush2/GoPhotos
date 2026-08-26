@@ -74,7 +74,7 @@ export default function ImageCarousel({
             <div className="relative">
               <Image
                 src={image.image_url}
-                alt={image.account.full_name.split(" ")[0]}
+                alt={`Photography sample by ${image.account.full_name}`}
                 width={position === 0 ? 360 : 260}
                 height={position === 0 ? 270 : 195}
                 className={`rounded-lg shadow-lg transition-all duration-500 ${

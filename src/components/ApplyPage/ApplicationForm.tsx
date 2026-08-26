@@ -158,6 +158,7 @@ export default function ApplicationForm({
                 id="price_low"
                 name="price_low"
                 required
+                aria-describedby="price-range-help"
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
@@ -170,11 +171,12 @@ export default function ApplicationForm({
                 id="price_high"
                 name="price_high"
                 required
+                aria-describedby="price-range-help"
                 className="w-full px-3 py-2 border rounded"
               />
             </div>
           </div>
-          <p className="text-sm text-gray-600 italic">
+          <p id="price-range-help" className="text-sm text-gray-600 italic">
             Note: This price range helps potential clients understand your rates
             before reaching out. It's not a fixed value, and you're not
             obligated to stay within this range. We understand that job costs
@@ -190,9 +192,10 @@ export default function ApplicationForm({
               type="text"
               id="school"
               name="school"
+              aria-describedby="school-help"
               className="w-full px-3 py-2 border rounded"
             />
-            <p className="text-sm text-gray-600 italic mt-2">
+            <p id="school-help" className="text-sm text-gray-600 italic mt-2">
               If applicable. Leave empty if not currently enrolled.
             </p>
           </div>
@@ -205,9 +208,10 @@ export default function ApplicationForm({
               id="hires"
               name="hires"
               required
+              aria-describedby="hires-help"
               className="w-full px-3 py-2 border rounded"
             />
-            <p className="text-sm text-gray-600 italic mt-2">
+            <p id="hires-help" className="text-sm text-gray-600 italic mt-2">
               This number will be displayed on your profile and will increase
               with each new GoPhotos job you complete.
             </p>
@@ -219,6 +223,7 @@ export default function ApplicationForm({
           </label>
           <Select
             isMulti
+            inputId="skills"
             name="skills"
             options={skillOptions}
             className="basic-multi-select"
@@ -240,10 +245,10 @@ export default function ApplicationForm({
       </form>
 
       <div className="space-y-2">
-        <label htmlFor="portfolio" className="block mb-1 font-medium">
+        <p className="block mb-1 font-medium">
           Upload up to 15 images that showcase your work with the skills you
           have selected.
-        </label>
+        </p>
         <p className="text-sm text-gray-600 italic">
           Note: These will be the first images to appear on your portfolio. You
           will be able to update these afterwards.

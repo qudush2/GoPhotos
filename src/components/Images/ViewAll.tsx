@@ -5,12 +5,20 @@ import { Dialog, DialogContent } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import { s3Images } from "@/src/utils/types";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { buildIndexedPhotoAlt } from "@/src/utils/imageAlt";
 
 interface ViewAllImagesProps {
   assets: s3Images[];
+  photographerName?: string;
 }
 
-export default function ViewAllImages({ assets }: ViewAllImagesProps) {
+export default function ViewAllImages({
+  assets,
+  photographerName,
+}: ViewAllImagesProps) {
+  const altLabel = photographerName
+    ? `Photo by ${photographerName}`
+    : "Photo";
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,9 +37,10 @@ export default function ViewAllImages({ assets }: ViewAllImagesProps) {
             </h2>
             <button
               onClick={() => setIsOpen(false)}
+              aria-label="Close all images view"
               className="text-gray-500 hover:text-gray-700"
             >
-              <XMarkIcon className="w-6 h-6" />
+              <XMarkIcon className="w-6 h-6" aria-hidden="true" />
             </button>
           </div>
           <div className="flex-grow overflow-auto p-4">
@@ -51,7 +60,7 @@ export default function ViewAllImages({ assets }: ViewAllImagesProps) {
                   />
                   <div className="relative w-full h-full flex items-center justify-center">
                     <Image
-                      alt=""
+                      alt={buildIndexedPhotoAlt(altLabel, idx, assets.length)}
                       src={asset.url}
                       fill
                       style={{ objectFit: "contain", zIndex: 1 }}
