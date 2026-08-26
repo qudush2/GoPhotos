@@ -59,7 +59,10 @@ export default function ShareProfileButton({
         </Button>
       </DialogTrigger>
       <DialogContent className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <DialogClose className="absolute inset-0 cursor-default" />
+        <DialogClose
+          aria-label="Close share profile dialog"
+          className="absolute inset-0 cursor-default"
+        />
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full relative z-10">
           <DialogTitle className="text-lg font-semibold mb-4">
             Share Profile
