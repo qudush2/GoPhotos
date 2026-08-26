@@ -243,6 +243,23 @@ export async function getAccountByClerkId(
   return result.rows.length > 0 ? result.rows[0] : null;
 }
 
+// Batched form of getAccountByClerkId. Callers that need accounts for a list of
+// clerk IDs should use this instead of mapping getAccountByClerkId over the
+// list, which costs one query and one pool connection per ID.
+export async function getAccountsByClerkIds(
+  clerkIds: string[]
+): Promise<PhotographerAccount[]> {
+  if (clerkIds.length === 0) {
+    return [];
+  }
+
+  const result = await query(
+    "SELECT * FROM photographer_account WHERE clerk_id = ANY($1::text[])",
+    [clerkIds]
+  );
+  return result.rows;
+}
+
 export async function getPortfolioPictures(
   clerkId: string,
   photographyType?: string
