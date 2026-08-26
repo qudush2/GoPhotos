@@ -248,6 +248,7 @@ export default function JobsTable({
         <input
           type="text"
           placeholder="Search jobs..."
+          aria-label="Search jobs"
           className="p-2 border rounded"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -260,6 +261,7 @@ export default function JobsTable({
             Create a Job
           </Button>
           <select
+            aria-label="Sort jobs by"
             className="p-2 border rounded mr-2 w-40"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "date" | "title")}
@@ -268,6 +270,7 @@ export default function JobsTable({
             <option value="title">Sort by Title</option>
           </select>
           <select
+            aria-label="Filter jobs by status"
             className="p-2 border rounded"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -429,9 +432,10 @@ export default function JobsTable({
           </div>
           <DialogClose
             autoFocus={false}
+            aria-label="Close"
             className="absolute right-4 top-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
           >
-            <XMarkIcon className="w-6 h-6" />
+            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
             <span className="sr-only">Close</span>
           </DialogClose>
         </DialogContent>

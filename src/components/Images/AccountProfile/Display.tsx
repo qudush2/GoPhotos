@@ -3,6 +3,7 @@
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { s3Images } from "@/src/utils/types";
 import ImageModal from "@/src/components/Images/Modal";
+import { buildSkillPhotoAlt } from "@/src/utils/imageAlt";
 
 interface ImageGalleryProps {
   images: s3Images[];
@@ -27,7 +28,7 @@ export default function ImageGallery({
         {images.length === 0 ? (
           <div>No images found</div>
         ) : (
-          images.map((image) => (
+          images.map((image, index) => (
             <div
               key={image.key}
               onClick={() => selectMode && onImageSelect(image.key)}
@@ -37,7 +38,7 @@ export default function ImageGallery({
             >
               <ImageModal
                 src={image.url}
-                alt={image.key.split("/").pop() || "Image"}
+                alt={buildSkillPhotoAlt(image.skills, index)}
                 selectMode={selectMode}
               />
               <div className="mt-2 text-sm">

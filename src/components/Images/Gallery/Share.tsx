@@ -50,9 +50,10 @@ export default function Share({ convoID }: { convoID: string }) {
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
           <button
             onClick={() => setIsOpen(false)}
+            aria-label="Close"
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
           >
-            <X size={24} />
+            <X size={24} aria-hidden="true" />
           </button>
           <DialogTitle className="text-xl font-bold mb-4">
             Share Gallery
@@ -62,7 +63,9 @@ export default function Share({ convoID }: { convoID: string }) {
               onClick={handleCopyLink}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
             >
-              {copied ? "Copied!" : "Copy Link"}
+              <span role="status" aria-live="polite">
+                {copied ? "Copied!" : "Copy Link"}
+              </span>
             </button>
             <form onSubmit={handleShareWithEmails} className="space-y-2">
               <input
@@ -70,6 +73,7 @@ export default function Share({ convoID }: { convoID: string }) {
                 value={emails}
                 onChange={(e) => setEmails(e.target.value)}
                 placeholder="Enter email addresses, separated by commas"
+                aria-label="Email addresses, separated by commas"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               />
               <button

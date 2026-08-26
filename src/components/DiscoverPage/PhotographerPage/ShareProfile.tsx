@@ -54,7 +54,7 @@ export default function ShareProfileButton({
     <Dialog>
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2 bg-black text-white px-3 py-1 rounded-md">
-          <ShareIcon className="w-4 h-4" />
+          <ShareIcon className="w-4 h-4" aria-hidden="true" />
           Share
         </Button>
       </DialogTrigger>
@@ -70,6 +70,7 @@ export default function ShareProfileButton({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter recipient's email"
+              aria-label="Recipient's email"
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
             />
@@ -82,9 +83,15 @@ export default function ShareProfileButton({
             </Button>
           </form>
           {isSuccess && (
-            <p className="text-green-600 mt-2">Profile shared successfully!</p>
+            <p role="status" aria-live="polite" className="text-green-600 mt-2">
+              Profile shared successfully!
+            </p>
           )}
-          {error && <p className="text-red-600 mt-2">{error}</p>}
+          {error && (
+            <p role="alert" className="text-red-600 mt-2">
+              {error}
+            </p>
+          )}
         </div>
       </DialogContent>
     </Dialog>

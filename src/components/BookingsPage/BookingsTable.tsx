@@ -213,12 +213,14 @@ export default function BookingsTable({
         <input
           type="text"
           placeholder="Search bookings..."
+          aria-label="Search bookings"
           className="p-2 border rounded"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div>
           <select
+            aria-label="Sort bookings by"
             className="p-2 border rounded mr-2 w-40"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "date" | "title")}
@@ -227,6 +229,7 @@ export default function BookingsTable({
             <option value="title">Sort by Title</option>
           </select>
           <select
+            aria-label="Filter bookings by status"
             className="p-2 border rounded"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}

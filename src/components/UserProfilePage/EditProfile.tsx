@@ -94,11 +94,12 @@ export default function EditProfile({
             }}
             pattern="^[a-zA-Z0-9.\-_!]+$"
             required
+            aria-describedby="custom_url-help"
             className="flex-grow p-2 border rounded-r"
             placeholder="your-custom-url"
           />
         </div>
-        <p className="text-sm text-gray-600 mt-1">
+        <p id="custom_url-help" className="text-sm text-gray-600 mt-1">
           Allowed characters: letters, numbers, ., -, _, and !
         </p>
       </div>
@@ -135,12 +136,15 @@ export default function EditProfile({
       </div>
 
       <div className="space-y-2">
-        <label className="block text-xl mb-2">Hourly Price Range</label>
+        <label className="block text-xl mb-2" id="price-range-label">
+          Hourly Price Range
+        </label>
         <div className="flex items-center space-x-2">
           <input
             type="number"
             id="price_low"
             name="price_low"
+            aria-label="Minimum hourly price"
             value={formData.price_low}
             onChange={handleChange}
             className="w-24 p-2 border rounded"
@@ -151,6 +155,7 @@ export default function EditProfile({
             type="number"
             id="price_high"
             name="price_high"
+            aria-label="Maximum hourly price"
             value={formData.price_high}
             onChange={handleChange}
             className="w-24 p-2 border rounded"
@@ -160,9 +165,12 @@ export default function EditProfile({
       </div>
 
       <div>
-        <label className="block text-xl mb-2">Profile Visible</label>
+        <label htmlFor="visible" className="block text-xl mb-2">
+          Profile Visible
+        </label>
         <input
           type="checkbox"
+          id="visible"
           name="visible"
           checked={formData.visible}
           onChange={(e) =>
@@ -170,7 +178,7 @@ export default function EditProfile({
           }
           className="mr-2"
         />
-        <span>Make profile visible</span>
+        <label htmlFor="visible">Make profile visible</label>
       </div>
 
       <div>
@@ -202,7 +210,9 @@ export default function EditProfile({
         {isSubmitting ? "Updating..." : "Update Profile"}
       </button>
       {submitMessage && (
-        <p className="mt-2 text-sm text-gray-600">{submitMessage}</p>
+        <p role="status" aria-live="polite" className="mt-2 text-sm text-gray-600">
+          {submitMessage}
+        </p>
       )}
     </form>
   );

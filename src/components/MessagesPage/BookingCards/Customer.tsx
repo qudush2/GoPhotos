@@ -92,7 +92,7 @@ export default async function BookingCardCustomer({
                     }}
                   />
                   <Image
-                    alt=""
+                    alt={`Portfolio photo by ${account.full_name}`}
                     src={asset.url}
                     fill
                     className="object-contain z-10"

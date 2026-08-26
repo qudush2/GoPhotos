@@ -56,24 +56,54 @@ export default function RatingSection({
   };
 
   const renderStars = (ratingValue: number, interactive: boolean) => {
+    if (!interactive) {
+      return [1, 2, 3, 4, 5].map((star) => (
+        <StarIcon
+          key={star}
+          aria-hidden="true"
+          className={`h-6 w-6 ${
+            star <= ratingValue ? "text-yellow-400" : "text-gray-300"
+          }`}
+        />
+      ));
+    }
+
     return [1, 2, 3, 4, 5].map((star) => (
-      <StarIcon
+      <button
         key={star}
-        className={`h-6 w-6 ${
-          star <= ratingValue ? "text-yellow-400" : "text-gray-300"
-        } ${interactive ? "cursor-pointer" : ""}`}
-        onClick={() => interactive && setRating(star)}
-      />
+        type="button"
+        onClick={() => setRating(star)}
+        aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
+        aria-pressed={star <= ratingValue}
+        className="rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        <StarIcon
+          aria-hidden="true"
+          className={`h-6 w-6 cursor-pointer ${
+            star <= ratingValue ? "text-yellow-400" : "text-gray-300"
+          }`}
+        />
+      </button>
     ));
   };
+
+  const isInteractive = !existingRating && isCustomer;
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <h3 className="text-lg font-semibold mb-2">
         {existingRating ? "Rating" : "Rate Your Experience"}
       </h3>
-      <div className="flex mb-2">
-        {renderStars(rating, !existingRating && isCustomer)}
+      <div
+        className="flex mb-2"
+        role={isInteractive ? "group" : "img"}
+        aria-label={
+          isInteractive
+            ? "Rate your experience, 1 to 5 stars"
+            : `Rating: ${rating} out of 5 stars`
+        }
+      >
+        {renderStars(rating, isInteractive)}
       </div>
       {existingRating ? (
         <p className="mt-2">{comment}</p>

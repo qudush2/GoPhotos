@@ -4,6 +4,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { s3Images } from "@/src/utils/types";
 import ImageModal from "@/src/components/Images/Modal";
 import { useState, useEffect, useCallback } from "react";
+import { buildIndexedPhotoAlt } from "@/src/utils/imageAlt";
 
 export default function Display({ folderID }: { folderID: string }) {
   const [images, setImages] = useState<s3Images[]>([]);
@@ -40,14 +41,18 @@ export default function Display({ folderID }: { folderID: string }) {
           {images.length === 0 ? (
             <div>No images found</div>
           ) : (
-            images.map((image) => (
+            images.map((image, index) => (
               <div
                 key={image.key}
                 className="cursor-pointer relative aspect-square"
               >
                 <ImageModal
                   src={image.url}
-                  alt={image.key.split("/").pop() || "Image"}
+                  alt={buildIndexedPhotoAlt(
+                    "Portfolio photo",
+                    index,
+                    images.length
+                  )}
                 />
               </div>
             ))
